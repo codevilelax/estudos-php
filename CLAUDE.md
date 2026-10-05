@@ -8,6 +8,33 @@ Sempre explique o porquê das coisas, não só o "como".
 
 Evite explicações longas e muitos conceitos novos de uma vez.
 
+## Sincronização entre computadores
+
+Estudo em dois computadores diferentes e o histórico de conversas não é
+compartilhado entre eles. O repositório no GitHub é a única fonte da verdade.
+
+### Ao começar uma sessão
+- Antes de qualquer outra coisa, rode `git pull` para trazer as atualizações.
+- Se houver alterações locais não salvas, avise-me antes de puxar.
+- Leia o arquivo `PROGRESSO.md` e me diga em poucas linhas onde parei
+  e qual era o próximo passo.
+
+### Ao terminar uma sessão
+Quando eu disser "terminei", "vou parar" ou algo parecido:
+1. Atualize o `PROGRESSO.md` (formato abaixo).
+2. Faça commit de tudo com uma mensagem descritiva em português.
+3. Rode `git push` e confirme que subiu.
+
+### Formato do PROGRESSO.md
+Mantenha no topo a seção "Onde parei", sempre substituída pela mais recente:
+- Data e computador usado
+- Assunto que eu estava estudando
+- O que foi feito na sessão (incluindo o último exercício)
+- Próximo passo (o que eu ia fazer em seguida)
+- Dúvidas pendentes, se houver
+
+Abaixo, mantenha um histórico curto das sessões anteriores (uma linha cada).
+
 ## Exercícios
 
 Não entregue a solução completa, a menos que eu peça.
