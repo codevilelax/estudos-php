@@ -5,16 +5,18 @@
 - **Data e computador:** 05/10/2026, computador `vilela`
 - **Assunto:** `01-fundamentos` (variáveis, arrays e condicionais)
 - **O que foi feito:**
-  - Exercícios 1 a 6 de fundamentos (feitos no outro computador): nota, lista de compras,
-    média do aluno, times de futebol, carrinho de compras e radar de velocidade.
-  - Último exercício: `ex06-radar.php` (condicionais com `if` / `elseif` / `else`).
-    Valores testados até agora: 140, 50, 70, 90 e 61.
-  - Neste computador: Git e GitHub CLI instalados, repositório clonado e
-    sincronização entre computadores configurada (este arquivo).
-- **Próximo passo:** revisar o ex06 (o desafio pede para descobrir todos os valores
-  que precisam ser testados) e seguir em fundamentos com **loops**.
-- **Dúvidas pendentes:** nenhuma registrada.
+  - ex06 (radar): código conferido e correto. Faltava testar as beiradas 60, 80 e 120
+    (ainda não anotadas no arquivo).
+  - ex07 (`ex07-nivel.php`, nível do jogador): **concluído e correto**, testado
+    nas beiradas (99, 100, 499, 500, 999, 1000).
+  - Aprendido: parênteses só mudam algo quando a conta tem mais de uma operação.
+  - Criados os enunciados dos exercícios 8, 9 e 10 (ainda não feitos).
+- **Próximo passo:** fazer o `ex08-playlist.php`, depois o ex09 e o ex10.
+  Loops ficam para depois: o objetivo agora é fixar bem variáveis, arrays e
+  condicionais antes de avançar.
+- **Dúvidas pendentes:** nenhuma.
 
 ## Histórico
 
+- 05/10/2026 (`vilela`): sincronização configurada (CLAUDE.md e PROGRESSO.md).
 - 05/10/2026 (outro computador): estrutura inicial e exercícios 1 a 6 de fundamentos.
