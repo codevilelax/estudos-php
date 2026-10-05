@@ -15,6 +15,9 @@ compartilhado entre eles. O repositório no GitHub é a única fonte da verdade.
 
 ### Ao começar uma sessão
 - Antes de qualquer outra coisa, rode `git pull` para trazer as atualizações.
+- Confira se `git config user.email` neste repositório é
+  `235184508+codevilelax@users.noreply.github.com`. Se não for, configure
+  com esse valor (só neste repositório), para meu e-mail pessoal não aparecer nos commits.
 - Se houver alterações locais não salvas, avise-me antes de puxar.
 - Leia o arquivo `PROGRESSO.md` e me diga em poucas linhas onde parei
   e qual era o próximo passo.
