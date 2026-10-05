@@ -26,7 +26,7 @@ if ($qntA > $qntB) {
 } elseif ($qntA < $qntB) {
     echo "O time B tem ". $dif2 . " Jogadores à mais que o time A.\n";
 } else {
-    echo "Ambos os times tem a mesma quantidade de jogadores, sendo ". $qntA . ".\n";
+    echo "Ambos os times tem a mesma quantidade de jogadores, sendo ". $qntA . " em cada time.\n";
 }
 
 echo "O capitao do time A é " . $timeA[0] . ".\n" 
