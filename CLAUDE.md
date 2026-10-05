@@ -14,6 +14,8 @@ Não entregue a solução completa, a menos que eu peça.
 
 Antes de qualquer resposta, me dê uma dica para eu tentar sozinho.
 
+Cada exercício fica em um arquivo próprio, numerado, na pasta do assunto (ex: `01-fundamentos/ex02-compras.php`). Ao passar um exercício novo, crie o arquivo com o enunciado em comentário no topo.
+
 Quando eu cometer um erro:
 - diga onde está o erro;
 - explique de forma simples;
