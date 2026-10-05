@@ -35,6 +35,29 @@ Mantenha no topo a seção "Onde parei", sempre substituída pela mais recente:
 
 Abaixo, mantenha um histórico curto das sessões anteriores (uma linha cada).
 
+## Perfil do GitHub
+
+Meu perfil fica no repositório `codevilelax/codevilelax` (arquivo `README.md`).
+Ao terminar uma sessão, depois do push acima, veja se aprendi algo novo que
+valha aparecer no perfil.
+
+- Só conte o que eu já pratiquei em exercícios concluídos. Nunca coloque um
+  assunto que acabei de começar ou que ainda está nos planos.
+- Exemplos do que vale: concluir um assunto inteiro (ex: fundamentos, POO),
+  usar Composer ou Laravel de verdade em exercícios, terminar um projeto em `projetos`.
+- O que atualizar: a linha "📚 Aprendendo..." em "Sobre mim", os ícones em
+  "Tecnologias" (do devicon) e, se fizer sentido, "Estudos em andamento".
+- Pode fazer commit e push direto, sem pedir aprovação. Depois me diga em uma
+  linha o que mudou.
+- Se não houver nada novo, não mexa no perfil.
+
+Como mexer no repositório do perfil:
+- Ele fica em `../codevilelax`. Se a pasta não existir neste computador, clone com
+  `gh repo clone codevilelax/codevilelax ../codevilelax`. Rode `git pull` antes de editar.
+- Faça os commits com o e-mail privado do GitHub, configurado só nesse repositório:
+  `git config user.email "235184508+codevilelax@users.noreply.github.com"`.
+- Nunca coloque no perfil telefone, e-mail pessoal ou endereço.
+
 ## Exercícios
 
 Não entregue a solução completa, a menos que eu peça.
