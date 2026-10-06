@@ -5,23 +5,25 @@
 - **Data e computador:** 06/10/2026, computador `vilela`
 - **Assunto:** `01-fundamentos` (variáveis, arrays e condicionais)
 - **O que foi feito:**
-  - ex08 (`ex08-playlist.php`, playlist): **concluído e correto**, testado com
-    5 músicas ("Faltam 5") e com 10 ("Playlist completa!").
+  - ex09 (`ex09-lojas.php`, comparar lojas com frete): **concluído e correto**,
+    testado nos três caminhos do `if` (Loja A mais barata, Loja B mais barata, preços iguais).
   - Aprendido:
-    - o `;` encerra o comando; sem ele o PHP acusa erro na linha seguinte;
-    - os índices do array começam em 0, então o último é `$array[$quantidade - 1]`;
-    - posição do array usa colchetes `[ ]`, não parênteses;
-    - comparar o array inteiro com um número (`$musicas >= 10`) dá sempre verdadeiro;
-      o certo é comparar a quantidade (`count`);
-    - `\n` quebra a linha na saída;
-    - rodar no terminal: `php caminho/do/arquivo.php`.
-- **Próximo passo:** fazer o `ex09-lojas.php` (comparar lojas com frete), depois o ex10.
-  Loops ficam para depois: o objetivo agora é fixar bem variáveis, arrays e
-  condicionais antes de avançar.
+    - quando o PHP acusa erro de sintaxe na linha X, olhar também o fim da linha anterior
+      (geralmente falta o `;`);
+    - o último comando antes de fechar `}` também precisa de `;`;
+    - `;` depois de `}` é um "comando vazio": não dá erro, mas é desnecessário;
+    - corrigiu sozinho a conta da economia (subtrair o total maior do menor, para não dar negativo).
+  - Conversa sobre o que vem no `02-web`: formulários, GET/POST, validação e sessões.
+- **Próximo passo:** fazer o `ex10-boletim.php`. Depois, ainda em `01-fundamentos`:
+  loops e funções. Só então o `02-web`.
 - **Dúvidas pendentes:** nenhuma.
+- **Aviso:** em 06/10/2026 o histórico do repositório foi reescrito para tirar o Gmail
+  dos commits. No outro computador, na primeira vez, usar `git fetch` e
+  `git reset --hard origin/main` (se não houver alterações locais) em vez de `git pull`.
 
 ## Histórico
 
+- 06/10/2026 (`vilela`): ex08 concluído (arrays: índice começa em 0, `count`, `\n`).
 - 05/10/2026 (`vilela`): ex07 concluído; enunciados dos exercícios 8 a 10 criados.
 - 05/10/2026 (`vilela`): sincronização configurada (CLAUDE.md e PROGRESSO.md).
 - 05/10/2026 (outro computador): estrutura inicial e exercícios 1 a 6 de fundamentos.

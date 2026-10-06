@@ -13,3 +13,23 @@
 //    Ex: "A Loja B é mais barata. Você economiza R$ 5"
 //    Se os totais forem iguais, mostre: "As duas lojas têm o mesmo preço."
 
+//Loja A
+$precoA = 50;
+$freteA = 10;
+$totalA = $precoA + $freteA;
+
+//loja B
+$precoB = 66;
+
+echo "O total na Loja A: R$ " . $totalA . ".\n"
+. "o total na Loja B: R$ " . $precoB . ".\n";
+
+if ($totalA < $precoB) {
+    $economiaA = $precoB - $totalA;
+    echo "A Loja A é mais barata, e você economiza: R$ " . $economiaA . ".\n";
+} elseif ($totalA > $precoB) {
+    $economiaB = $totalA - $precoB;
+    echo "A Loja B é mais barata, e você economiza: R$ " . $economiaB . ".\n";
+} else {
+    echo "As duas lojas tem o mesmo preço.";
+}
