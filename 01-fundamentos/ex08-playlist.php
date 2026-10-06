@@ -11,3 +11,15 @@
 //
 // O programa deve continuar funcionando se você adicionar ou remover músicas.
 
+$musicas = $musicas = ["Cerol", "Mlks de sp", "tropa da lacoste", "diario de um cafajeste", "vergonha pra midia", "Malvadão 3", "Tubarão te amo", "Bipolar", "Vai embrazando", "Plantão"];
+$quantidade = count($musicas);
+
+echo "A playlist tem " . $quantidade . " músicas.\n"
+. "A primeira música é " . $musicas[0] . ".\n"
+. "A última música é " . $musicas[$quantidade - 1] . ".\n";
+
+if ($quantidade >= 10) {
+    echo "Playlist completa!";
+} else {
+    echo "Faltam " . (10 - $quantidade) . " músicas para completar 10.";
+}
