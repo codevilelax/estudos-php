@@ -3,35 +3,42 @@
 ## Onde parei
 
 - **Data e computador:** 08/10/2026, computador `vilela`
-- **Assunto:** `01-fundamentos`: terminou as condicionais e começou os loops
+- **Assunto:** `01-fundamentos`: terminou as condicionais e começou os loops (`while`)
 - **O que foi feito:**
-  - ex12 (`ex12-bateria.php`, bateria do celular): **concluído sozinho, sem ajuda**, e correto
-    em todas as fronteiras (19, 20, 49, 50, 89, 90). Usou `>=` descendo do maior para o
-    menor, que era o ponto que tinha travado no ex11.
-  - Início dos loops: explicação do `while` e das 3 etapas de um loop (começo, condição,
-    atualização), com o aviso sobre o loop infinito (Ctrl+C para parar).
-  - Enunciado do ex13 (`ex13-contagem.php`, contagem regressiva com `while`) criado.
   - ex11 (`ex11-pizzaria.php`, frete da pizzaria): **concluído e funcionando**, testado nos
     valores de fronteira (29, 30, 50, 79, 80 e distância acima de 10 km).
-  - Corrigiu sozinho dois erros de sintaxe:
-    - uma letra solta depois do `;` (o PHP acusou o erro na linha seguinte);
-    - `else` com condição: o `else` não leva condição, porque quer dizer "em qualquer outro caso".
-  - Erro de lógica: usou `< 80` e `< 50` descendo do maior para o menor. Como o `< 80`
-    pegava todos os valores abaixo de 80, as linhas de baixo nunca rodavam. **A correção
-    (`>= 50`, `>= 30`) foi feita pelo Claude, a pedido.** Vale praticar isso de novo sozinho.
-  - Conversa sobre nomes de variáveis: nomes completos (`$valorPedido`) são mais fáceis de
-    ler do que abreviados (`$vlrPed`). Decidiu manter `$vlrPed`, o que é aceitável.
-- **Próximo passo:** fazer o `ex13-contagem.php` (primeiro loop, com `while`). Depois, `for`
-  e `foreach` (um de cada vez), e então funções. Só então o `02-web`.
-  Ao começar assunto novo, usar exercícios curtos, que dê para fazer sozinho do começo ao fim.
-- **Dúvidas pendentes:** nenhuma.
+    - Corrigiu sozinho dois erros de sintaxe: uma letra solta depois do `;` (o PHP acusou a
+      linha seguinte) e `else` com condição (o `else` não leva condição).
+    - Erro de lógica: usou `< 80` e `< 50` descendo do maior para o menor. **A correção
+      (`>= 50`, `>= 30`) foi feita pelo Claude, a pedido.**
+    - Nomes de variáveis: preferiu manter `$vlrPed` em vez de `$valorPedido` (aceitável).
+  - ex12 (`ex12-bateria.php`, bateria do celular): **concluído sozinho, sem ajuda**, e correto
+    em todas as fronteiras. Usou `>=` descendo do maior para o menor (fixou o ponto do ex11).
+  - **Loops, primeiro contato com o `while`:**
+    - ex13 (`ex13-exemplo-while.php`): exemplo para mexer e rodar (contar de 1 até N).
+    - Entendeu `$contador = $contador + 1` (o `=` quer dizer "guarde", e o lado direito é
+      calculado primeiro) e que o loop começa a partir do **valor inicial** da variável.
+    - ex14 (`ex14-contagem.php`, contagem regressiva de 10 até 1): **concluído**, com ajuda.
+      Os erros no caminho: condição `<= 1` (o loop não rodou nenhuma vez); a frase dentro do
+      loop (apareceu 10 vezes); contar para cima em vez de para baixo. No fim, colocou o
+      "Feliz Ano Novo!" fora do loop sozinho.
+    - Viu por cima: os 4 tipos de loop (`while`, `for`, `foreach`, `do...while`) e a diferença
+      entre `while` (condição) e `foreach` (passa pelos itens de um array).
+  - A pasta `01-fundamentos` foi reorganizada: o exemplo do while virou ex13 e a contagem, ex14.
+- **Próximo passo:** um exercício curto de `while`, para fazer sozinho do começo ao fim. Depois,
+  `for` e `foreach` (um de cada vez), e então funções. Só então o `02-web`.
+- **Como ensinar (pedido dele):** em assunto novo, explicar **um pedaço por mensagem** e esperar
+  ele entender antes de seguir. Uma aula com tudo de uma vez confundiu. Dicas concretas, e o
+  comando completo para rodar o arquivo.
+- **Dúvidas pendentes:** nenhuma. Pendência pequena: tirar os espaços do `echo` da linha 22 do
+  ex14, que está fora do loop mas recuado como se estivesse dentro.
 - **Aviso:** em 06/10/2026 o histórico do repositório foi reescrito para tirar o Gmail
   dos commits. No outro computador, na primeira vez, usar `git fetch` e
   `git reset --hard origin/main` (se não houver alterações locais) em vez de `git pull`.
 
 ## Histórico
 
-- 08/10/2026 (`vilela`): ex11 e ex12 concluídos (`else` sem condição, ordem com `>=`); início dos loops.
+- 08/10/2026 (`vilela`): ex11 e ex12 concluídos (`else` sem condição, ordem com `>=`); primeiro loop (`while`, ex13 e ex14).
 - 07/10/2026 (`vilela`): ex10 concluído (boletim com faltas, `if` / `elseif` em ordem).
 - 06/10/2026 (`vilela`): ex09 concluído (`;` no fim da linha anterior ao erro, economia sem negativo).
 - 06/10/2026 (`vilela`): ex08 concluído (arrays: índice começa em 0, `count`, `\n`).
