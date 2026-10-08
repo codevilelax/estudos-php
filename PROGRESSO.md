@@ -2,7 +2,7 @@
 
 ## Onde parei
 
-- **Data e computador:** 08/10/2026, computador `vilela`
+- **Data e computador:** 08/10/2026, `computador 2`
 - **Assunto:** `01-fundamentos`: terminou as condicionais e começou os loops (`while`)
 - **O que foi feito:**
   - ex11 (`ex11-pizzaria.php`, frete da pizzaria): **concluído e funcionando**, testado nos
@@ -40,10 +40,10 @@
 
 ## Histórico
 
-- 08/10/2026 (`vilela`): ex11 e ex12 concluídos (`else` sem condição, ordem com `>=`); primeiro loop (`while`, exemplo, ex13 e ex14).
-- 07/10/2026 (`vilela`): ex10 concluído (boletim com faltas, `if` / `elseif` em ordem).
+- 08/10/2026 (`computador 2`): ex11 e ex12 concluídos (`else` sem condição, ordem com `>=`); primeiro loop (`while`, exemplo, ex13 e ex14).
+- 07/10/2026 (`computador 2`): ex10 concluído (boletim com faltas, `if` / `elseif` em ordem).
 - 06/10/2026 (`vilela`): ex09 concluído (`;` no fim da linha anterior ao erro, economia sem negativo).
 - 06/10/2026 (`vilela`): ex08 concluído (arrays: índice começa em 0, `count`, `\n`).
 - 05/10/2026 (`vilela`): ex07 concluído; enunciados dos exercícios 8 a 10 criados.
 - 05/10/2026 (`vilela`): sincronização configurada (CLAUDE.md e PROGRESSO.md).
-- 05/10/2026 (outro computador): estrutura inicial e exercícios 1 a 6 de fundamentos.
+- 05/10/2026 (`computador 2`): estrutura inicial e exercícios 1 a 6 de fundamentos.
