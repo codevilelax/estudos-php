@@ -15,7 +15,7 @@
   - ex12 (`ex12-bateria.php`, bateria do celular): **concluído sozinho, sem ajuda**, e correto
     em todas as fronteiras. Usou `>=` descendo do maior para o menor (fixou o ponto do ex11).
   - **Loops, primeiro contato com o `while`:**
-    - `exemplo-while.php`: exemplo para mexer e rodar (contar de 1 até N). Não é exercício.
+    - `ex13-0-exemplo-while.php`: exemplo para mexer e rodar (contar de 1 até N). Não é exercício.
     - Entendeu `$contador = $contador + 1` (o `=` quer dizer "guarde", e o lado direito é
       calculado primeiro) e que o loop começa a partir do **valor inicial** da variável.
     - ex13 (`ex13-contagem.php`, contagem regressiva de 10 até 1): **concluído**, com ajuda.
@@ -24,9 +24,11 @@
       "Feliz Ano Novo!" fora do loop sozinho.
     - Viu por cima: os 4 tipos de loop (`while`, `for`, `foreach`, `do...while`) e a diferença
       entre `while` (condição) e `foreach` (passa pelos itens de um array).
-  - Os exemplos ficam sem número (ex: `exemplo-while.php`), para não parecerem exercícios.
-- **Próximo passo:** um exercício curto de `while`, para fazer sozinho do começo ao fim. Depois,
-  `for` e `foreach` (um de cada vez), e então funções. Só então o `02-web`.
+    - ex14 (`ex14-pares.php`, números pares de 2 até 20): **concluído sozinho, sem ajuda**, de
+      primeira. Usou a atualização de 2 em 2 (`$par = $par + 2`).
+  - Os exemplos ficam logo antes do exercício do assunto, com nome `exNN-0-exemplo-...` (ex: `ex13-0-exemplo-while.php`).
+- **Próximo passo:** começar o `for` (um pedaço por vez, com exemplo antes do exercício).
+  Depois, `foreach`, e então funções. Só então o `02-web`.
 - **Como ensinar (pedido dele):** em assunto novo, explicar **um pedaço por mensagem** e esperar
   ele entender antes de seguir. Uma aula com tudo de uma vez confundiu. Dicas concretas, e o
   comando completo para rodar o arquivo.
@@ -38,7 +40,7 @@
 
 ## Histórico
 
-- 08/10/2026 (`vilela`): ex11 e ex12 concluídos (`else` sem condição, ordem com `>=`); primeiro loop (`while`, exemplo e ex13).
+- 08/10/2026 (`vilela`): ex11 e ex12 concluídos (`else` sem condição, ordem com `>=`); primeiro loop (`while`, exemplo, ex13 e ex14).
 - 07/10/2026 (`vilela`): ex10 concluído (boletim com faltas, `if` / `elseif` em ordem).
 - 06/10/2026 (`vilela`): ex09 concluído (`;` no fim da linha anterior ao erro, economia sem negativo).
 - 06/10/2026 (`vilela`): ex08 concluído (arrays: índice começa em 0, `count`, `\n`).
