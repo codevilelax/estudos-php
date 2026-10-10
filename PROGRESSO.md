@@ -40,14 +40,14 @@
   mensagem**: ele reclamou de "várias coisas ao mesmo tempo". Quando um exercício juntar uma
   ideia nova (ex: `if` dentro do `while`), passar antes um exercício intermediário e dividir
   o enunciado em etapas.
-- **Dúvidas pendentes:** nenhuma. Pendência pequena: tirar os espaços do `echo` da linha 22 do
-  ex13, que está fora do loop mas recuado como se estivesse dentro.
+- **Dúvidas pendentes:** nenhuma.
 - **Aviso:** em 06/10/2026 o histórico do repositório foi reescrito para tirar o Gmail
   dos commits. No outro computador, na primeira vez, usar `git fetch` e
   `git reset --hard origin/main` (se não houver alterações locais) em vez de `git pull`.
 
 ## Histórico
 
+- 10/10/2026 (`vilela`): sábado de descanso; só tirou o recuo do `echo` do ex13 (pendência).
 - 09/10/2026 (`computador 2`): prática de `while`, ex15 a ex19 (os três últimos sozinho); termômetro adiado e dividido em etapas (ex20 e ex21).
 - 08/10/2026 (`computador 2`): ex11 e ex12 concluídos (`else` sem condição, ordem com `>=`); primeiro loop (`while`, exemplo, ex13 e ex14).
 - 07/10/2026 (`computador 2`): ex10 concluído (boletim com faltas, `if` / `elseif` em ordem).
