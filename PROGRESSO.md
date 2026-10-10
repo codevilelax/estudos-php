@@ -47,7 +47,6 @@
 
 ## Histórico
 
-- 10/10/2026 (`vilela`): sábado de descanso; só tirou o recuo do `echo` do ex13 (pendência).
 - 09/10/2026 (`computador 2`): prática de `while`, ex15 a ex19 (os três últimos sozinho); termômetro adiado e dividido em etapas (ex20 e ex21).
 - 08/10/2026 (`computador 2`): ex11 e ex12 concluídos (`else` sem condição, ordem com `>=`); primeiro loop (`while`, exemplo, ex13 e ex14).
 - 07/10/2026 (`computador 2`): ex10 concluído (boletim com faltas, `if` / `elseif` em ordem).
