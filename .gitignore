@@ -1,0 +1,10 @@
+# Dependências do Composer (instaladas com composer install)
+/vendor/
+
+# Configurações de editor
+.vscode/
+.idea/
+
+# Arquivos do sistema
+Thumbs.db
+.DS_Store
