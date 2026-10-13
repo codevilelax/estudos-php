@@ -17,6 +17,5 @@ $contador = 0;
 
 while ($contador < 10) {
     $contador = $contador + 1;
-    echo $numero ." X ". $contador ." = " . $numero * $contador . "\n";
+    echo $numero . " X " . $contador . " = " . $numero * $contador . "\n";
 }
-

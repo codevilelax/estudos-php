@@ -18,5 +18,5 @@ $feliz = 10;
 while ($feliz >= 1) {
     echo $feliz . "\n";
     $feliz = $feliz - 1;
-} 
+}
 echo "Feliz ano novo!";
