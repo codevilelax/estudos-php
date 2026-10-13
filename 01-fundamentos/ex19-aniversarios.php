@@ -15,9 +15,8 @@
 $ano = 2026;
 $idade = 15;
 
-while ( $idade <= 18) {
-    echo $ano . ": " . $idade ." anos\n";
+while ($idade <= 18) {
+    echo $ano . ": " . $idade . " anos\n";
     $idade = $idade + 1;
-    $ano = $ano +1;
+    $ano = $ano + 1;
 }
-

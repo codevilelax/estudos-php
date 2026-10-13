@@ -16,11 +16,11 @@
 // Bateria: 0%
 // Celular desligou!
 
-
 $gastoPorHora = 20;
 $bateria = 100;
 
-while ( $bateria >= 0) {
+while ($bateria >= 0) {
     echo "Bateria: " . $bateria . "%\n";
     $bateria = $bateria - $gastoPorHora;
-} echo "Celular desligou!";
+}
+echo "Celular desligou!";

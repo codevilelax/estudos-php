@@ -13,7 +13,7 @@
 
 $par = 2;
 
-while ( $par <= 20 ) {
+while ($par <= 20) {
     echo $par . "\n";
     $par = $par + 2;
 }

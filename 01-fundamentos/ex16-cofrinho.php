@@ -19,6 +19,5 @@ $mes = 0;
 
 while ($mes < 12) {
     $mes = $mes + 1;
-    echo "Mês " . $mes . ": R$ " . $valorMensal * $mes ."\n";
+    echo "Mês " . $mes . ": R$ " . $valorMensal * $mes . "\n";
 }
-    

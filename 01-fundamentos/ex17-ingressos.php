@@ -20,4 +20,3 @@ while ($ingressos <= 8) {
     echo $ingressos . " ingresso(s): R$ " . $vlrIngresso * $ingressos . "\n";
     $ingressos = $ingressos + 1;
 }
-
