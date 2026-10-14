@@ -20,3 +20,10 @@
 // (...)
 // 10
 
+
+$numeros = 1;
+
+while ($numeros <= 10) {
+    echo $numeros . "\n";
+    $numeros = $numeros + 1;
+}
