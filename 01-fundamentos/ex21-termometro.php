@@ -25,3 +25,17 @@
 // 35 graus - quente
 // 40 graus - quente
 
+
+$aumentoPorHora = 5;
+$temperatura = 20;
+
+while ( $temperatura <= 40 ) {
+    echo $temperatura ." graus - ";
+    if ( $temperatura < 30 ) {
+        echo "agradável\n";
+    }
+    else {
+        echo "quente\n";
+    }
+    $temperatura = $temperatura + $aumentoPorHora;
+}

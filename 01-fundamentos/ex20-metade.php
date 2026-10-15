@@ -25,5 +25,8 @@ $numeros = 1;
 
 while ($numeros <= 10) {
     echo $numeros . "\n";
+    
+if ( $numeros == 5 )
+    echo "Metade do caminho!\n";
     $numeros = $numeros + 1;
 }
