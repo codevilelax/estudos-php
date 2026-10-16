@@ -14,6 +14,9 @@
   `while` com início, condição e `+ 1` juntos numa linha só). Depois `foreach`, funções e
   `02-web`.
 - **Dúvidas pendentes:** nenhuma.
+- **Pendente:** no perfil (`codevilelax/codevilelax`), o "Sobre mim" diz que o objetivo é
+  "Engenharia de Dados", e o portfólio novo diz "desenvolvedor". Ele pediu para deixar a troca
+  para depois: perguntar de novo no próximo fim de sessão.
 - **Como ensinar (pedido dele):** em assunto novo, explicar **um pedaço por mensagem** e esperar
   ele entender antes de seguir. Uma aula com tudo de uma vez confundiu. Dicas concretas, e o
   comando completo para rodar o arquivo. Quando ele pedir "o terminal do ex N", mandar **só o
