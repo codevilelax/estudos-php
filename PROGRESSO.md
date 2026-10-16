@@ -2,29 +2,22 @@
 
 ## Onde parei
 
-- **Data e computador:** 15/10/2026, `computador 2`
-- **Assunto:** `01-fundamentos`: fechando o `while` (com `if` / `else` dentro do loop).
+- **Data e computador:** 16/10/2026, `computador 2`
+- **Assunto:** `01-fundamentos`: `while` encerrado.
 - **O que foi feito:**
-  - ex20 (`ex20-metade.php`): etapa 2 concluída, com ajuda. Primeiro pôs o `if` depois do
-    `+ 1` e comparou com 6; depois a frase saiu antes do número; ao mover uma linha, copiou em
-    vez de mover (`+ 1` duas vezes, contou de 2 em 2). Lição: dentro do loop, **mostrar,
-    conferir e só então mudar o número** (o `+ 1` vai por último).
-  - ex21 (`ex21-termometro.php`): concluído, com ajuda. Loop infinito (pôs o
-    `+ $aumentoPorHora` dentro do `echo`: o `echo` só mostra, não muda a variável); esqueceu
-    a `}` antes do `else`; usou `<= 25` em vez de `< 30` (o número do `if` tem que ser o do
-    enunciado, senão quebra quando os valores mudam).
-  - ex22 (`ex22-tanque.php`, contando para baixo): concluído com pouca ajuda. De novo a linha
-    que muda o número veio antes do `if`; corrigiu e trocou para `<= 20` sozinho.
-  - ex23 (`ex23-carregando.php`) e ex24 (`ex24-vida.php`, sem etapas): **sozinho, de
-    primeira**. Cumpriu o critério combinado para passar ao `for`.
-  - ex25 (`ex25-corrida.php`) criado e **ainda não feito**: aquecimento de `while`, a pedido dele.
-- **Próximo passo:** fazer o ex25 sozinho para refrescar a memória. Depois começar o `for`,
-  um pedaço por mensagem (ideia: mostrar o `for` como um `while` com início, condição e
-  `+ 1` juntos numa linha só). Depois `foreach`, funções e `02-web`.
+  - ex25 (`ex25-corrida.php`, `while` com `if` / `else`): **sozinho, de primeira**.
+  - ex26 (`ex26-forno.php`, "último while", um pouco mais difícil: três casos com
+    `if` / `elseif` / `else`, com valores bem na divisa, 100 e 180): **sozinho, de primeira**.
+  - Antes, ex20 a ex24: a lição que ficou foi **mostrar, conferir e só então mudar o número**
+    (o `+ 1` vai por último dentro do loop). Nos últimos quatro ele acertou isso sozinho.
+- **Próximo passo:** começar o `for`, um pedaço por mensagem (ideia: mostrar o `for` como um
+  `while` com início, condição e `+ 1` juntos numa linha só). Depois `foreach`, funções e
+  `02-web`.
 - **Dúvidas pendentes:** nenhuma.
 - **Como ensinar (pedido dele):** em assunto novo, explicar **um pedaço por mensagem** e esperar
   ele entender antes de seguir. Uma aula com tudo de uma vez confundiu. Dicas concretas, e o
-  comando completo para rodar o arquivo. Ao guiar um exercício, pedir **uma ação por
+  comando completo para rodar o arquivo. Quando ele pedir "o terminal do ex N", mandar **só o
+  comando** para ele rodar: não rodar o arquivo nem mostrar a saída (ele quer ver sozinho). Ao guiar um exercício, pedir **uma ação por
   mensagem**: ele reclamou de "várias coisas ao mesmo tempo". Quando um exercício juntar uma
   ideia nova (ex: `if` dentro do `while`), passar antes um exercício intermediário e dividir
   o enunciado em etapas. Quando ele disser "não entendi", mostrar o trecho do código dele
@@ -38,6 +31,7 @@
 
 ## Histórico
 
+- 15/10/2026 (`computador 2`): ex20 a ex24 de `while` com `if` / `else` (ex20 a ex22 com ajuda, ex23 e ex24 sozinho); ex25 criado como aquecimento.
 - 14/10/2026 (celular, nuvem): etapa 1 do ex20 com ajuda passo a passo (contador começando no fim, chaves, `;`, `/n`); teclado do celular troca `"` por aspas curvas.
 - 09/10/2026 (`computador 2`): prática de `while`, ex15 a ex19 (os três últimos sozinho); termômetro adiado e dividido em etapas (ex20 e ex21).
 - 08/10/2026 (`computador 2`): ex11 e ex12 concluídos (`else` sem condição, ordem com `>=`); primeiro loop (`while`, exemplo, ex13 e ex14).

@@ -21,3 +21,16 @@
 // Km 10 - cansado
 // Chegou!
 
+$km = 0; $kmPorVolta = 2;
+
+while ( $km <= 10 ) {
+    echo "Km " . $km . " - ";
+    if ( $km < 6 ) {
+        echo "no ritmo\n";
+    }
+    else {
+        echo "cansado\n";
+    }
+    $km = $km + $kmPorVolta;
+}
+echo "Chegou!";
