@@ -3,16 +3,22 @@
 ## Onde parei
 
 - **Data e computador:** 16/10/2026, `computador 2`
-- **Assunto:** `01-fundamentos`: `while` encerrado.
+- **Assunto:** `01-fundamentos`: fechou o `while` e começou o `for`.
 - **O que foi feito:**
-  - ex25 (`ex25-corrida.php`, `while` com `if` / `else`): **sozinho, de primeira**.
-  - ex26 (`ex26-forno.php`, "último while", um pouco mais difícil: três casos com
-    `if` / `elseif` / `else`, com valores bem na divisa, 100 e 180): **sozinho, de primeira**.
-  - Antes, ex20 a ex24: a lição que ficou foi **mostrar, conferir e só então mudar o número**
-    (o `+ 1` vai por último dentro do loop). Nos últimos quatro ele acertou isso sozinho.
-- **Próximo passo:** começar o `for`, um pedaço por mensagem (ideia: mostrar o `for` como um
-  `while` com início, condição e `+ 1` juntos numa linha só). Depois `foreach`, funções e
-  `02-web`.
+  - ex25 (`ex25-corrida.php`) e ex26 (`ex26-forno.php`, três casos com `elseif`, valores bem
+    na divisa): `while` com `if`, **sozinho, de primeira**. Com isso o `while` ficou encerrado.
+  - `for` explicado como um `while` com começo, condição e passo juntos no parêntese. Por quê:
+    o passo fica na linha de cima e não tem como esquecer ou pôr no lugar errado (o erro dele
+    no `while`). Dúvida dele: a variável que conta é criada **dentro** do `for`; as outras
+    (ex: `$aumento`) continuam fora, antes do loop.
+  - ex27 (`ex27-flexoes.php`, 1 a 10): sozinho; só faltou o `!` no texto final.
+  - ex28 (`ex28-foguete.php`, 10 a 1): usou `>= 0` e mostrou o 0 a mais; corrigiu para `> 0`.
+  - ex29 (`ex29-volume.php`, `for` com `if` / `else` e `$aumento` fora): começou com
+    `$volume = 100`, viu no terminal e corrigiu para 0 sozinho.
+  - ex30 (`ex30-prova.php`) criado e **ainda não feito**: `for` contando para baixo de 15 em 15,
+    com três casos (`if` / `elseif` / `else`), sem etapas.
+- **Próximo passo:** fazer o ex30 sozinho. Depois, talvez mostrar o atalho `$i++` (um pedaço
+  por mensagem), e então `foreach`, funções e `02-web`.
 - **Dúvidas pendentes:** nenhuma.
 - **Pendente:** no perfil (`codevilelax/codevilelax`), o "Sobre mim" diz que o objetivo é
   "Engenharia de Dados", e o portfólio novo diz "desenvolvedor". Ele pediu para deixar a troca
