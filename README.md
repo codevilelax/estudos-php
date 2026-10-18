@@ -17,6 +17,9 @@ Meus estudos de PHP, do zero, com exercícios práticos.
 Cada exercício fica em um arquivo numerado, com o enunciado em comentário no topo
 (ex: `01-fundamentos/ex02-compras.php`).
 
+Os resumos do que já pratiquei ficam junto dos exercícios do assunto
+(ex: [resumo do `while`](01-fundamentos/resumo-while.md)).
+
 ## Como rodar
 
 ```bash
