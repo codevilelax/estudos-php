@@ -2,9 +2,10 @@
 
 ## Onde parei
 
-- **Data e computador:** 16/10/2026, `computador 2`
+- **Data e computador:** 19/10/2026, `computador 2`
 - **Assunto:** `01-fundamentos`: fechou o `while` e começou o `for`.
 - **O que foi feito:**
+  - 19/10: só sincronização (`git pull`). Abaixo, o que foi feito em 16/10.
   - ex25 (`ex25-corrida.php`) e ex26 (`ex26-forno.php`, três casos com `elseif`, valores bem
     na divisa): `while` com `if`, **sozinho, de primeira**. Com isso o `while` ficou encerrado.
   - `for` explicado como um `while` com começo, condição e passo juntos no parêntese. Por quê:
@@ -40,6 +41,7 @@
 
 ## Histórico
 
+- 16/10/2026 (`computador 2`): ex25 e ex26 sozinho (`while` encerrado); começo do `for`, ex27 a ex29 (quase tudo sozinho); ex30 criado.
 - 15/10/2026 (`computador 2`): ex20 a ex24 de `while` com `if` / `else` (ex20 a ex22 com ajuda, ex23 e ex24 sozinho); ex25 criado como aquecimento.
 - 14/10/2026 (celular, nuvem): etapa 1 do ex20 com ajuda passo a passo (contador começando no fim, chaves, `;`, `/n`); teclado do celular troca `"` por aspas curvas.
 - 09/10/2026 (`computador 2`): prática de `while`, ex15 a ex19 (os três últimos sozinho); termômetro adiado e dividido em etapas (ex20 e ex21).
