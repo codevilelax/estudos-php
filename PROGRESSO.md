@@ -21,6 +21,9 @@
 - **Pendente:** no perfil (`codevilelax/codevilelax`), o "Sobre mim" diz que o objetivo é
   "Engenharia de Dados", e o portfólio novo diz "desenvolvedor". Ele pediu para deixar a troca
   para depois: perguntar de novo no próximo fim de sessão.
+- **Pendente (próxima sessão):** trocar a mensagem do commit `2a517f6` (19/10) por uma neutra,
+  como ele pediu. Isso reescreve o histórico: depois do push forçado, no outro computador usar
+  `git fetch` e `git reset --hard origin/main` (se não houver alterações locais).
 - **Como ensinar (pedido dele):** em assunto novo, explicar **um pedaço por mensagem** e esperar
   ele entender antes de seguir. Uma aula com tudo de uma vez confundiu. Dicas concretas, e o
   comando para rodar o arquivo com o **caminho absoluto** neste computador (o relativo não
