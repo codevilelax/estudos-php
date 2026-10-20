@@ -20,3 +20,19 @@
 // Faltam 15 min - acelera
 // Faltam 0 min - acabou
 // Entreguem a prova!
+
+$diminuiPorAviso = 15;
+
+for ( $tempo = 60; $tempo >= 0; $tempo = $tempo - $diminuiPorAviso) {
+    echo "Faltam " . $tempo . " min - ";
+    if ( $tempo >= 30 ) {
+        echo "com calma" . "\n";
+    }
+    elseif ( $tempo >= 1 ) {
+        echo "acelera" . "\n";
+    }
+    else {
+        echo "acabou" . "\n";
+    }
+}
+echo "Entreguem a prova!";

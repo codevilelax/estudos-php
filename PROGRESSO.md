@@ -2,32 +2,31 @@
 
 ## Onde parei
 
-- **Data e computador:** 19/10/2026, `computador 2`
-- **Assunto:** `01-fundamentos`: fechou o `while` e começou o `for`.
+- **Data e computador:** 20/10/2026, `vilela`
+- **Assunto:** `01-fundamentos`: praticando o `for`.
 - **O que foi feito:**
-  - 19/10: só sincronização (`git pull`). Abaixo, o que foi feito em 16/10.
-  - ex25 (`ex25-corrida.php`) e ex26 (`ex26-forno.php`, três casos com `elseif`, valores bem
-    na divisa): `while` com `if`, **sozinho, de primeira**. Com isso o `while` ficou encerrado.
-  - `for` explicado como um `while` com começo, condição e passo juntos no parêntese. Por quê:
-    o passo fica na linha de cima e não tem como esquecer ou pôr no lugar errado (o erro dele
-    no `while`). Dúvida dele: a variável que conta é criada **dentro** do `for`; as outras
-    (ex: `$aumento`) continuam fora, antes do loop.
-  - ex27 (`ex27-flexoes.php`, 1 a 10): sozinho; só faltou o `!` no texto final.
-  - ex28 (`ex28-foguete.php`, 10 a 1): usou `>= 0` e mostrou o 0 a mais; corrigiu para `> 0`.
-  - ex29 (`ex29-volume.php`, `for` com `if` / `else` e `$aumento` fora): começou com
-    `$volume = 100`, viu no terminal e corrigiu para 0 sozinho.
-  - ex30 (`ex30-prova.php`) criado e **ainda não feito**: `for` contando para baixo de 15 em 15,
-    com três casos (`if` / `elseif` / `else`), sem etapas.
-- **Próximo passo:** fazer o ex30 sozinho. Depois, talvez mostrar o atalho `$i++` (um pedaço
-  por mensagem), e então `foreach`, funções e `02-web`.
+  - ex30 (`ex30-prova.php`, `for` descendo de 15 em 15 com `if` / `elseif` / `else`): sozinho,
+    saída certa. Mas usou `> 1` no `elseif` (com 1 minuto cairia em "acabou"); com a dica da
+    divisa, corrigiu para `>= 1`.
+  - Atalho `$i++` explicado: só soma 1, e quem decide quando parar é a condição. Dúvida dele:
+    achava que o `++` somava "até ser verdadeiro". Testou trocando o passo do ex27 por `$n++`.
+  - `+=` foi mostrado cedo demais; ele pediu para deixar para depois (uma coisa de cada vez).
+  - ex31 (`ex31-senhas.php`, `for` com `$senha++`, três casos comparando com `$minhaSenha` e
+    `==`): **sozinho e sem consultar**; achou o próprio erro.
+  - ex32 (`ex32-corrida.php`) criado e **ainda não feito**: `for` com conta dentro
+    (`$semana * $kmPorSemana`, como a tabuada do ex15) e `if` / `else` com `$meta`.
+- **Próximo passo:** fazer o ex32 sozinho. Ele pediu mais prática de `for` antes de seguir.
+  Depois: `+=` / `-=` (quando ele quiser), `foreach`, funções e `02-web`.
 - **Dúvidas pendentes:** nenhuma.
 - **Pendente:** no perfil (`codevilelax/codevilelax`), o "Sobre mim" diz que o objetivo é
   "Engenharia de Dados", e o portfólio novo diz "desenvolvedor". Ele pediu para deixar a troca
   para depois: perguntar de novo no próximo fim de sessão.
 - **Como ensinar (pedido dele):** em assunto novo, explicar **um pedaço por mensagem** e esperar
   ele entender antes de seguir. Uma aula com tudo de uma vez confundiu. Dicas concretas, e o
-  comando completo para rodar o arquivo. Quando ele pedir "o terminal do ex N", mandar **só o
-  comando** para ele rodar: não rodar o arquivo nem mostrar a saída (ele quer ver sozinho). Ao guiar um exercício, pedir **uma ação por
+  comando para rodar o arquivo com o **caminho absoluto** neste computador (o relativo não
+  funcionou no terminal dele). Quando ele pedir "o terminal do ex N", mandar **só o
+  comando** para ele rodar: não rodar o arquivo, não mostrar a saída e não comentar erro (ele
+  quer ver sozinho antes de pedir ajuda). Ao guiar um exercício, pedir **uma ação por
   mensagem**: ele reclamou de "várias coisas ao mesmo tempo". Quando um exercício juntar uma
   ideia nova (ex: `if` dentro do `while`), passar antes um exercício intermediário e dividir
   o enunciado em etapas. Quando ele disser "não entendi", mostrar o trecho do código dele
