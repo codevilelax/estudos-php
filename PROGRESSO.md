@@ -6,6 +6,20 @@
 > andamento), confira que não há trabalho local que ainda não está no GitHub, e então rode
 > `git fetch` e `git reset --hard origin/main`. Depois, apague este aviso, faça commit e push.
 
+> **⚠️ Para o Claude no computador `vilela` (monitor do Detran):** em 21/10/2026, no
+> `computador 2`, fiz um monitor que avisa quando abre vaga numa quarta-feira no agendamento
+> do exame prático do Detran-SP (script do Tampermonkey + notificação no celular pelo ntfy).
+> Ele vai rodar **no `vilela`**. Tudo está nesta página, fixada no claude.ai dele:
+> https://claude.ai/artifact/CfCJBGtok9eW2wsWUNa9Uf
+> 1. Leia a página com a ferramenta Artifact (`action: "read"`): tem o passo a passo e o script inteiro.
+> 2. Salve na memória deste computador: o link; o que é o monitor; que o celular já assinou o
+>    tópico do ntfy (está na página) e recebeu o teste; que o WhatsApp (CallMeBot) ficou de
+>    fora porque o bot estava lotado; e que o script ainda não foi testado na tela real do
+>    Detran (a detecção de dia livre é pela cor: número escuro = disponível). Se der erro,
+>    pedir print da caixinha preta do monitor e da tela, ajustar o script e republicar a página.
+> 3. Apague este aviso, faça commit e push.
+> 4. Ajude ele a seguir os passos da página, uma ação por mensagem.
+
 ## Onde parei
 
 - **Data e computador:** 21/10/2026, `computador 2`
