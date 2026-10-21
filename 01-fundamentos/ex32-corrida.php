@@ -22,3 +22,16 @@
 // Semana 6: 12 km - meta batida!
 // Fim do treino.
 
+$kmPorSemana = 2; $meta = 8;
+
+for ( $semana = 1; $semana <= 6; $semana++ ) {
+    $km = $semana * $kmPorSemana;
+    echo "Semana " . $semana . ": " . $km . " km - ";
+    if ( $km < $meta ) {
+        echo "continua treinando" . "\n";
+    }
+    else {
+        echo "meta batida!" . "\n";
+    }
+}
+echo "Fim do treino.";

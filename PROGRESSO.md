@@ -2,26 +2,24 @@
 
 ## Onde parei
 
-- **Data e computador:** 20/10/2026, `vilela`
-- **Assunto:** `01-fundamentos`: praticando o `for`.
+- **Data e computador:** 21/10/2026, `computador 2`
+- **Assunto:** `01-fundamentos`: `for` encerrado.
 - **O que foi feito:**
-  - ex30 (`ex30-prova.php`, `for` descendo de 15 em 15 com `if` / `elseif` / `else`): sozinho,
-    saída certa. Mas usou `> 1` no `elseif` (com 1 minuto cairia em "acabou"); com a dica da
-    divisa, corrigiu para `>= 1`.
-  - Atalho `$i++` explicado: só soma 1, e quem decide quando parar é a condição. Dúvida dele:
-    achava que o `++` somava "até ser verdadeiro". Testou trocando o passo do ex27 por `$n++`.
-  - `+=` foi mostrado cedo demais; ele pediu para deixar para depois (uma coisa de cada vez).
-  - ex31 (`ex31-senhas.php`, `for` com `$senha++`, três casos comparando com `$minhaSenha` e
-    `==`): **sozinho e sem consultar**; achou o próprio erro.
-  - ex32 (`ex32-corrida.php`) criado e **ainda não feito**: `for` com conta dentro
-    (`$semana * $kmPorSemana`, como a tabuada do ex15) e `if` / `else` com `$meta`.
-- **Próximo passo:** fazer o ex32 sozinho. Ele pediu mais prática de `for` antes de seguir.
-  Depois: `+=` / `-=` (quando ele quiser), `foreach`, funções e `02-web`.
+  - ex32 (`ex32-corrida.php`, `for` com conta dentro e `if` / `else` com `$meta`): **com
+    ajuda**. Travou em: colocar a conta como 4ª parte dentro dos parênteses do `for` (erro de
+    sintaxe); `echo` da mensagem antes do `echo` da linha (cada mensagem caía na linha
+    anterior e a da semana 6 parecia sumir); `<= 8` na divisa (8 km dava "continua"); `8` e
+    `$semana + $semana` fixos em vez de `$meta` e `$kmPorSemana`. Corrigiu tudo com dicas.
+  - ex33 (`ex33-cinema.php`, mesma estrutura do ex32 com a divisa invertida: R$ 40 ainda
+    cabe, então `<=`): **sozinho e sem ajuda**, certo de primeira.
+- **Próximo passo:** começar o `foreach` (loop para percorrer arrays; arrays vistos no ex08).
+  É assunto novo: um pedaço por mensagem. Depois: `+=` / `-=` (quando ele quiser), funções e
+  `02-web`.
 - **Dúvidas pendentes:** nenhuma.
 - **Pendente:** no perfil (`codevilelax/codevilelax`), o "Sobre mim" diz que o objetivo é
   "Engenharia de Dados", e o portfólio novo diz "desenvolvedor". Ele pediu para deixar a troca
   para depois: perguntar de novo no próximo fim de sessão.
-- **Pendente (próxima sessão):** trocar a mensagem do commit `2a517f6` (19/10) por uma neutra,
+- **Pendente:** trocar a mensagem do commit `2a517f6` (19/10) por uma neutra,
   como ele pediu. Isso reescreve o histórico: depois do push forçado, no outro computador usar
   `git fetch` e `git reset --hard origin/main` (se não houver alterações locais).
 - **Como ensinar (pedido dele):** em assunto novo, explicar **um pedaço por mensagem** e esperar
@@ -43,6 +41,7 @@
 
 ## Histórico
 
+- 20/10/2026 (`vilela`): ex30 e ex31 de `for` sozinho (ex30 com dica na divisa); atalho `$i++` explicado; ex32 criado.
 - 16/10/2026 (`computador 2`): ex25 e ex26 sozinho (`while` encerrado); começo do `for`, ex27 a ex29 (quase tudo sozinho); ex30 criado.
 - 15/10/2026 (`computador 2`): ex20 a ex24 de `while` com `if` / `else` (ex20 a ex22 com ajuda, ex23 e ex24 sozinho); ex25 criado como aquecimento.
 - 14/10/2026 (celular, nuvem): etapa 1 do ex20 com ajuda passo a passo (contador começando no fim, chaves, `;`, `/n`); teclado do celular troca `"` por aspas curvas.
