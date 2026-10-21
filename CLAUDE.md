@@ -28,6 +28,9 @@ Quando eu disser "terminei", "vou parar" ou algo parecido:
 2. Faça commit de tudo com uma mensagem descritiva em português.
 3. Rode `git push` e confirme que subiu.
 
+Nunca registre o motivo de eu parar ou de não ter estudado (nem no `PROGRESSO.md`,
+nem nas mensagens de commit). Escreva só o que foi feito.
+
 ### Formato do PROGRESSO.md
 Mantenha no topo a seção "Onde parei", sempre substituída pela mais recente:
 - Data e computador usado

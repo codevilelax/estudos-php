@@ -19,9 +19,6 @@
 - **Pendente:** no perfil (`codevilelax/codevilelax`), o "Sobre mim" diz que o objetivo é
   "Engenharia de Dados", e o portfólio novo diz "desenvolvedor". Ele pediu para deixar a troca
   para depois: perguntar de novo no próximo fim de sessão.
-- **Pendente:** trocar a mensagem do commit `2a517f6` (19/10) por uma neutra,
-  como ele pediu. Isso reescreve o histórico: depois do push forçado, no outro computador usar
-  `git fetch` e `git reset --hard origin/main` (se não houver alterações locais).
 - **Como ensinar (pedido dele):** em assunto novo, explicar **um pedaço por mensagem** e esperar
   ele entender antes de seguir. Uma aula com tudo de uma vez confundiu. Dicas concretas, e o
   comando para rodar o arquivo com o **caminho absoluto** neste computador (o relativo não
@@ -35,8 +32,9 @@
   "mova a linha 29 para cima do `if`"). Isso funcionou melhor que explicar de novo.
 - **Ao conferir loops:** rodar com limite de tempo (`timeout 3 php ...`), porque um loop
   infinito trava. Se travar no terminal dele, avisar para apertar Ctrl+C.
-- **Aviso:** em 06/10/2026 o histórico do repositório foi reescrito para tirar o Gmail
-  dos commits. No outro computador, na primeira vez, usar `git fetch` e
+- **Aviso:** em 06/10/2026 e de novo em 21/10/2026 o histórico do repositório foi reescrito
+  (em 06/10 para tirar o Gmail dos commits; em 21/10 para deixar neutro o commit de 19/10).
+  No outro computador (`vilela`), na primeira vez depois de 21/10, usar `git fetch` e
   `git reset --hard origin/main` (se não houver alterações locais) em vez de `git pull`.
 
 ## Histórico
