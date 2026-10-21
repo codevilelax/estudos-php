@@ -18,9 +18,16 @@
     `$semana + $semana` fixos em vez de `$meta` e `$kmPorSemana`. Corrigiu tudo com dicas.
   - ex33 (`ex33-cinema.php`, mesma estrutura do ex32 com a divisa invertida: R$ 40 ainda
     cabe, então `<=`): **sozinho e sem ajuda**, certo de primeira.
-- **Próximo passo:** começar o `foreach` (loop para percorrer arrays; arrays vistos no ex08).
-  É assunto novo: um pedaço por mensagem. Depois: `+=` / `-=` (quando ele quiser), funções e
-  `02-web`.
+  - Histórico do GitHub reescrito: o commit de 19/10 ficou neutro (ver aviso no topo).
+  - Prontos para a próxima sessão, **ainda não vistos por ele**: `ex34-0-exemplo-foreach.php`
+    (exemplo com `$frutas`) e `ex34-convites.php` (primeiro exercício: array `$amigos` com 4
+    nomes, `foreach` mostrando "Convite enviado para Nome" e a mensagem final).
+- **Próximo passo:** começar o `foreach`. **Ele pediu uma explicação antes de fazer o ex34.**
+  É assunto novo: um pedaço por mensagem, esperando ele entender antes de seguir. Sugestão
+  de ordem: (1) para que serve (passar por cada item do array, sem contador e sem `count`);
+  (2) rodar o `ex34-0` e ler a linha `foreach ($frutas as $fruta)`: a cada volta, `$fruta`
+  recebe o próximo item; (3) ele mexer no array do exemplo e rodar de novo; (4) só então o
+  ex34. Depois: `+=` / `-=` (quando ele quiser), funções e `02-web`.
 - **Dúvidas pendentes:** nenhuma.
 - **Pendente:** no perfil (`codevilelax/codevilelax`), o "Sobre mim" diz que o objetivo é
   "Engenharia de Dados", e o portfólio novo diz "desenvolvedor". Ele pediu para deixar a troca
