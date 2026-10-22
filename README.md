@@ -8,7 +8,7 @@ Meus estudos de PHP, do zero, com exercícios práticos.
 | --- | --- |
 | `01-fundamentos` | variáveis, arrays, condicionais, loops, funções |
 | `02-web` | formulários, GET/POST, sessões |
-| `03-banco-de-dados` | MySQL, PDO |
+| `03-banco-de-dados` | SQLite, PDO, SQL (com um banco de 500 pessoas fictícias) |
 | `04-poo` | classes, objetos, herança |
 | `05-composer` | pacotes e autoload |
 | `06-laravel` | framework Laravel |

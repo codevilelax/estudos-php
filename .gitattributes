@@ -1,0 +1,2 @@
+# O banco SQLite é um arquivo binário: o git não deve tentar juntar versões dele
+*.sqlite binary

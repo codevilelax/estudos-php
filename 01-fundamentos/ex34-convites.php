@@ -12,3 +12,10 @@
 // Convite enviado para Carla
 // Convite enviado para Diego
 // Todos os convites foram enviados.
+
+$amigos = ["Ana", "Bruno", "Carla", "Diego"];
+
+foreach ($amigos as $amigo) {
+    echo "Convite enviado para " . $amigo . "\n";
+}
+echo "Todos os convites foram enviados.";

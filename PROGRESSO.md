@@ -22,41 +22,60 @@
 
 ## Onde parei
 
-- **Data e computador:** 21/10/2026, `computador 2`
-- **Assunto:** `01-fundamentos`: `for` encerrado.
+- **Data e computador:** 22/10/2026, `computador 2`
+- **Assunto:** `foreach` e `+=` / `-=` encerrados em `01-fundamentos`. Começou
+  `03-banco-de-dados` com SQLite (pedido dele, ver "Novo jeito de estudar" abaixo).
 - **O que foi feito:**
-  - ex32 (`ex32-corrida.php`, `for` com conta dentro e `if` / `else` com `$meta`): **com
-    ajuda**. Travou em: colocar a conta como 4ª parte dentro dos parênteses do `for` (erro de
-    sintaxe); `echo` da mensagem antes do `echo` da linha (cada mensagem caía na linha
-    anterior e a da semana 6 parecia sumir); `<= 8` na divisa (8 km dava "continua"); `8` e
-    `$semana + $semana` fixos em vez de `$meta` e `$kmPorSemana`. Corrigiu tudo com dicas.
-  - ex33 (`ex33-cinema.php`, mesma estrutura do ex32 com a divisa invertida: R$ 40 ainda
-    cabe, então `<=`): **sozinho e sem ajuda**, certo de primeira.
-  - Histórico do GitHub reescrito: o commit de 19/10 ficou neutro (ver aviso no topo).
-  - Prontos para a próxima sessão, **ainda não vistos por ele**: `ex34-0-exemplo-foreach.php`
-    (exemplo com `$frutas`) e `ex34-convites.php` (primeiro exercício: array `$amigos` com 4
-    nomes, `foreach` mostrando "Convite enviado para Nome" e a mensagem final).
-- **Próximo passo:** começar o `foreach`. **Ele pediu uma explicação antes de fazer o ex34.**
-  É assunto novo: um pedaço por mensagem, esperando ele entender antes de seguir. Sugestão
-  de ordem: (1) para que serve (passar por cada item do array, sem contador e sem `count`);
-  (2) rodar o `ex34-0` e ler a linha `foreach ($frutas as $fruta)`: a cada volta, `$fruta`
-  recebe o próximo item; (3) ele mexer no array do exemplo e rodar de novo; (4) só então o
-  ex34. Depois: `+=` / `-=` (quando ele quiser), funções e `02-web`.
+  - `foreach`: ex34 (convites) **com ajuda** no nome da variável (`$amigos as $amigos`; entendeu
+    vendo o valor de `$amigos` a cada volta e trocou para `$amigo`). ex35 e ex36 com detalhes
+    de texto; no ex36 usou `18` fixo no `if` em vez de `$idadeMinima` e corrigiu. ex37 e ex38
+    **sozinho** (no ex38 só faltou um espaço).
+  - Somar no `foreach`: ex39 (cofrinho) esqueceu o `$total = 0` antes do loop (aviso
+    "Undefined variable") e corrigiu. ex40 **sozinho**, com a soma antes do `echo` certa de
+    primeira. Para entender a soma, funcionou a explicação "como para uma criança" (cofrinho
+    vazio + uma moeda por volta).
+  - `+=` / `-=`: ele mesmo deduziu `$total += $km`. ex41 (vida no jogo): inverteu
+    `$pocao += $vida`; entendeu com "quem bebe a poção é o personagem: quem sobe é a vida".
+  - **Novo jeito de estudar:** ele achou o ritmo lento e pediu para aprender na prática com
+    dados. Criei o banco SQLite `03-banco-de-dados/banco/estudos.sqlite` (tabela `pessoas`,
+    500 pessoas fictícias), que vai para o git e vale nos dois computadores. Regras no
+    `CLAUDE.md`. Funções e `02-web` ficaram para depois.
+  - `03-banco-de-dados`: ex01-0 (exemplo de conexão, lido parte por parte: `new PDO`,
+    `setAttribute`, `query`, `$pessoa["nome"]`). ex01 (faixas de idade) **com ajuda**: colou
+    código PHP no PowerShell; escreveu o SQL solto, fora do `query("...")`; `FROM nome` em
+    vez de `FROM pessoas`; `echo $pessoa` ("Array to string conversion"); divisas `< 29` em
+    vez de `<= 29`. ex02 (10 mais velhos de MG + média calculada no PHP) **com ajuda**:
+    `WHERE uf` sem comparação; aspas simples em volta da tabela e da coluna em vez do valor;
+    `TOP10` (vem do SQL Server); faltou `, nome` no desempate; `+=` invertido de novo na
+    soma das idades.
+  - VS Code: ele já tinha o SQLite Viewer (ver a tabela). Instalou a extensão **SQLite**
+    (alexcvzz) para testar consultas: Ctrl+Shift+P → "SQLite: New Query", Ctrl+Shift+Q roda.
+    Os rascunhos `-- SQLite*.sql` estão no `.gitignore`.
+- **Próximo passo:** próximo desafio de banco. Ele **sabe SQL básico** (usa SQL Server no
+  trabalho), então o foco é o lado do PHP, um assunto novo por vez: (1) variável dentro do
+  SQL do jeito seguro (`prepare` + `execute`); (2) inserir, alterar e apagar pessoas pelo PHP;
+  (3) `require` para deixar a conexão num arquivo só (prometi mostrar). Sugerir testar a
+  consulta antes na extensão SQLite e depois colar no `query("...")`.
+- **No computador `vilela`:** antes do primeiro exercício de banco, conferir se `php -m`
+  mostra `pdo_sqlite` (ver `CLAUDE.md`). Se ele quiser a tela de consulta, instalar as
+  extensões SQLite Viewer e SQLite (alexcvzz) no VS Code de lá.
 - **Dúvidas pendentes:** nenhuma.
 - **Pendente:** no perfil (`codevilelax/codevilelax`), o "Sobre mim" diz que o objetivo é
-  "Engenharia de Dados", e o portfólio novo diz "desenvolvedor". Ele pediu para deixar a troca
-  para depois: perguntar de novo no próximo fim de sessão.
-- **Como ensinar (pedido dele):** em assunto novo, explicar **um pedaço por mensagem** e esperar
-  ele entender antes de seguir. Uma aula com tudo de uma vez confundiu. Dicas concretas, e o
-  comando para rodar o arquivo com o **caminho absoluto** neste computador (o relativo não
-  funcionou no terminal dele). Quando ele pedir "o terminal do ex N", mandar **só o
-  comando** para ele rodar: não rodar o arquivo, não mostrar a saída e não comentar erro (ele
-  quer ver sozinho antes de pedir ajuda). Ao guiar um exercício, pedir **uma ação por
-  mensagem**: ele reclamou de "várias coisas ao mesmo tempo". Quando um exercício juntar uma
-  ideia nova (ex: `if` dentro do `while`), passar antes um exercício intermediário e dividir
-  o enunciado em etapas. Quando ele disser "não entendi", mostrar o trecho do código dele
-  com os valores de uma volta do loop e dar uma ação concreta com o número da linha (ex:
-  "mova a linha 29 para cima do `if`"). Isso funcionou melhor que explicar de novo.
+  "Engenharia de Dados", e o portfólio novo diz "desenvolvedor". Perguntado de novo em 22/10.
+- **Como ensinar (pedido dele):** desde 22/10 ele quer **ritmo mais rápido e desafios mais
+  difíceis**, sem etapas, usando o banco. Mas a explicação de assunto novo continua **um pedaço
+  por mensagem**, curta e concreta. Quando não entende, pede "como se fosse para uma criança"
+  (analogias simples funcionaram: telefone para a conexão, planilha para tabela e coluna,
+  cofrinho para soma). Quando o exercício pedir um array, os itens já vêm no enunciado (regra
+  no `CLAUDE.md`). Erro que se repetiu: a ordem do `+=` (o cofrinho fica à esquerda).
+  Dicas concretas, e o comando para rodar o arquivo com o **caminho absoluto** neste computador
+  (o relativo não funcionou no terminal dele). Quando ele pedir "o terminal do ex N", mandar
+  **só o comando** para ele rodar: não rodar o arquivo, não mostrar a saída e não comentar erro
+  (ele quer ver sozinho antes de pedir ajuda). Ao guiar um exercício, pedir **uma ação por
+  mensagem**: ele reclamou de "várias coisas ao mesmo tempo". Quando ele disser "não entendi",
+  mostrar o trecho do código dele com os valores de uma volta do loop e dar uma ação concreta
+  com o número da linha. Isso funcionou melhor que explicar de novo. Incentivar a ler a
+  mensagem de erro antes de pedir ajuda (falamos disso em 22/10).
 - **Ao conferir loops:** rodar com limite de tempo (`timeout 3 php ...`), porque um loop
   infinito trava. Se travar no terminal dele, avisar para apertar Ctrl+C.
 - **Aviso:** em 06/10/2026 e de novo em 21/10/2026 o histórico do repositório foi reescrito
@@ -66,6 +85,7 @@
 
 ## Histórico
 
+- 21/10/2026 (`computador 2`): ex32 com ajuda e ex33 sozinho (`for` encerrado); exemplo do `foreach` e ex34 preparados.
 - 20/10/2026 (`vilela`): ex30 e ex31 de `for` sozinho (ex30 com dica na divisa); atalho `$i++` explicado; ex32 criado.
 - 16/10/2026 (`computador 2`): ex25 e ex26 sozinho (`while` encerrado); começo do `for`, ex27 a ex29 (quase tudo sozinho); ex30 criado.
 - 15/10/2026 (`computador 2`): ex20 a ex24 de `while` com `if` / `else` (ex20 a ex22 com ajuda, ex23 e ex24 sozinho); ex25 criado como aquecimento.

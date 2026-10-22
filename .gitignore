@@ -1,6 +1,14 @@
 # Dependências do Composer (instaladas com composer install)
 /vendor/
 
+# Arquivos temporários do SQLite (o estudos.sqlite em si vai para o git)
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+
+# Rascunhos de consulta criados pela extensão SQLite do VS Code
+-- SQLite*.sql
+
 # Configurações de editor
 .vscode/
 .idea/

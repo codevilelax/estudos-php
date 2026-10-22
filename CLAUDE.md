@@ -31,6 +31,21 @@ Quando eu disser "terminei", "vou parar" ou algo parecido:
 Nunca registre o motivo de eu parar ou de não ter estudado (nem no `PROGRESSO.md`,
 nem nas mensagens de commit). Escreva só o que foi feito.
 
+### Banco de dados de estudo (SQLite)
+- O banco fica em `03-banco-de-dados/banco/estudos.sqlite` (tabela `pessoas`: `id`, `nome`,
+  `idade`, `cidade`, `uf`, com 500 pessoas fictícias). Ele vai para o git junto com o resto,
+  então as mudanças que eu fizer nele valem nos dois computadores.
+- É um arquivo binário: se o `git pull` der conflito nele, não tente juntar as versões.
+  Pergunte qual versão manter.
+- Para voltar às 500 pessoas originais (apaga as mudanças, pede confirmação):
+  `php 03-banco-de-dados/banco/recriar-banco.php`. Os dados originais ficam em
+  `03-banco-de-dados/banco/dados-iniciais.sql`.
+- Nos exercícios, conectar com o caminho a partir de `__DIR__` (ex:
+  `new PDO("sqlite:" . __DIR__ . "/banco/estudos.sqlite")`). Com caminho errado, o SQLite cria
+  um banco vazio sem avisar, e aparece o erro "no such table".
+- O PHP precisa do `pdo_sqlite`. Se `php -m` não mostrar `pdo_sqlite` neste computador,
+  me ajude a ativar a linha `extension=pdo_sqlite` no `php.ini` (`php --ini` mostra onde ele fica).
+
 ### Formato do PROGRESSO.md
 Mantenha no topo a seção "Onde parei", sempre substituída pela mais recente:
 - Data e computador usado
@@ -70,7 +85,7 @@ Não entregue a solução completa, a menos que eu peça.
 
 Antes de qualquer resposta, me dê uma dica para eu tentar sozinho.
 
-Cada exercício fica em um arquivo próprio, numerado, na pasta do assunto (ex: `01-fundamentos/ex02-compras.php`). Ao passar um exercício novo, crie o arquivo com o enunciado em comentário no topo. Não coloque no enunciado uma linha para eu anotar os valores que testei.
+Cada exercício fica em um arquivo próprio, numerado, na pasta do assunto (ex: `01-fundamentos/ex02-compras.php`). Ao passar um exercício novo, crie o arquivo com o enunciado em comentário no topo. Não coloque no enunciado uma linha para eu anotar os valores que testei. Quando o exercício pedir para criar um array, já coloque no enunciado os itens dele (ex: `"arroz", "feijão", "leite"`), para eu não perder tempo inventando.
 
 Quando eu cometer um erro:
 - diga onde está o erro;
@@ -81,7 +96,7 @@ Quando eu cometer um erro:
 
 - `01-fundamentos` — variáveis, arrays, condicionais, loops, funções
 - `02-web` — formulários, GET/POST, sessões
-- `03-banco-de-dados` — MySQL, PDO
+- `03-banco-de-dados` — SQLite, PDO, SQL (usando o banco `banco/estudos.sqlite`)
 - `04-poo` — classes, objetos, herança
 - `05-composer` — pacotes e autoload
 - `06-laravel` — framework Laravel
