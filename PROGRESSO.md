@@ -60,8 +60,8 @@
   mostra `pdo_sqlite` (ver `CLAUDE.md`). Se ele quiser a tela de consulta, instalar as
   extensões SQLite Viewer e SQLite (alexcvzz) no VS Code de lá.
 - **Dúvidas pendentes:** nenhuma.
-- **Pendente:** no perfil (`codevilelax/codevilelax`), o "Sobre mim" diz que o objetivo é
-  "Engenharia de Dados", e o portfólio novo diz "desenvolvedor". Perguntado de novo em 22/10.
+- **Perfil do GitHub:** em 22/10 ele escolheu "desenvolvedor" como objetivo (antes estava
+  "Engenharia de Dados"). Perfil ajustado, agora igual ao portfólio.
 - **Como ensinar (pedido dele):** desde 22/10 ele quer **ritmo mais rápido e desafios mais
   difíceis**, sem etapas, usando o banco. Mas a explicação de assunto novo continua **um pedaço
   por mensagem**, curta e concreta. Quando não entende, pede "como se fosse para uma criança"
