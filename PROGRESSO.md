@@ -20,6 +20,33 @@
 > 3. Apague este aviso, faça commit e push.
 > 4. Ajude ele a seguir os passos da página, uma ação por mensagem.
 
+> **⚠️ Para o Claude no computador `vilela` (extensões do VS Code):** em 22/10/2026 ele pediu
+> que o VS Code do `vilela` fique com **as mesmas extensões do `computador 2`**, que é a
+> referência ("esse aqui tem as melhores"). As que existirem só no `vilela` devem sair. No
+> `computador 2` passei para ele a sincronização do VS Code (Ctrl+Shift+P → "Settings Sync:
+> Backup and Sync Settings", conta GitHub `codevilelax`).
+> 1. Rode `code --list-extensions` e compare com a lista abaixo.
+> 2. Mostre a ele as que sobram no `vilela` e pergunte se pode **desinstalar**
+>    (`code --uninstall-extension <id>`). Ele falou em "desativar", mas explique em uma linha
+>    que a desativada continua instalada e a sincronização copiaria ela para o `computador 2`.
+>    Se ele preferir desativar, é pelo painel de extensões (botão direito → Disable).
+> 3. **Só depois disso**, ajude a ligar a sincronização com a mesma conta. Se perguntar entre
+>    "Merge" e "Replace Local", escolha **Replace Local** (o `computador 2` manda). Se ele não
+>    quiser a sincronização, instale as que faltam com `code --install-extension <id>`.
+> 4. Confira com `code --list-extensions`, apague este aviso, faça commit e push.
+>
+> Extensões do `computador 2` (22/10/2026): `alexcvzz.vscode-sqlite`, `anthropic.claude-code`,
+> `batisteo.vscode-django`, `brapifra.phpserver`, `devsense.composer-php-vscode`,
+> `devsense.intelli-php-vscode`, `devsense.phptools-vscode`, `devsense.profiler-php-vscode`,
+> `donjayamanne.python-environment-manager`, `donjayamanne.python-extension-pack`,
+> `esbenp.prettier-vscode`, `formulahendry.code-runner`, `kevinrose.vsc-python-indent`,
+> `mathiasfrohlich.kotlin`, `mechatroner.rainbow-csv`, `ms-python.debugpy`, `ms-python.python`,
+> `ms-python.vscode-pylance`, `ms-python.vscode-python-envs`, `ms-vscode.powershell`,
+> `njpwerner.autodocstring`, `openai.chatgpt`, `openai.codex-audio`, `pkief.material-icon-theme`,
+> `qwtel.sqlite-viewer`, `ritwickdey.liveserver`, `rocketseat.theme-omni`,
+> `visualstudioexptteam.intellicode-api-usage-examples`, `visualstudioexptteam.vscodeintellicode`,
+> `wholroyd.jinja`, `zobo.php-intellisense`.
+
 ## Onde parei
 
 - **Data e computador:** 22/10/2026, `computador 2`
