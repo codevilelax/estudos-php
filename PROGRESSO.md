@@ -49,43 +49,48 @@
 
 ## Onde parei
 
-- **Data e computador:** 22/10/2026, `computador 2`
-- **Assunto:** `foreach` e `+=` / `-=` encerrados em `01-fundamentos`. Começou
-  `03-banco-de-dados` com SQLite (pedido dele, ver "Novo jeito de estudar" abaixo).
+- **Data e computador:** 23/10/2026, `computador 2`
+- **Assunto:** treino de **explicar código** (pedido dele), prática no banco (ex03 e ex04) e
+  começo do projeto `projetos/cadastro-pessoas` com `prepare` + `execute`.
 - **O que foi feito:**
-  - `foreach`: ex34 (convites) **com ajuda** no nome da variável (`$amigos as $amigos`; entendeu
-    vendo o valor de `$amigos` a cada volta e trocou para `$amigo`). ex35 e ex36 com detalhes
-    de texto; no ex36 usou `18` fixo no `if` em vez de `$idadeMinima` e corrigiu. ex37 e ex38
-    **sozinho** (no ex38 só faltou um espaço).
-  - Somar no `foreach`: ex39 (cofrinho) esqueceu o `$total = 0` antes do loop (aviso
-    "Undefined variable") e corrigiu. ex40 **sozinho**, com a soma antes do `echo` certa de
-    primeira. Para entender a soma, funcionou a explicação "como para uma criança" (cofrinho
-    vazio + uma moeda por volta).
-  - `+=` / `-=`: ele mesmo deduziu `$total += $km`. ex41 (vida no jogo): inverteu
-    `$pocao += $vida`; entendeu com "quem bebe a poção é o personagem: quem sobe é a vida".
-  - **Novo jeito de estudar:** ele achou o ritmo lento e pediu para aprender na prática com
-    dados. Criei o banco SQLite `03-banco-de-dados/banco/estudos.sqlite` (tabela `pessoas`,
-    500 pessoas fictícias), que vai para o git e vale nos dois computadores. Regras no
-    `CLAUDE.md`. Funções e `02-web` ficaram para depois.
-  - `03-banco-de-dados`: ex01-0 (exemplo de conexão, lido parte por parte: `new PDO`,
-    `setAttribute`, `query`, `$pessoa["nome"]`). ex01 (faixas de idade) **com ajuda**: colou
-    código PHP no PowerShell; escreveu o SQL solto, fora do `query("...")`; `FROM nome` em
-    vez de `FROM pessoas`; `echo $pessoa` ("Array to string conversion"); divisas `< 29` em
-    vez de `<= 29`. ex02 (10 mais velhos de MG + média calculada no PHP) **com ajuda**:
-    `WHERE uf` sem comparação; aspas simples em volta da tabela e da coluna em vez do valor;
-    `TOP10` (vem do SQL Server); faltou `, nome` no desempate; `+=` invertido de novo na
-    soma das idades.
-  - VS Code: ele já tinha o SQLite Viewer (ver a tabela). Instalou a extensão **SQLite**
-    (alexcvzz) para testar consultas: Ctrl+Shift+P → "SQLite: New Query", Ctrl+Shift+Q roda.
-    Os rascunhos `-- SQLite*.sql` estão no `.gitignore`.
-- **Próximo passo:** próximo desafio de banco. Ele **sabe SQL básico** (usa SQL Server no
-  trabalho), então o foco é o lado do PHP, um assunto novo por vez: (1) variável dentro do
-  SQL do jeito seguro (`prepare` + `execute`); (2) inserir, alterar e apagar pessoas pelo PHP;
-  (3) `require` para deixar a conexão num arquivo só (prometi mostrar). Sugerir testar a
-  consulta antes na extensão SQLite e depois colar no `query("...")`.
+  - **Explicar código:** ele disse que entende a lógica, mas trava na hora de explicar o que
+    cada parte faz. Método que funcionou: traduzir a linha pro português pedaço por pedaço
+    (`=` se lê "guarda", `+=` "soma na caixinha") e depois **o que faz + pra quê**.
+    Analogias: caixinha (variável), cofre (contador), fila e balcão no `foreach` (`$pessoas` =
+    a caixa com todas, `$pessoa` = a ficha de uma pessoa, uma linha da tabela) e
+    **campeonato** para achar o maior/menor. Explicou sozinho o `+=` com a ideia do cofre.
+    Ele anota tudo no caderno: mandar notas curtas, prontas para copiar.
+  - ex03 (censo de Curitiba: lista, total, quantos 60+, mais velha) **com ajuda passo a
+    passo**: `'curitiba'` minúsculo (o SQLite diferencia maiúsculas, o SQL Server do trabalho
+    não); `echo` dentro do `if`/`foreach` repetindo; `$velho += 1` fora do `if`;
+    `if ($pessoa = $qnt)`; `$$maiorIdade`; apagou demais ao corrigir. O campeonato do mais
+    velho (linhas dentro do `if`) e o `echo` final saíram quase sozinho. Parte 2 (explicar
+    o `foreach` e o `if` em comentário): fez, e eu corrigi mantendo o estilo dele, a pedido.
+  - ex04 (caça aos 6 erros, Bahia; ele pediu código quebrado para consertar): achou 3
+    **lendo o código** antes de darem erro (`;`, `echo` dentro do `foreach`, `$pessoas` no
+    lugar de `$pessoa`) e consertou `'ba'` e a diferença invertida. Com dica: o campeão da
+    mais nova começando em 0 (pôs 30, viu que falharia em Sorocaba, trocou por 999). Parte 2:
+    listou os erros; completei os porquês a pedido.
+  - Projeto **cadastro de pessoas** (`projetos/cadastro-pessoas`): cada assunto novo vira uma
+    parte. Parte 1, `buscar.php`: expliquei `readline`, SQL Injection (o bilhete) e o jeito
+    seguro (formulário com quadradinho `?`, `prepare` + `execute([$uf])`). Ele fez o
+    `readline`, o `prepare`/`execute` (trocou a ordem duas vezes), o `foreach` com `echo` e o
+    contador `$encontradas` (primeiro somou a ficha `$pessoa` inteira). Expliquei `=` guarda
+    × `==` pergunta. Deixei a formatação arrumada e uma marca de onde continuar.
+  - VS Code: consulta na extensão SQLite roda com Ctrl+Shift+Q no arquivo `.sql` (o terminal é
+    só para o `.php`). A extensão de PHP deixou um risco vermelho antigo que não atualizou
+    (o `php -l` dizia que não havia erro): se acontecer, fechar e abrir o arquivo.
+- **Próximo passo:** terminar a parte 1 do `buscar.php`: trocar o `echo` final por `if` /
+  `else` (`$encontradas == 0` → "Nenhuma pessoa encontrada em XX" com o estado digitado;
+  senão "Encontradas: N pessoas"). Testar com MS (5 pessoas) e XX. Depois, as próximas
+  partes do projeto, um assunto novo por vez: (2) cadastrar pessoa (`INSERT` com
+  `prepare`); (3) alterar e apagar (`UPDATE`, `DELETE`); (4) `require` para a conexão num
+  arquivo só; (5) levar pro navegador (`02-web`). Ideia dele para a tela: escolher o estado
+  e aparecer as cidades daquele estado. Extra possível: aceitar "ms" minúsculo.
 - **No computador `vilela`:** antes do primeiro exercício de banco, conferir se `php -m`
   mostra `pdo_sqlite` (ver `CLAUDE.md`). Se ele quiser a tela de consulta, instalar as
-  extensões SQLite Viewer e SQLite (alexcvzz) no VS Code de lá.
+  extensões SQLite Viewer e SQLite (alexcvzz) no VS Code de lá. O `readline` do projeto
+  precisa funcionar no PHP de lá (`php -r "var_dump(function_exists('readline'));"`).
 - **Dúvidas pendentes:** nenhuma.
 - **Perfil do GitHub:** em 22/10 ele escolheu "desenvolvedor" como objetivo (antes estava
   "Engenharia de Dados"). Perfil ajustado, agora igual ao portfólio.
@@ -93,8 +98,13 @@
   difíceis**, sem etapas, usando o banco. Mas a explicação de assunto novo continua **um pedaço
   por mensagem**, curta e concreta. Quando não entende, pede "como se fosse para uma criança"
   (analogias simples funcionaram: telefone para a conexão, planilha para tabela e coluna,
-  cofrinho para soma). Quando o exercício pedir um array, os itens já vêm no enunciado (regra
-  no `CLAUDE.md`). Erro que se repetiu: a ordem do `+=` (o cofrinho fica à esquerda).
+  cofrinho para soma, campeonato para maior/menor). Desde 23/10, treinar também a
+  **explicação**: nos exercícios, uma Parte 2 em que ele explica linhas em comentário (o que
+  faz + pra quê). Ele gostou de **caça ao bug** (código quebrado para consertar). Quando ele
+  pede "passo a passo", dar uma ação por mensagem e conferir o arquivo depois de cada uma:
+  funcionou muito bem em 23/10. Quando o exercício pedir um array, os itens já vêm no
+  enunciado (regra no `CLAUDE.md`). Erros que se repetem: a ordem do `+=` (o cofrinho fica à
+  esquerda) e colocar linhas dentro/fora das chaves erradas.
   Dicas concretas, e o comando para rodar o arquivo com o **caminho absoluto** neste computador
   (o relativo não funcionou no terminal dele). Quando ele pedir "o terminal do ex N", mandar
   **só o comando** para ele rodar: não rodar o arquivo, não mostrar a saída e não comentar erro
@@ -112,6 +122,7 @@
 
 ## Histórico
 
+- 22/10/2026 (`computador 2`): ex34 a ex41 (`foreach` e `+=`/`-=` encerrados); banco SQLite de 500 pessoas criado; ex01 e ex02 de banco com ajuda.
 - 21/10/2026 (`computador 2`): ex32 com ajuda e ex33 sozinho (`for` encerrado); exemplo do `foreach` e ex34 preparados.
 - 20/10/2026 (`vilela`): ex30 e ex31 de `for` sozinho (ex30 com dica na divisa); atalho `$i++` explicado; ex32 criado.
 - 16/10/2026 (`computador 2`): ex25 e ex26 sozinho (`while` encerrado); começo do `for`, ex27 a ex29 (quase tudo sozinho); ex30 criado.
