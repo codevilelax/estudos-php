@@ -1,11 +1,5 @@
 # Progresso dos estudos de PHP
 
-> **⚠️ Para o Claude no computador `vilela`:** o histórico do GitHub foi reescrito em
-> 21/10/2026. Se o `git pull` deu conflito ou disse que os históricos divergiram, **não
-> resolva o conflito nem faça merge/rebase**: rode `git merge --abort` (se houver merge em
-> andamento), confira que não há trabalho local que ainda não está no GitHub, e então rode
-> `git fetch` e `git reset --hard origin/main`. Depois, apague este aviso, faça commit e push.
-
 > **⚠️ Para o Claude no computador `vilela` (monitor do Detran):** em 21/10/2026, no
 > `computador 2`, fiz um monitor que avisa quando abre vaga numa quarta-feira no agendamento
 > do exame prático do Detran-SP (script do Tampermonkey + notificação no celular pelo ntfy).
