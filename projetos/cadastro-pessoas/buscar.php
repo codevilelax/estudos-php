@@ -41,6 +41,15 @@ foreach ($consulta as $pessoa) {
     echo $pessoa["nome"] . " - " . $pessoa["idade"] . " anos - " . $pessoa["cidade"] . "\n";
 }
 
-// Próxima sessão: trocar este echo por um if / else
-// (se $encontradas == 0, mostra "Nenhuma pessoa encontrada em XX").
-echo "Encontradas: " . $encontradas . " pessoas";
+// o if serve para quando o usuario escrever um estado que nao tem ninguem no banco
+// (o cofre $encontradas ficou 0), mostrar a mensagem abaixo.
+// else, caso tenha gente desse estado, mostra so a quantidade.
+// (os nomes e os dados de cada pessoa quem mostra e o foreach, antes do if)
+
+if ($encontradas == 0) {
+    echo "Nenhuma pessoa encontrada em " . $uf . "\n";
+} else {
+    echo "Encontradas: " . $encontradas . " pessoas";
+}
+
+

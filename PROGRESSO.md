@@ -43,44 +43,41 @@
 
 ## Onde parei
 
-- **Data e computador:** 23/10/2026, `computador 2`
-- **Assunto:** treino de **explicar código** (pedido dele), prática no banco (ex03 e ex04) e
-  começo do projeto `projetos/cadastro-pessoas` com `prepare` + `execute`.
+- **Data e computador:** 26/10/2026, `computador 2`
+- **Assunto:** projeto `projetos/cadastro-pessoas`: `if` / `else` no `buscar.php`, `INSERT`
+  (cadastrar) e `DELETE` (apagar), tudo com `prepare` + `execute`.
 - **O que foi feito:**
-  - **Explicar código:** ele disse que entende a lógica, mas trava na hora de explicar o que
-    cada parte faz. Método que funcionou: traduzir a linha pro português pedaço por pedaço
-    (`=` se lê "guarda", `+=` "soma na caixinha") e depois **o que faz + pra quê**.
-    Analogias: caixinha (variável), cofre (contador), fila e balcão no `foreach` (`$pessoas` =
-    a caixa com todas, `$pessoa` = a ficha de uma pessoa, uma linha da tabela) e
-    **campeonato** para achar o maior/menor. Explicou sozinho o `+=` com a ideia do cofre.
-    Ele anota tudo no caderno: mandar notas curtas, prontas para copiar.
-  - ex03 (censo de Curitiba: lista, total, quantos 60+, mais velha) **com ajuda passo a
-    passo**: `'curitiba'` minúsculo (o SQLite diferencia maiúsculas, o SQL Server do trabalho
-    não); `echo` dentro do `if`/`foreach` repetindo; `$velho += 1` fora do `if`;
-    `if ($pessoa = $qnt)`; `$$maiorIdade`; apagou demais ao corrigir. O campeonato do mais
-    velho (linhas dentro do `if`) e o `echo` final saíram quase sozinho. Parte 2 (explicar
-    o `foreach` e o `if` em comentário): fez, e eu corrigi mantendo o estilo dele, a pedido.
-  - ex04 (caça aos 6 erros, Bahia; ele pediu código quebrado para consertar): achou 3
-    **lendo o código** antes de darem erro (`;`, `echo` dentro do `foreach`, `$pessoas` no
-    lugar de `$pessoa`) e consertou `'ba'` e a diferença invertida. Com dica: o campeão da
-    mais nova começando em 0 (pôs 30, viu que falharia em Sorocaba, trocou por 999). Parte 2:
-    listou os erros; completei os porquês a pedido.
-  - Projeto **cadastro de pessoas** (`projetos/cadastro-pessoas`): cada assunto novo vira uma
-    parte. Parte 1, `buscar.php`: expliquei `readline`, SQL Injection (o bilhete) e o jeito
-    seguro (formulário com quadradinho `?`, `prepare` + `execute([$uf])`). Ele fez o
-    `readline`, o `prepare`/`execute` (trocou a ordem duas vezes), o `foreach` com `echo` e o
-    contador `$encontradas` (primeiro somou a ficha `$pessoa` inteira). Expliquei `=` guarda
-    × `==` pergunta. Deixei a formatação arrumada e uma marca de onde continuar.
-  - VS Code: consulta na extensão SQLite roda com Ctrl+Shift+Q no arquivo `.sql` (o terminal é
-    só para o `.php`). A extensão de PHP deixou um risco vermelho antigo que não atualizou
-    (o `php -l` dizia que não havia erro): se acontecer, fechar e abrir o arquivo.
-- **Próximo passo:** terminar a parte 1 do `buscar.php`: trocar o `echo` final por `if` /
-  `else` (`$encontradas == 0` → "Nenhuma pessoa encontrada em XX" com o estado digitado;
-  senão "Encontradas: N pessoas"). Testar com MS (5 pessoas) e XX. Depois, as próximas
-  partes do projeto, um assunto novo por vez: (2) cadastrar pessoa (`INSERT` com
-  `prepare`); (3) alterar e apagar (`UPDATE`, `DELETE`); (4) `require` para a conexão num
-  arquivo só; (5) levar pro navegador (`02-web`). Ideia dele para a tela: escolher o estado
-  e aparecer as cidades daquele estado. Extra possível: aceitar "ms" minúsculo.
+  - **Parte 1, `buscar.php`: concluída.** `if ($encontradas == 0)` com a mensagem "Nenhuma
+    pessoa encontrada em XX" e `else` com o total. No sinal, tentou `>`, depois `<`, depois
+    `=`, até chegar no `==`: o que funcionou foi testar cada tentativa com os valores do
+    cofre (MS = 5, XX = 0). A mensagem com `$uf` (lembrou do espaço em "em ") e o
+    `} else {` com o `echo` dentro saíram com uma dica cada. Testou MS e XX: certo.
+    Treino de explicar: explicou o `if` / `else`; ajustei dois pontos (o `if` olha o cofre,
+    não se o estado existe; quem mostra as pessoas é o `foreach`, o `else` só mostra o
+    total). Reescrevi no estilo dele, a pedido, e ele colou em comentário no arquivo.
+  - **Parte 2, `cadastrar.php`: concluída, passo a passo.** Expliquei o `INSERT` (linha
+    nova na planilha; o `id` o banco dá sozinho, como senha de fila). Erros: colunas com
+    aspas simples e sem parênteses (aspas simples = texto, coluna vai sem); `execute` com
+    `$banco[nome]` (o `$banco` é o telefone, os dados estão nas caixinhas do `readline`);
+    aspas dentro dos colchetes, `["$nome, $idade, ..."]` (só entendeu com o desenho:
+    1 papel para 4 gavetas `?` × 4 papéis); `" anos " - $cidade` com o `-` fora das aspas.
+    Cadastrou a Carla Mendes (id 501, Bonito/MS), que **continua no banco**: MS agora tem 6.
+  - **Parte 3, só o `DELETE`, `apagar.php`:** expliquei o `DELETE` (riscar uma linha; apagar
+    pelo `id` porque nome repete; **nunca esquecer o `WHERE`**). Ele achou repetitivo (é
+    igual ao `cadastrar.php`, só muda o SQL) e pediu que eu fizesse o arquivo: fiz. Ele
+    rodou e apagou um cadastro de teste (id 502). SP voltou a 118.
+  - **Banco agora:** 501 pessoas (as 500 + a Carla). O próximo `id` vai ser **503**: o
+    banco não reaproveita o 502 (bom para mostrar a ele).
+- **Próximo passo:** parte 4, **`require`**. Ele se irritou com a conexão repetida nos 3
+  arquivos ("muito repetitivo"), então é um bom gancho. Já expliquei a ideia (a receita de
+  bolo numa folha só; `require __DIR__ . "/conexao.php";` = "pega o código de lá e cola
+  aqui"; se o banco mudar, arruma num lugar só). Ação 1, que ficou para a próxima: criar
+  `conexao.php` na pasta do projeto com `<?php` e as 2 linhas da conexão. Depois, trocar as
+  2 linhas pelo `require` em `buscar.php`, `cadastrar.php` e `apagar.php`. Em seguida, o
+  `UPDATE` (alterar, o que falta da parte 3) e (5) levar pro navegador (`02-web`). Ideia
+  dele para a tela: escolher o estado e aparecer as cidades daquele estado. Extra possível:
+  aceitar "ms" minúsculo. Treino de explicar que ficou sem resposta: a linha do `execute`
+  do `cadastrar.php` (o que faz e por que as caixinhas vão sem aspas).
 - **No computador `vilela`:** antes do primeiro exercício de banco, conferir se `php -m`
   mostra `pdo_sqlite` (ver `CLAUDE.md`). Se ele quiser a tela de consulta, instalar as
   extensões SQLite Viewer e SQLite (alexcvzz) no VS Code de lá. O `readline` do projeto
@@ -98,7 +95,13 @@
   pede "passo a passo", dar uma ação por mensagem e conferir o arquivo depois de cada uma:
   funcionou muito bem em 23/10. Quando o exercício pedir um array, os itens já vêm no
   enunciado (regra no `CLAUDE.md`). Erros que se repetem: a ordem do `+=` (o cofrinho fica à
-  esquerda) e colocar linhas dentro/fora das chaves erradas.
+  esquerda), colocar linhas dentro/fora das chaves erradas, `=` no lugar de `==` no `if`
+  (23/10 e 26/10) e **aspas**: o que é texto vai dentro, o que é código (coluna, caixinha,
+  `.`) vai fora. Quando um passo é **só repetição** do que ele já sabe (copiar a conexão,
+  `prepare`/`execute` iguais), ele cansa ("muito repetitivo"): oferecer fazer essa parte por
+  ele e focar no que é novo.
+- **Privacidade:** o repositório `estudos-php` é **público** e o banco vai junto no push.
+  Se ele se cadastrar com dados reais (nome, idade, cidade), avisar antes de subir.
   Dicas concretas, e o comando para rodar o arquivo com o **caminho absoluto** neste computador
   (o relativo não funcionou no terminal dele). Quando ele pedir "o terminal do ex N", mandar
   **só o comando** para ele rodar: não rodar o arquivo, não mostrar a saída e não comentar erro
@@ -116,6 +119,7 @@
 
 ## Histórico
 
+- 23/10/2026 (`computador 2`): treino de explicar código; ex03 e ex04 de banco (com ajuda); começo do projeto `cadastro-pessoas` (`readline`, `prepare` + `execute`).
 - 22/10/2026 (`computador 2`): ex34 a ex41 (`foreach` e `+=`/`-=` encerrados); banco SQLite de 500 pessoas criado; ex01 e ex02 de banco com ajuda.
 - 21/10/2026 (`computador 2`): ex32 com ajuda e ex33 sozinho (`for` encerrado); exemplo do `foreach` e ex34 preparados.
 - 20/10/2026 (`vilela`): ex30 e ex31 de `for` sozinho (ex30 com dica na divisa); atalho `$i++` explicado; ex32 criado.
