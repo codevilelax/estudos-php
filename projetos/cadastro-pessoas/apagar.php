@@ -28,5 +28,3 @@ $delete = $banco->prepare("DELETE FROM pessoas WHERE id = ?");
 $delete->execute([$id]);
 
 echo "Pessoa de id " . $id . " apagada.";
-
-

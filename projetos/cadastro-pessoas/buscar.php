@@ -51,5 +51,3 @@ if ($encontradas == 0) {
 } else {
     echo "Encontradas: " . $encontradas . " pessoas";
 }
-
-
