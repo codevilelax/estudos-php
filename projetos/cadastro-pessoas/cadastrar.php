@@ -22,8 +22,7 @@
 // Depois, rode o buscar.php com MS: a Carla tem que aparecer na lista,
 // e agora vão ser 6 pessoas.
 
-$banco = new PDO("sqlite:" . __DIR__ . "/../../03-banco-de-dados/banco/estudos.sqlite");
-$banco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+require __DIR__ . "/conexao.php";
 
 $nome = readline("Digite seu nome: ");
 $idade = readline("Digite sua idade: ");

@@ -43,41 +43,29 @@
 
 ## Onde parei
 
-- **Data e computador:** 26/10/2026, `computador 2`
-- **Assunto:** projeto `projetos/cadastro-pessoas`: `if` / `else` no `buscar.php`, `INSERT`
-  (cadastrar) e `DELETE` (apagar), tudo com `prepare` + `execute`.
+- **Data e computador:** 28/10/2026, `computador 2`
+- **Assunto:** projeto `projetos/cadastro-pessoas`, parte 4: **`require`**.
 - **O que foi feito:**
-  - **Parte 1, `buscar.php`: concluída.** `if ($encontradas == 0)` com a mensagem "Nenhuma
-    pessoa encontrada em XX" e `else` com o total. No sinal, tentou `>`, depois `<`, depois
-    `=`, até chegar no `==`: o que funcionou foi testar cada tentativa com os valores do
-    cofre (MS = 5, XX = 0). A mensagem com `$uf` (lembrou do espaço em "em ") e o
-    `} else {` com o `echo` dentro saíram com uma dica cada. Testou MS e XX: certo.
-    Treino de explicar: explicou o `if` / `else`; ajustei dois pontos (o `if` olha o cofre,
-    não se o estado existe; quem mostra as pessoas é o `foreach`, o `else` só mostra o
-    total). Reescrevi no estilo dele, a pedido, e ele colou em comentário no arquivo.
-  - **Parte 2, `cadastrar.php`: concluída, passo a passo.** Expliquei o `INSERT` (linha
-    nova na planilha; o `id` o banco dá sozinho, como senha de fila). Erros: colunas com
-    aspas simples e sem parênteses (aspas simples = texto, coluna vai sem); `execute` com
-    `$banco[nome]` (o `$banco` é o telefone, os dados estão nas caixinhas do `readline`);
-    aspas dentro dos colchetes, `["$nome, $idade, ..."]` (só entendeu com o desenho:
-    1 papel para 4 gavetas `?` × 4 papéis); `" anos " - $cidade` com o `-` fora das aspas.
-    Cadastrou a Carla Mendes (id 501, Bonito/MS), que **continua no banco**: MS agora tem 6.
-  - **Parte 3, só o `DELETE`, `apagar.php`:** expliquei o `DELETE` (riscar uma linha; apagar
-    pelo `id` porque nome repete; **nunca esquecer o `WHERE`**). Ele achou repetitivo (é
-    igual ao `cadastrar.php`, só muda o SQL) e pediu que eu fizesse o arquivo: fiz. Ele
-    rodou e apagou um cadastro de teste (id 502). SP voltou a 118.
-  - **Banco agora:** 501 pessoas (as 500 + a Carla). O próximo `id` vai ser **503**: o
-    banco não reaproveita o 502 (bom para mostrar a ele).
-- **Próximo passo:** parte 4, **`require`**. Ele se irritou com a conexão repetida nos 3
-  arquivos ("muito repetitivo"), então é um bom gancho. Já expliquei a ideia (a receita de
-  bolo numa folha só; `require __DIR__ . "/conexao.php";` = "pega o código de lá e cola
-  aqui"; se o banco mudar, arruma num lugar só). Ação 1, que ficou para a próxima: criar
-  `conexao.php` na pasta do projeto com `<?php` e as 2 linhas da conexão. Depois, trocar as
-  2 linhas pelo `require` em `buscar.php`, `cadastrar.php` e `apagar.php`. Em seguida, o
-  `UPDATE` (alterar, o que falta da parte 3) e (5) levar pro navegador (`02-web`). Ideia
-  dele para a tela: escolher o estado e aparecer as cidades daquele estado. Extra possível:
-  aceitar "ms" minúsculo. Treino de explicar que ficou sem resposta: a linha do `execute`
-  do `cadastrar.php` (o que faz e por que as caixinhas vão sem aspas).
+  - **Parte 4, `require`: concluída, passo a passo.** Ele criou o `conexao.php` sozinho
+    (`<?php` + as 2 linhas da conexão). Agora `buscar.php`, `cadastrar.php` e `apagar.php`
+    têm só `require __DIR__ . "/conexao.php";` no lugar da conexão. Testei o `buscar.php`
+    com MS: 6 pessoas, certo.
+  - Erros no caminho: colocou o `require` **dentro do `conexao.php`** (grudado no fim da
+    linha da conexão), depois **grudou** o `require` no fim da linha da conexão do
+    `buscar.php` em vez de trocar as 2 linhas por ele; no `cadastrar.php` e no `apagar.php`
+    pôs o nome do **próprio arquivo** no `require` (se chamaria sem parar); e esqueceu de
+    salvar (Ctrl+S). Entendeu com "o `conexao.php` é a folha da receita; quem pede a
+    receita é o outro arquivo" e "é para trocar, não juntar". Achou chato apagar as linhas
+    repetidas e pediu que eu fizesse: fiz no `buscar.php` e no fim dos outros dois.
+  - **Banco agora:** 501 pessoas (as 500 + a Carla Mendes, id 501, Bonito/MS). O próximo
+    `id` vai ser **503**: o banco não reaproveita o 502 (bom para mostrar a ele).
+- **Próximo passo:** o **`UPDATE`** (alterar uma pessoa que já existe, o que falta da parte
+  3). Já anunciei a ideia: borracha na linha da planilha, ex.: idade da Carla de 28 para 29.
+  Ainda não expliquei o `SET` nem criei o arquivo. Lembrar do `WHERE` (sem ele, altera
+  todo mundo). Depois, (5) levar pro navegador (`02-web`). Ideia dele para a tela: escolher
+  o estado e aparecer as cidades daquele estado. Extra possível: aceitar "ms" minúsculo.
+  Treino de explicar que ficou sem resposta: a linha do `execute` do `cadastrar.php` (o que
+  faz e por que as caixinhas vão sem aspas).
 - **No computador `vilela`:** antes do primeiro exercício de banco, conferir se `php -m`
   mostra `pdo_sqlite` (ver `CLAUDE.md`). Se ele quiser a tela de consulta, instalar as
   extensões SQLite Viewer e SQLite (alexcvzz) no VS Code de lá. O `readline` do projeto
@@ -119,6 +107,7 @@
 
 ## Histórico
 
+- 26/10/2026 (`computador 2`): projeto `cadastro-pessoas`: `if` / `else` no `buscar.php`, `INSERT` no `cadastrar.php` (Carla Mendes, id 501) e `DELETE` no `apagar.php`.
 - 23/10/2026 (`computador 2`): treino de explicar código; ex03 e ex04 de banco (com ajuda); começo do projeto `cadastro-pessoas` (`readline`, `prepare` + `execute`).
 - 22/10/2026 (`computador 2`): ex34 a ex41 (`foreach` e `+=`/`-=` encerrados); banco SQLite de 500 pessoas criado; ex01 e ex02 de banco com ajuda.
 - 21/10/2026 (`computador 2`): ex32 com ajuda e ex33 sozinho (`for` encerrado); exemplo do `foreach` e ex34 preparados.

@@ -19,8 +19,7 @@
 // Depois, rode o buscar.php com SP: o id 502 não pode mais aparecer na lista,
 // e o total tem que ser 118 pessoas (hoje são 119).
 
-$banco = new PDO("sqlite:" . __DIR__ . "/../../03-banco-de-dados/banco/estudos.sqlite");
-$banco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+require __DIR__ . "/conexao.php";
 
 $id = readline("Digite o id da pessoa: ");
 

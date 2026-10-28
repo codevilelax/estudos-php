@@ -26,8 +26,7 @@
 // Digite o estado: XX
 // Nenhuma pessoa encontrada em XX
 
-$banco = new PDO("sqlite:" . __DIR__ . "/../../03-banco-de-dados/banco/estudos.sqlite");
-$banco->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+require __DIR__ . "/conexao.php";
 
 $uf = readline("Digite o estado: ");
 
