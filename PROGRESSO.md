@@ -43,29 +43,36 @@
 
 ## Onde parei
 
-- **Data e computador:** 28/10/2026, `computador 2`
-- **Assunto:** projeto `projetos/cadastro-pessoas`, parte 4: **`require`**.
+- **Data e computador:** 29/10/2026, `computador 2`
+- **Assunto:** projeto `projetos/cadastro-pessoas`: **`UPDATE`** e começo da parte 5,
+  **levar pro navegador**.
 - **O que foi feito:**
-  - **Parte 4, `require`: concluída, passo a passo.** Ele criou o `conexao.php` sozinho
-    (`<?php` + as 2 linhas da conexão). Agora `buscar.php`, `cadastrar.php` e `apagar.php`
-    têm só `require __DIR__ . "/conexao.php";` no lugar da conexão. Testei o `buscar.php`
-    com MS: 6 pessoas, certo.
-  - Erros no caminho: colocou o `require` **dentro do `conexao.php`** (grudado no fim da
-    linha da conexão), depois **grudou** o `require` no fim da linha da conexão do
-    `buscar.php` em vez de trocar as 2 linhas por ele; no `cadastrar.php` e no `apagar.php`
-    pôs o nome do **próprio arquivo** no `require` (se chamaria sem parar); e esqueceu de
-    salvar (Ctrl+S). Entendeu com "o `conexao.php` é a folha da receita; quem pede a
-    receita é o outro arquivo" e "é para trocar, não juntar". Achou chato apagar as linhas
-    repetidas e pediu que eu fizesse: fiz no `buscar.php` e no fim dos outros dois.
-  - **Banco agora:** 501 pessoas (as 500 + a Carla Mendes, id 501, Bonito/MS). O próximo
-    `id` vai ser **503**: o banco não reaproveita o 502 (bom para mostrar a ele).
-- **Próximo passo:** o **`UPDATE`** (alterar uma pessoa que já existe, o que falta da parte
-  3). Já anunciei a ideia: borracha na linha da planilha, ex.: idade da Carla de 28 para 29.
-  Ainda não expliquei o `SET` nem criei o arquivo. Lembrar do `WHERE` (sem ele, altera
-  todo mundo). Depois, (5) levar pro navegador (`02-web`). Ideia dele para a tela: escolher
-  o estado e aparecer as cidades daquele estado. Extra possível: aceitar "ms" minúsculo.
-  Treino de explicar que ficou sem resposta: a linha do `execute` do `cadastrar.php` (o que
-  faz e por que as caixinhas vão sem aspas).
+  - **`UPDATE` concluído** no `alterar.php`, passo a passo: `require`, 2 `readline`,
+    `prepare("UPDATE pessoas SET idade = ? WHERE id = ?")`, `execute([$idade, $id])` e `echo`.
+    Carla Mendes (id 501) agora tem 29 anos (conferi no banco: só ela mudou).
+  - Erros no caminho: `SET id = ? AND idade = ?` sem `WHERE`; depois `SET` e `WHERE`
+    trocados (`SET id = ? WHERE idade = ?`); no `execute`, usou `$delete` (nome do outro
+    arquivo), dois arrays `[$idade], [$id]` e ordem errada. Entendeu com "`SET` = o que muda,
+    `WHERE` = qual pessoa" e "os valores vão na mesma ordem dos `?`". Treino de explicar a
+    linha do `prepare`: acertou o SQL; achava que o `prepare` conecta (quem conecta é o
+    `require`) e que `$update` guarda o texto (guarda o comando preparado; prepare = deixa
+    pronto, execute = roda).
+  - **Parte 5, passos 1 e 2 (`index.php`):** a busca por estado virou página. `$_GET["uf"]`
+    no lugar do `readline`, `<br>` no lugar do `"\n"`, servidor com
+    `php -S localhost:8000 -t <pasta do projeto>` (caminho absoluto). Formulário `<form>` +
+    `<select name="uf">` + `<button>`; a lista de estados vem do banco
+    (`SELECT DISTINCT uf ... ORDER BY uf` + `foreach` com `echo "<option>..."`). O `require`
+    foi para a linha 1 (`<?php require ...; ?>`), antes do formulário. Fez quase tudo com
+    ajuda, uma ação por mensagem (pediu de novo: "muita informação de uma vez").
+  - Erros no caminho: trocou o `<form>` inteiro pelo `<select>` (sumiram form e botão);
+    não salvou depois de apagar linhas; o servidor desligou ("conexão recusada").
+  - **Banco agora:** 501 pessoas, Carla com 29 anos. O próximo `id` vai ser **503**.
+- **Próximo passo:** o desafio que ele mesmo achou (anotado no topo do `index.php`): depois
+  de buscar, a lista volta para AL. Resolver com `if` / `else` dentro do `foreach` dos
+  estados, escrevendo `<option selected>` quando o estado for igual a `$_GET["uf"]`. Depois:
+  a frase "Nenhuma pessoa encontrada em" aparece ao abrir a página sem estado (tratar quando
+  não tem `uf`); visual (escuro + vermelho, como o portfólio); cadastrar, alterar e apagar
+  pela página. Treino de explicar ainda sem resposta: a linha do `execute` do `cadastrar.php`.
 - **No computador `vilela`:** antes do primeiro exercício de banco, conferir se `php -m`
   mostra `pdo_sqlite` (ver `CLAUDE.md`). Se ele quiser a tela de consulta, instalar as
   extensões SQLite Viewer e SQLite (alexcvzz) no VS Code de lá. O `readline` do projeto
@@ -107,6 +114,7 @@
 
 ## Histórico
 
+- 28/10/2026 (`computador 2`): projeto `cadastro-pessoas`, parte 4: `require` com `conexao.php` nos três arquivos.
 - 26/10/2026 (`computador 2`): projeto `cadastro-pessoas`: `if` / `else` no `buscar.php`, `INSERT` no `cadastrar.php` (Carla Mendes, id 501) e `DELETE` no `apagar.php`.
 - 23/10/2026 (`computador 2`): treino de explicar código; ex03 e ex04 de banco (com ajuda); começo do projeto `cadastro-pessoas` (`readline`, `prepare` + `execute`).
 - 22/10/2026 (`computador 2`): ex34 a ex41 (`foreach` e `+=`/`-=` encerrados); banco SQLite de 500 pessoas criado; ex01 e ex02 de banco com ajuda.
