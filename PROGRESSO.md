@@ -43,36 +43,38 @@
 
 ## Onde parei
 
-- **Data e computador:** 29/10/2026, `computador 2`
-- **Assunto:** projeto `projetos/cadastro-pessoas`: **`UPDATE`** e começo da parte 5,
-  **levar pro navegador**.
-- **O que foi feito:**
-  - **`UPDATE` concluído** no `alterar.php`, passo a passo: `require`, 2 `readline`,
-    `prepare("UPDATE pessoas SET idade = ? WHERE id = ?")`, `execute([$idade, $id])` e `echo`.
-    Carla Mendes (id 501) agora tem 29 anos (conferi no banco: só ela mudou).
-  - Erros no caminho: `SET id = ? AND idade = ?` sem `WHERE`; depois `SET` e `WHERE`
-    trocados (`SET id = ? WHERE idade = ?`); no `execute`, usou `$delete` (nome do outro
-    arquivo), dois arrays `[$idade], [$id]` e ordem errada. Entendeu com "`SET` = o que muda,
-    `WHERE` = qual pessoa" e "os valores vão na mesma ordem dos `?`". Treino de explicar a
-    linha do `prepare`: acertou o SQL; achava que o `prepare` conecta (quem conecta é o
-    `require`) e que `$update` guarda o texto (guarda o comando preparado; prepare = deixa
-    pronto, execute = roda).
-  - **Parte 5, passos 1 e 2 (`index.php`):** a busca por estado virou página. `$_GET["uf"]`
-    no lugar do `readline`, `<br>` no lugar do `"\n"`, servidor com
-    `php -S localhost:8000 -t <pasta do projeto>` (caminho absoluto). Formulário `<form>` +
-    `<select name="uf">` + `<button>`; a lista de estados vem do banco
-    (`SELECT DISTINCT uf ... ORDER BY uf` + `foreach` com `echo "<option>..."`). O `require`
-    foi para a linha 1 (`<?php require ...; ?>`), antes do formulário. Fez quase tudo com
-    ajuda, uma ação por mensagem (pediu de novo: "muita informação de uma vez").
-  - Erros no caminho: trocou o `<form>` inteiro pelo `<select>` (sumiram form e botão);
-    não salvou depois de apagar linhas; o servidor desligou ("conexão recusada").
-  - **Banco agora:** 501 pessoas, Carla com 29 anos. O próximo `id` vai ser **503**.
-- **Próximo passo:** o desafio que ele mesmo achou (anotado no topo do `index.php`): depois
-  de buscar, a lista volta para AL. Resolver com `if` / `else` dentro do `foreach` dos
-  estados, escrevendo `<option selected>` quando o estado for igual a `$_GET["uf"]`. Depois:
-  a frase "Nenhuma pessoa encontrada em" aparece ao abrir a página sem estado (tratar quando
-  não tem `uf`); visual (escuro + vermelho, como o portfólio); cadastrar, alterar e apagar
-  pela página. Treino de explicar ainda sem resposta: a linha do `execute` do `cadastrar.php`.
+- **Data e computador:** 30/10/2026, `computador 2`
+- **Assunto:** projeto `projetos/cadastro-pessoas`, parte 5 (**levar pro navegador**):
+  `selected`, `isset`, **POST** e cadastro pela página.
+- **O que foi feito (tudo no `index.php`, uma ação por mensagem):**
+  - **Lista lembra o estado buscado:** `if` / `else` dentro do `foreach` dos estados,
+    `<option selected>` quando `$estado["uf"] == $_GET["uf"]`. Ele viu o estado aparecer duas
+    vezes (o `echo` normal estava fora do `if`) e resolveu com `else`.
+  - **Página sem estado:** `if (isset($_GET["uf"])) { ...busca... }`. A frase
+    "Selecione um estado:" ficou fixa em HTML no topo (ele escolheu fixa, sem `echo`).
+  - **Formulário de cadastro** no fim da página: `?>` para voltar ao HTML, `<form method="post">`,
+    4 `<input>` (nome, idade, cidade, uf) com texto antes, `<br>` (ele mesmo pôs) e `required`.
+    Ele mesmo achou que o cadastro com GET disparava a busca (os dois têm `uf`): daí o POST
+    ("GET = buscar, vai no endereço; POST = salvar, vai escondido"). No PHP:
+    `if (isset($_POST["nome"]))`, o `INSERT` copiado do `cadastrar.php` com `$_POST["..."]` no
+    lugar do `readline`. Funcionou (Diego Alves, id 504). Achou um cadastro vazio (505) e
+    resolvemos com `required`.
+  - Treino de explicar (linha do `if` do `selected`): acertou a lógica; ajustes: "estado da
+    volta atual" (não "escolhido"), "o que a pessoa buscou" (não "digitado"), "roda o que está
+    dentro das chaves" e faltou o pra quê.
+  - Erros no caminho: `;` no fim do `if` no lugar de `{ }` (2 vezes), erros de digitação
+    (`$estadp`, `opticion`, `fomr`), colou o exemplo inteiro em vez de só a `}`, e no
+    `$_POST` trocou só a palavra `readline` (ficou `$_POST("Digite...")`, depois
+    `$_POST["nome"]("Digite...")`). Entendeu com "`readline` = comando que pergunta, `( )`;
+    `$_POST` = caixinha com a resposta, `[ ]`".
+  - **Banco agora:** 501 pessoas (as 500 + Carla, 29 anos). Ele apagou os testes 503, 504 e 505
+    com o `apagar.php`. O próximo `id` vai ser **506**.
+- **Próximo passo:** **alterar pela página** (id + idade nova), igual ao cadastro: `?>` no fim
+  do `index.php`, `<form method="post">` com `name="id"` e `name="idade"`, e no PHP
+  `if (isset($_POST["id"]))` + o `UPDATE` do `alterar.php`. Combinamos que ele tenta **mais
+  sozinho** (só dica, sem código pronto; mostrar se travar). Depois: apagar pela página e o
+  visual (escuro + vermelho, como o portfólio). Treino de explicar ainda sem resposta: a linha
+  do `execute` do `cadastrar.php`.
 - **No computador `vilela`:** antes do primeiro exercício de banco, conferir se `php -m`
   mostra `pdo_sqlite` (ver `CLAUDE.md`). Se ele quiser a tela de consulta, instalar as
   extensões SQLite Viewer e SQLite (alexcvzz) no VS Code de lá. O `readline` do projeto
@@ -114,6 +116,7 @@
 
 ## Histórico
 
+- 29/10/2026 (`computador 2`): projeto `cadastro-pessoas`: `UPDATE` no `alterar.php`; começo da parte 5, busca por estado no navegador (`$_GET`, `<form>`, `<select>`).
 - 28/10/2026 (`computador 2`): projeto `cadastro-pessoas`, parte 4: `require` com `conexao.php` nos três arquivos.
 - 26/10/2026 (`computador 2`): projeto `cadastro-pessoas`: `if` / `else` no `buscar.php`, `INSERT` no `cadastrar.php` (Carla Mendes, id 501) e `DELETE` no `apagar.php`.
 - 23/10/2026 (`computador 2`): treino de explicar código; ex03 e ex04 de banco (com ajuda); começo do projeto `cadastro-pessoas` (`readline`, `prepare` + `execute`).
