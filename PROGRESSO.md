@@ -1,5 +1,28 @@
 # Progresso dos estudos de PHP
 
+> **⚠️ Para o Claude no computador `vilela` (loja do Valorant, parte do login):** em 06/11/2026
+> começamos o projeto `projetos/loja-valorant`: um robô que confere a loja diária do Valorant
+> na conta dele e avisa no celular (ntfy) quando vier uma skin da lista de desejos, mesmo com
+> o PC desligado. O login só pode ser feito **no `vilela`, nunca no `computador 2`**.
+> Ele já sabe que a loja não está na API oficial da Riot, que a rota não oficial traz risco
+> para a conta, e decidiu seguir. Ele entra na conta da Riot **pelo Google**, então não há senha para usar.
+> 1. **Regra:** o cookie `ssid` e o endereço depois do login (traz token) são como chaves da
+>    conta. Nunca peça o valor, nem em chat ou print, e nunca deixe no código ou no git.
+> 2. Passo em aberto: ele entra no navegador do `vilela` por este link e vê, em F12 →
+>    Application → Cookies → `https://auth.riotgames.com`, se existe a linha `ssid`:
+>    `https://auth.riotgames.com/authorize?redirect_uri=https%3A%2F%2Fplayvalorant.com%2Fopt_in&client_id=play-valorant-web-prod&response_type=token%20id_token&nonce=1&scope=account%20openid`
+>    No `computador 2`, esse link terminou em erro 404 e não chegamos a saber em qual domínio.
+>    Se o endereço começar com `playvalorant.com`, o login funcionou mesmo com o 404. Se
+>    começar com `auth.riotgames.com`, procure o link atual.
+> 3. Pesquise a rota atual antes de codar: a busca de 06/11 não confirmou os endereços nem o
+>    captcha. Em PHP, com o `ssid` vindo de variável de ambiente, teste se dá para renovar a
+>    sessão sem abrir o navegador e mostre as 4 skins do dia no terminal. Veja também por
+>    quanto tempo a sessão dura.
+> 4. Depois: juntar com o `comparar.php`, avisar pelo ntfy, rodar no GitHub Actions (sessão só
+>    em secret; confira antes se o repositório e os logs são públicos) e, por último, a tela no celular.
+> 5. Uma ação por mensagem. Quando o login e a leitura da loja funcionarem, apague este aviso,
+>    faça commit e push.
+
 > **⚠️ Para o Claude no computador `vilela` (monitor do Detran):** em 21/10/2026, no
 > `computador 2`, fiz um monitor que avisa quando abre vaga numa quarta-feira no agendamento
 > do exame prático do Detran-SP (script do Tampermonkey + notificação no celular pelo ntfy).
