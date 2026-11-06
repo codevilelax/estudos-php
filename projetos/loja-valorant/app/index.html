@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <!-- A chave do GitHub fica neste app: só deixa conversar com estes endereços -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://media.valorant-api.com; connect-src 'self' https://valorant-api.com https://api.github.com; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' https://media.valorant-api.com; connect-src 'self' https://valorant-api.com https://api.github.com; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
   <title>Minha Loja</title>
   <meta name="theme-color" content="#0e0f12">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -14,10 +15,11 @@
   <link rel="icon" type="image/png" href="icone-192.png">
   <link rel="apple-touch-icon" href="icone-180.png">
   <link rel="manifest" href="manifest.json">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&amp;family=Barlow:wght@400;500;600&amp;display=swap">
   <style>
+    @font-face { font-family: 'Barlow Condensed'; font-weight: 700; font-display: swap; src: url('fontes/barlow-condensed-700.woff2') format('woff2'); }
+    @font-face { font-family: 'Barlow'; font-weight: 500; font-display: swap; src: url('fontes/barlow-500.woff2') format('woff2'); }
+    @font-face { font-family: 'Barlow'; font-weight: 600; font-display: swap; src: url('fontes/barlow-600.woff2') format('woff2'); }
+
     :root {
       --fundo: #0e0f12;
       --cartao: #181a1f;
@@ -117,6 +119,28 @@
     .coracao[aria-pressed="true"] { color: var(--vermelho); }
     .coracao[aria-pressed="true"] svg { fill: currentColor; }
     .coracao:disabled { opacity: .5; cursor: progress; }
+
+    .botao-ontem {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      width: 100%;
+      min-height: 56px;
+      margin-top: 24px;
+      padding: 12px 16px;
+      font-weight: 600;
+      text-align: left;
+      background: var(--cartao);
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+    }
+    .botao-ontem .data { margin-left: auto; }
+    .botao-ontem svg { flex: none; width: 18px; height: 18px; fill: none; stroke: var(--texto-2); stroke-width: 2; transition: transform .15s; }
+    .botao-ontem[aria-expanded="true"] svg { transform: rotate(180deg); }
+    .loja-ontem { margin-top: 8px; }
+    @media (prefers-reduced-motion: reduce) { .botao-ontem svg { transition: none; } }
+
+    .bloqueio { display: grid; gap: 12px; padding: 16px 12px; background: var(--cartao); border-radius: 6px; }
+    .bloqueio p { margin: 0; color: var(--texto-2); }
+    .bloqueio .botoes { margin-top: 0; }
 
     .vazio { margin: 0; padding: 16px 12px; color: var(--texto-2); background: var(--cartao); border-radius: 6px; }
 
@@ -233,13 +257,13 @@
       </div>
 
       <div class="secao">
-        <div class="secao-topo"><h2>Edição pelo app</h2></div>
+        <div class="secao-topo"><h2>Acesso</h2></div>
       <details id="caixa-chave">
-        <summary id="titulo-chave">Conectar para editar a lista</summary>
+        <summary id="titulo-chave">Conectar</summary>
         <ol>
           <li><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Crie uma chave no GitHub</a>, só para o repositório <code>loja-valorant</code>.</li>
           <li>Em permissões, dê <strong>Contents: Read and write</strong> e mais nada.</li>
-          <li>Cole a chave aqui. Ela fica guardada só neste aparelho.</li>
+          <li>Cole a chave aqui. Ela fica guardada só neste aparelho. Sem ela, ninguém vê sua conta, sua loja ou sua lista.</li>
         </ol>
         <label for="chave">Chave do GitHub</label>
         <input id="chave" type="password" autocomplete="off" spellcheck="false">
@@ -280,6 +304,8 @@
     let shaAjustes = null;
     let salvando = false;
     let chave = lerChave();
+    let modoExemplo = false;
+    let ontemAberta = false;
 
     const $ = id => document.getElementById(id);
 
@@ -343,8 +369,8 @@
         onclick: () => alternarDesejo(skin.nome),
       });
       coracao.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5 4.4 13a4.9 4.9 0 0 1 0-7 5 5 0 0 1 7 0l.6.6.6-.6a5 5 0 0 1 7 0 4.9 4.9 0 0 1 0 7Z"/></svg>';
-      // Só deixa editar com a lista carregada, para não salvar por cima do que não foi lido
-      coracao.disabled = salvando || situacaoDesejos !== 'ok';
+      // Com chave, só deixa editar com a lista carregada, para não salvar por cima do que não foi lido
+      coracao.disabled = salvando || (Boolean(chave) && situacaoDesejos !== 'ok');
 
       return criar('article', { class: quero ? 'skin quero' : 'skin' }, imagem, nome, coracao);
     }
@@ -363,10 +389,11 @@
 
     function desenharTempo() {
       const campo = $('tempo-loja');
+      if (modoExemplo) { campo.textContent = 'Skins de exemplo'; return; }
+      if (!chave) { campo.textContent = ''; return; }
       if (erroLoja) { campo.textContent = 'Não consegui carregar a loja.'; return; }
       if (!loja) { campo.textContent = 'Carregando…'; return; }
       if (!loja.hoje) { campo.textContent = 'O robô ainda não leu sua loja.'; return; }
-      if (loja.exemplo) { campo.textContent = 'Skins de exemplo'; return; }
       if (lojaExpirou()) { campo.textContent = 'A loja já trocou'; return; }
       if (!loja.hoje.expira) { campo.textContent = ''; return; }
       const minutos = Math.max(0, Math.ceil((Date.parse(loja.hoje.expira) - Date.now()) / 60000));
@@ -401,6 +428,14 @@
       const conteudo = $('conteudo-loja');
       conteudo.replaceChildren();
 
+      if (!chave && !modoExemplo) {
+        conteudo.append(criar('div', { class: 'bloqueio' },
+          criar('p', { text: 'Sua loja fica protegida. Conecte sua chave para ver.' }),
+          criar('div', { class: 'botoes' },
+            criar('button', { class: 'botao principal', type: 'button', text: 'Conectar', onclick: abrirConexao }),
+            criar('button', { class: 'botao', type: 'button', text: 'Ver exemplo', onclick: verExemplo }))));
+        return;
+      }
       if (erroLoja) {
         conteudo.append(
           criar('p', { class: 'aviso', text: 'Confira a internet e tente de novo.' }),
@@ -408,8 +443,10 @@
         return;
       }
       if (!loja) return;
-      if (loja.exemplo) {
-        conteudo.append(criar('p', { class: 'aviso', text: 'Esta não é a sua loja. Ela aparece aqui depois que o robô for ligado na sua conta.' }));
+      if (modoExemplo) {
+        conteudo.append(
+          criar('p', { class: 'aviso', text: 'Esta não é a sua loja. É só um exemplo de como o app fica.' }),
+          criar('button', { class: 'botao', type: 'button', text: 'Sair do exemplo', onclick: sairDoExemplo }));
       }
       if (lojaExpirou()) {
         conteudo.append(criar('p', { class: 'aviso', text: 'O robô ainda não leu a loja nova. Esta é a última que ele viu.' }));
@@ -421,14 +458,26 @@
 
       conteudo.append(desenharSecaoLoja(lojaExpirou() ? 'Última loja' : 'Loja de hoje', loja.hoje.data, loja.hoje.skins));
 
-      if (loja.ontem) {
-        const titulo = ehDiaAnterior(loja.ontem.data, loja.hoje.data) ? 'Loja de ontem' : 'Loja anterior';
-        conteudo.append(desenharSecaoLoja(titulo, loja.ontem.data, loja.ontem.skins));
-      } else {
-        conteudo.append(criar('section', { class: 'secao' },
-          criar('div', { class: 'secao-topo' }, criar('h2', { text: 'Loja de ontem' })),
-          criar('p', { class: 'vazio', text: 'Aparece depois do segundo dia do robô ligado.' })));
-      }
+      conteudo.append(...desenharLojaDeOntem());
+    }
+
+    function desenharLojaDeOntem() {
+      const ontem = loja.ontem;
+      const nome = !ontem || ehDiaAnterior(ontem.data, loja.hoje.data) ? 'loja de ontem' : 'loja anterior';
+      const botao = criar('button', {
+        class: 'botao-ontem',
+        type: 'button',
+        'aria-expanded': String(ontemAberta),
+        onclick: () => { ontemAberta = !ontemAberta; desenharLoja(); },
+      }, criar('span', { text: `${ontemAberta ? 'Esconder' : 'Ver'} ${nome}` }));
+      if (ontem) botao.append(criar('span', { class: 'data', text: formatarData(ontem.data) }));
+      botao.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>');
+
+      if (!ontemAberta) return [botao];
+      const conteudo = ontem
+        ? criar('div', { class: 'skins loja-ontem' }, ...ontem.skins.map(desenharCartao))
+        : criar('p', { class: 'vazio loja-ontem', text: 'Aparece depois do segundo dia do robô ligado.' });
+      return [botao, conteudo];
     }
 
     function desenharResultados() {
@@ -459,7 +508,9 @@
 
       const lista = $('lista-desejos');
       lista.replaceChildren();
-      if (situacaoDesejos === 'carregando') {
+      if (situacaoDesejos === 'bloqueado') {
+        lista.append(criar('p', { class: 'vazio', text: 'Sua lista fica protegida. Conecte sua chave em Ajustes para ver.' }));
+      } else if (situacaoDesejos === 'carregando') {
         lista.append(criar('p', { class: 'vazio', text: 'Carregando sua lista…' }));
       } else if (situacaoDesejos === 'erro') {
         lista.append(criar('p', { class: 'vazio', text: 'Não consegui carregar sua lista. Tente de novo com internet.' }));
@@ -470,7 +521,7 @@
       }
       desenharResultados();
 
-      $('titulo-chave').textContent = chave ? 'Chave conectada' : 'Conectar para editar a lista';
+      $('titulo-chave').textContent = chave ? 'Chave conectada' : 'Conectar';
       $('remover-chave').hidden = !chave;
     }
 
@@ -557,14 +608,15 @@
     }
 
     async function lerAjustes() {
-      if (chave) {
-        const arquivo = await lerArquivoDoGitHub('config.json');
-        ajustes = arquivo ? lerJsonDeAjustes(arquivo.texto) : { ...AJUSTES_PADRAO };
-        shaAjustes = arquivo ? arquivo.sha : null;
-        return;
-      }
-      const resposta = await fetch('config.json', { cache: 'no-cache' });
-      ajustes = resposta.ok ? lerJsonDeAjustes(await resposta.text()) : { ...AJUSTES_PADRAO };
+      const arquivo = await lerArquivoDoGitHub('config.json');
+      ajustes = arquivo ? lerJsonDeAjustes(arquivo.texto) : { ...AJUSTES_PADRAO };
+      shaAjustes = arquivo ? arquivo.sha : null;
+    }
+
+    // O repositório é privado: sem a chave, nada da conta chega ao app
+    async function carregarLoja() {
+      const arquivo = await lerArquivoDoGitHub('dados/loja.json');
+      loja = arquivo ? JSON.parse(arquivo.texto) : {};
     }
 
     async function salvarAjuste(campo, valor) {
@@ -597,19 +649,14 @@
     }
 
     async function lerDesejos() {
-      if (chave) {
-        try {
-          const lido = await lerDesejosDoGitHub();
-          desejos = lido.lista;
-          shaDesejos = lido.sha;
-          return;
-        } catch (erro) {
-          mostrarStatus(erro.message, true);
-        }
+      try {
+        const lido = await lerDesejosDoGitHub();
+        desejos = lido.lista;
+        shaDesejos = lido.sha;
+      } catch (erro) {
+        mostrarStatus(erro instanceof TypeError ? 'Sem internet para carregar sua lista.' : erro.message, true);
+        throw erro;
       }
-      const resposta = await fetch('desejos.txt', { cache: 'no-cache' });
-      if (!resposta.ok) throw new Error('Lista não encontrada');
-      desejos = textoParaLista(await resposta.text());
     }
 
     function enviarArquivo(caminho, texto, sha, mensagem) {
@@ -627,8 +674,7 @@
     async function alternarDesejo(nome) {
       if (salvando) return;
       if (!chave) {
-        trocarAba('ajustes');
-        $('caixa-chave').open = true;
+        abrirConexao();
         mostrarStatus('Conecte a chave do GitHub para editar a lista.', true);
         return;
       }
@@ -668,29 +714,64 @@
       if (!nova) { mostrarStatus('Cole a chave antes de salvar.', true); return; }
       mostrarStatus('Conferindo a chave…');
       try {
-        const lido = await lerDesejosDoGitHub(nova);
+        await lerDesejosDoGitHub(nova);
         chave = nova;
         guardarChave(nova);
-        desejos = lido.lista;
-        situacaoDesejos = 'ok';
-        shaDesejos = lido.sha;
-        await lerAjustes();
-        situacaoAjustes = 'ok';
+        modoExemplo = false;
         $('chave').value = '';
         $('caixa-chave').open = false;
-        mostrarStatus('Chave conectada. Já pode editar a lista.');
-        desenharTudo();
+        await carregar();
+        mostrarStatus('Chave conectada.');
       } catch (erro) {
         mostrarStatus(erro instanceof TypeError ? 'Sem internet para conferir a chave.' : erro.message, true);
       }
     }
 
+    function limparDados() {
+      loja = null;
+      erroLoja = false;
+      desejos = [];
+      shaDesejos = null;
+      ajustes = { ...AJUSTES_PADRAO };
+      shaAjustes = null;
+      situacaoDesejos = 'bloqueado';
+      situacaoAjustes = 'bloqueado';
+      ontemAberta = false;
+    }
+
     function removerChave() {
       chave = '';
-      shaDesejos = null;
-      shaAjustes = null;
+      modoExemplo = false;
       guardarChave('');
+      limparDados();
       mostrarStatus('Chave removida deste aparelho.');
+      desenharTudo();
+    }
+
+    function abrirConexao() {
+      trocarAba('ajustes');
+      $('caixa-chave').open = true;
+    }
+
+    async function verExemplo() {
+      try {
+        const resposta = await fetch('exemplo.json', { cache: 'no-cache' });
+        if (!resposta.ok) throw new Error('Exemplo indisponível');
+        const exemplo = await resposta.json();
+        loja = exemplo;
+        desejos = exemplo.desejos;
+        situacaoDesejos = 'ok';
+        modoExemplo = true;
+        mostrarStatus('');
+        desenharTudo();
+      } catch {
+        mostrarStatus('Não consegui abrir o exemplo.', true);
+      }
+    }
+
+    function sairDoExemplo() {
+      modoExemplo = false;
+      limparDados();
       desenharTudo();
     }
 
@@ -715,31 +796,33 @@
       catalogo.sort((a, b) => a.nome.localeCompare(b.nome));
     }
 
-    async function carregarLoja() {
-      const resposta = await fetch('dados/loja.json', { cache: 'no-cache' });
-      if (!resposta.ok) throw new Error('Loja indisponível');
-      loja = await resposta.json();
-    }
-
     async function carregar() {
-      erroLoja = false;
-      situacaoCatalogo = 'carregando';
-      situacaoDesejos = 'carregando';
-      situacaoAjustes = 'carregando';
+      limparDados();
+      if (chave) {
+        situacaoDesejos = 'carregando';
+        situacaoAjustes = 'carregando';
+      }
       desenharTudo();
+
       // Cada parte aparece quando chega e falha sozinha: sem imagens, a loja continua com os nomes
-      await Promise.all([
-        carregarLoja().catch(() => { erroLoja = true; }).then(desenharTudo),
-        carregarCatalogo()
+      const partes = [];
+      if (situacaoCatalogo !== 'ok') {
+        situacaoCatalogo = 'carregando';
+        partes.push(carregarCatalogo()
           .then(() => { situacaoCatalogo = 'ok'; }, () => { situacaoCatalogo = 'erro'; })
-          .then(desenharTudo),
-        lerDesejos()
-          .then(() => { situacaoDesejos = 'ok'; }, () => { situacaoDesejos = 'erro'; })
-          .then(desenharTudo),
-        lerAjustes()
-          .then(() => { situacaoAjustes = 'ok'; }, () => { situacaoAjustes = 'erro'; })
-          .then(desenharTudo),
-      ]);
+          .then(desenharTudo));
+      }
+      if (chave) {
+        partes.push(
+          carregarLoja().catch(() => { erroLoja = true; }).then(desenharTudo),
+          lerDesejos()
+            .then(() => { situacaoDesejos = 'ok'; }, () => { situacaoDesejos = 'erro'; })
+            .then(desenharTudo),
+          lerAjustes()
+            .then(() => { situacaoAjustes = 'ok'; }, () => { situacaoAjustes = 'erro'; })
+            .then(desenharTudo));
+      }
+      await Promise.all(partes);
     }
 
     $('aba-loja').addEventListener('click', () => trocarAba('loja'));

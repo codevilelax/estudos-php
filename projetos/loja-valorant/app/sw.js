@@ -3,7 +3,11 @@
 const CACHE = 'minha-loja-v1';
 
 self.addEventListener('install', e => {
-  const arquivos = ['./', './index.html', './manifest.json', './icone-180.png', './icone-192.png', './icone-512.png'];
+  const arquivos = [
+    './', './index.html', './manifest.json', './exemplo.json',
+    './icone-180.png', './icone-192.png', './icone-512.png',
+    './fontes/barlow-500.woff2', './fontes/barlow-600.woff2', './fontes/barlow-condensed-700.woff2',
+  ];
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(arquivos)).then(() => self.skipWaiting()));
 });
 

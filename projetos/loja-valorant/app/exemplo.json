@@ -1,5 +1,4 @@
 {
-    "exemplo": true,
     "riot_id": "SeuNome#BR1",
     "vp": 2350,
     "hoje": {
@@ -53,5 +52,10 @@
                 "preco": 2475
             }
         ]
-    }
+    },
+    "desejos": [
+        "Reaver Vandal",
+        "Glitchpop Dagger",
+        "Elderflame Vandal"
+    ]
 }

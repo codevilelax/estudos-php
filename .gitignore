@@ -16,3 +16,6 @@
 # Arquivos do sistema
 Thumbs.db
 .DS_Store
+
+# Dados da conta da loja do Valorant: só no repositório privado
+/projetos/loja-valorant/dados/

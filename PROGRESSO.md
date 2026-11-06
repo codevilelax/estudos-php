@@ -18,19 +18,26 @@
 >    solução não vale aqui). O `robo.php` já está pronto e passou no `php robo.php --teste`,
 >    mas a parte que usa a conta **nunca rodou**: a rota veio de documentação da comunidade e
 >    pode estar velha. Teste no `vilela` com `RIOT_SSID` em variável de ambiente, sem mostrar o
->    valor, e corrija o que falhar. Veja também por quanto tempo a sessão dura.
-> 4. O front também está pronto (`index.html`, `sw.js`, `manifest.json`), com dados de exemplo
->    em `dados/loja.json`: saldo de VP, preços, loja de hoje, loja de ontem, lista de desejos e
->    ajustes de aviso (`config.json`), editados pelo app, e Riot ID com a tag. Saldo, preços e Riot ID também nunca
->    rodaram com dados reais; saldo e Riot ID ficam públicos no repositório, e ele já foi avisado.
->    Foi testado com um GitHub de mentira, nunca com o de verdade. Falta: testar o aviso pelo
->    ntfy; mover o projeto para a raiz de um repositório próprio, `codevilelax/loja-valorant`
->    (é o nome que está no `index.html`; ele cria o repositório e liga o Pages pela web); rodar
->    no GitHub Actions, que precisa fazer commit do `dados/loja.json` (sessão só em secret, e
->    confira se os logs são públicos); e criar a chave do GitHub só para esse repositório, com
->    Contents read/write, colando já no app instalado no celular (no iPhone, o app instalado
->    guarda dados separados do Safari).
-> 5. Uma ação por mensagem. Quando o login e a leitura da loja funcionarem, apague este aviso,
+>    valor, e corrija o que falhar. Use `php robo.php --mostrar` para ver o resultado: sem essa
+>    opção o robô só escreve "Loja lida." de propósito. Veja também por quanto tempo a sessão dura.
+> 4. **Privacidade (ele pediu o máximo possível):** são dois repositórios, e nenhum dado da conta
+>    pode ir para um lugar público.
+>    - **Privado, `codevilelax/loja-valorant`** (é o nome que está no `app/index.html`): `robo.php`,
+>      `desejos.txt`, `config.json`, `dados/loja.json` e o GitHub Actions, com a sessão e o tópico
+>      do ntfy em secrets. Se ele já criou esse repositório como público, deve mudar para privado.
+>    - **Público, com nome neutro, com o Pages ligado:** só o conteúdo de `app/`, sem dados.
+>    - O app só lê os dados pela API do GitHub, com uma chave só para o repositório privado
+>      (Contents read/write) e colada no app instalado no celular (no iPhone, o app instalado
+>      guarda dados separados do Safari). Sem a chave, mostra só a tela bloqueada ou o exemplo.
+>    - O aviso do ntfy é genérico de propósito ("Veio skin da sua lista. Abra o app."), porque o
+>      ntfy é público. Use um tópico longo e aleatório.
+>    - **Neste repositório de estudos:** `dados/` da loja está no `.gitignore`. Não faça commit
+>      aqui da lista real de skins, do Riot ID ou do saldo; eles vão só para o repositório privado.
+> 5. O front está pronto em `app/`: saldo de VP, Riot ID, preços, loja de hoje, botão para ver a
+>    loja de ontem, lista de desejos e ajustes. Foi testado com um GitHub de mentira. Saldo,
+>    preços e Riot ID nunca rodaram com dados reais. Falta: testar o aviso pelo ntfy, ligar o
+>    Actions (com commit do `dados/loja.json`) e testar o app no celular.
+> 6. Uma ação por mensagem. Quando o login e a leitura da loja funcionarem, apague este aviso,
 >    faça commit e push.
 
 > **⚠️ Para o Claude no computador `vilela` (monitor do Detran):** em 21/10/2026, no

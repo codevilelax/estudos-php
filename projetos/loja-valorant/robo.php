@@ -7,7 +7,10 @@
 // Teste sem usar a conta (loja de mentira, sem enviar aviso e sem mexer em dados/loja.json):
 //   php robo.php --teste
 //
-// De verdade (precisa destas variáveis de ambiente):
+// De verdade, o robô não escreve nada pessoal na tela, porque isso iria para os logs.
+// Para ver a loja no seu próprio terminal, use: php robo.php --mostrar
+//
+// Precisa destas variáveis de ambiente:
 //   RIOT_SSID    cookie da sessão da Riot. É como uma chave da conta: nunca no código nem no git.
 //   NTFY_TOPICO  tópico do ntfy que recebe o aviso.
 //   RIOT_SHARD   servidor da conta (opcional). Brasil usa "na".
@@ -168,9 +171,8 @@ function descreverSkin($skin)
 function guardarLoja($arquivo, $skins, $segundos, $vp, $riotId)
 {
     $dados = is_file($arquivo) ? json_decode(file_get_contents($arquivo), true) : [];
-    $exemplo = !empty($dados["exemplo"]);
-    $anterior = $exemplo ? null : ($dados["hoje"] ?? null);
-    $ontem = $exemplo ? null : ($dados["ontem"] ?? null);
+    $anterior = $dados["hoje"] ?? null;
+    $ontem = $dados["ontem"] ?? null;
 
     $hoje = [
         "data" => gmdate("Y-m-d"),
@@ -182,8 +184,12 @@ function guardarLoja($arquivo, $skins, $segundos, $vp, $riotId)
     }
 
     // O Riot ID quase nunca muda: se a leitura falhar, continua valendo o último.
-    if ($riotId === null && !$exemplo) {
+    if ($riotId === null) {
         $riotId = $dados["riot_id"] ?? null;
+    }
+
+    if (!is_dir(dirname($arquivo))) {
+        mkdir(dirname($arquivo), 0777, true);
     }
 
     $json = json_encode(["riot_id" => $riotId, "vp" => $vp, "hoje" => $hoje, "ontem" => $ontem], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
@@ -202,7 +208,15 @@ function avisar($topico, $titulo, $mensagem)
 }
 
 $teste = in_array("--teste", $argv);
+$mostrar = $teste || in_array("--mostrar", $argv);
 $topico = getenv("NTFY_TOPICO");
+
+$falar = function ($texto) use ($mostrar) {
+    if ($mostrar) {
+        echo $texto . "
+";
+    }
+};
 
 try {
     $nomes = buscarNomes();
@@ -214,7 +228,7 @@ try {
     // Nome escrito errado nunca daria aviso, então é melhor falar logo.
     foreach ($desejos as $desejo) {
         if (!in_array(mb_strtolower(trim($desejo)), $nomesEmMinusculo)) {
-            echo "Atenção: \"" . $desejo . "\" não existe na lista de skins do jogo.\n";
+            $falar("Atenção: \"" . $desejo . "\" não existe na lista de skins do jogo.");
         }
     }
 
@@ -257,30 +271,31 @@ try {
     guardarLoja($arquivoDaLoja, $loja, $segundos, $vp, $riotId);
 
     if ($riotId !== null) {
-        echo "Conta: " . $riotId . "\n";
+        $falar("Conta: " . $riotId);
     }
     if ($vp !== null) {
-        echo "Saldo: " . $vp . " VP\n";
+        $falar("Saldo: " . $vp . " VP");
     }
 
     $achadas = [];
     foreach ($loja as $skin) {
         if (in_array(mb_strtolower($skin["nome"]), $desejosEmMinusculo)) {
             $achadas[] = descreverSkin($skin);
-            echo descreverSkin($skin) . " - QUERO!\n";
+            $falar(descreverSkin($skin) . " - QUERO!");
         } else {
-            echo descreverSkin($skin) . "\n";
+            $falar(descreverSkin($skin));
         }
     }
-    echo "Skins da lista hoje: " . count($achadas) . "\n";
+    $falar("Skins da lista hoje: " . count($achadas));
 
+    // O ntfy é um serviço público: o aviso não leva nome de skin, saldo nem Riot ID. Os detalhes ficam no app.
     $ajustes = lerAjustes(__DIR__ . "/config.json");
     $avisos = [];
     if (count($achadas) > 0 && $ajustes["avisar_desejos"]) {
-        $avisos[] = ["Skin na sua loja!", implode(", ", $achadas)];
+        $avisos[] = ["Minha Loja", "Veio skin da sua lista. Abra o app."];
     }
     if ($ajustes["resumo_diario"]) {
-        $avisos[] = ["Sua loja de hoje", implode(", ", array_map("descreverSkin", $loja))];
+        $avisos[] = ["Minha Loja", "A loja de hoje já está no app."];
     }
 
     foreach ($avisos as $aviso) {
@@ -289,6 +304,11 @@ try {
         } elseif ($topico) {
             avisar($topico, $aviso[0], $aviso[1]);
         }
+    }
+
+    if (!$mostrar) {
+        echo "Loja lida.
+";
     }
 } catch (Exception $erro) {
     echo "Erro: " . $erro->getMessage() . "\n";
