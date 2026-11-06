@@ -5,7 +5,7 @@
 > na conta dele e avisa no celular (ntfy) quando vier uma skin da lista de desejos, mesmo com
 > o PC desligado. O login só pode ser feito **no `vilela`, nunca no `computador 2`**.
 > Ele já sabe que a loja não está na API oficial da Riot, que a rota não oficial traz risco
-> para a conta, e decidiu seguir. Ele entra na conta da Riot **pelo Google**, então não há senha para usar.
+> para a conta, e decidiu seguir. O login é feito no navegador: não há senha para o robô usar.
 > 1. **Regra:** o cookie `ssid` e o endereço depois do login (traz token) são como chaves da
 >    conta. Nunca peça o valor, nem em chat ou print, e nunca deixe no código ou no git.
 > 2. Passo em aberto: ele entra no navegador do `vilela` por este link e vê, em F12 →
@@ -24,8 +24,10 @@
 >    pode ir para um lugar público.
 >    - **Privado, `codevilelax/loja-valorant`** (é o nome que está no `app/index.html`): `robo.php`,
 >      `desejos.txt`, `config.json`, `dados/loja.json` e o GitHub Actions, com a sessão e o tópico
->      do ntfy em secrets. Se ele já criou esse repositório como público, deve mudar para privado.
->    - **Público, com nome neutro, com o Pages ligado:** só o conteúdo de `app/`, sem dados.
+>      do ntfy em secrets. **Em 06/11 esse repositório existe, vazio e PÚBLICO: precisa virar
+>      privado (Settings → Danger Zone → Change visibility) antes de receber qualquer arquivo.**
+>    - **Público, com nome neutro (`minha-loja`, ainda não existe), com o Pages ligado:** só o
+>      conteúdo de `app/`, sem dados.
 >    - O app só lê os dados pela API do GitHub, com uma chave só para o repositório privado
 >      (Contents read/write) e colada no app instalado no celular (no iPhone, o app instalado
 >      guarda dados separados do Safari). Sem a chave, mostra só a tela bloqueada ou o exemplo.
@@ -33,6 +35,8 @@
 >      ntfy é público. Use um tópico longo e aleatório.
 >    - **Neste repositório de estudos:** `dados/` da loja está no `.gitignore`. Não faça commit
 >      aqui da lista real de skins, do Riot ID ou do saldo; eles vão só para o repositório privado.
+>      `estudos-php` é público: quando o privado estiver pronto, mova o robô para lá e tire
+>      `projetos/loja-valorant` daqui, com confirmação antes de apagar.
 > 5. O front está pronto em `app/`: saldo de VP, Riot ID, preços, loja de hoje, botão para ver a
 >    loja de ontem, lista de desejos e ajustes. Foi testado com um GitHub de mentira. Saldo,
 >    preços e Riot ID nunca rodaram com dados reais. Falta: testar o aviso pelo ntfy, ligar o
@@ -83,42 +87,63 @@
 
 ## Onde parei
 
-- **Data e computador:** 30/10/2026, `computador 2`
-- **Assunto:** projeto `projetos/cadastro-pessoas`, parte 5 (**levar pro navegador**):
-  `selected`, `isset`, **POST** e cadastro pela página.
-- **O que foi feito (tudo no `index.php`, uma ação por mensagem):**
-  - **Lista lembra o estado buscado:** `if` / `else` dentro do `foreach` dos estados,
-    `<option selected>` quando `$estado["uf"] == $_GET["uf"]`. Ele viu o estado aparecer duas
-    vezes (o `echo` normal estava fora do `if`) e resolveu com `else`.
-  - **Página sem estado:** `if (isset($_GET["uf"])) { ...busca... }`. A frase
-    "Selecione um estado:" ficou fixa em HTML no topo (ele escolheu fixa, sem `echo`).
-  - **Formulário de cadastro** no fim da página: `?>` para voltar ao HTML, `<form method="post">`,
-    4 `<input>` (nome, idade, cidade, uf) com texto antes, `<br>` (ele mesmo pôs) e `required`.
-    Ele mesmo achou que o cadastro com GET disparava a busca (os dois têm `uf`): daí o POST
-    ("GET = buscar, vai no endereço; POST = salvar, vai escondido"). No PHP:
-    `if (isset($_POST["nome"]))`, o `INSERT` copiado do `cadastrar.php` com `$_POST["..."]` no
-    lugar do `readline`. Funcionou (Diego Alves, id 504). Achou um cadastro vazio (505) e
-    resolvemos com `required`.
-  - Treino de explicar (linha do `if` do `selected`): acertou a lógica; ajustes: "estado da
-    volta atual" (não "escolhido"), "o que a pessoa buscou" (não "digitado"), "roda o que está
-    dentro das chaves" e faltou o pra quê.
-  - Erros no caminho: `;` no fim do `if` no lugar de `{ }` (2 vezes), erros de digitação
-    (`$estadp`, `opticion`, `fomr`), colou o exemplo inteiro em vez de só a `}`, e no
-    `$_POST` trocou só a palavra `readline` (ficou `$_POST("Digite...")`, depois
-    `$_POST["nome"]("Digite...")`). Entendeu com "`readline` = comando que pergunta, `( )`;
-    `$_POST` = caixinha com a resposta, `[ ]`".
-  - **Banco agora:** 501 pessoas (as 500 + Carla, 29 anos). Ele apagou os testes 503, 504 e 505
-    com o `apagar.php`. O próximo `id` vai ser **506**.
-- **Próximo passo:** **alterar pela página** (id + idade nova), igual ao cadastro: `?>` no fim
-  do `index.php`, `<form method="post">` com `name="id"` e `name="idade"`, e no PHP
-  `if (isset($_POST["id"]))` + o `UPDATE` do `alterar.php`. Combinamos que ele tenta **mais
-  sozinho** (só dica, sem código pronto; mostrar se travar). Depois: apagar pela página e o
-  visual (escuro + vermelho, como o portfólio). Treino de explicar ainda sem resposta: a linha
-  do `execute` do `cadastrar.php`.
+- **Data e computador:** 06/11/2026, `computador 2`
+- **Assunto:** projeto `projetos/loja-valorant` (loja do Valorant no celular). O aviso no topo
+  deste arquivo tem login, privacidade e o que falta no robô.
+- **O que foi feito:**
+  - **Banco:** `03-banco-de-dados/ex05-tocantins.php` concluído. Além do pedido, incluiu a idade
+    e o contador `$qnt` sem ninguém falar. Erros no caminho: `echo $pessoas` (não dá para
+    mostrar o resultado inteiro, só com `foreach`) e um `and IDADE` sobrando no `WHERE`.
+  - **Vistos, mas ainda não praticados:** `&&` e `in_array`. Não contam como aprendidos.
+  - **Loja do Valorant (código escrito pelo Claude):** `robo.php` lê a loja e o saldo, guarda hoje
+    e ontem em `dados/loja.json` e avisa pelo ntfy. `app/` tem loja do dia, preços, VP, Riot ID,
+    botão da loja de ontem, lista de desejos, ajustes e tela bloqueada sem a chave. `testes/`
+    tem o GitHub de mentira (`router.php`), o roteiro do navegador (`roteiro.js`) e o gerador do
+    exemplo (`gerar-exemplo.php`). Passou nos testes, **sem nada real**: login, leitura da
+    loja, ntfy, GitHub de verdade e celular nunca rodaram.
+  - **Teste do app:** copie `app/` para uma pasta temporária com os arquivos de `testes/`, troque
+    a URL de `API_ARQUIVOS` por `/github/`, inclua `roteiro.js` antes de `</body>`, desligue o
+    service worker na cópia e rode `php -S` com `router.php` + Chrome `--headless=new --dump-dom`.
+    O `roteiro.js` precisa de ajuste depois do novo visual.
+  - **Banco agora:** 501 pessoas (as 500 + Carla, 29 anos). O próximo `id` vai ser **506**.
+- **Próximo passo (na ordem combinada):**
+  1. **Refazer o visual do app, com `exemplo.json`.** Foi aprovado ("dê seu melhor"), mas **não
+     foi salvo**: o `app/index.html` ainda é o visual antigo. A referência são 3 prints mandados no
+     chat; não foram salvos porque mostram dados da conta, então peça de novo. Usar como
+     referência de layout, com identidade própria, sem copiar marca e sem anúncios:
+     - **Geral:** fundo preto, cartões `#1c1c1e` com raio de 20px, vermelho `#ff4655`, fonte do
+       sistema (apagar `app/fontes` e tirar do `sw.js`). Barra de baixo flutuante em pílula, com
+       ícone e texto: Loja, Coleção e Ajustes. Battle Pass e Perfil ficam para depois.
+     - **Loja:** título grande e Riot ID. Painel com VP, Kingdom Credits e Radianite
+       (`media.valorant-api.com/currencies/<id>/displayicon.png`), relógio ao vivo "Troca em
+       hh:mm:ss" e "Total" da loja. Abas Diária, Acessórios e Pacotes. Na Diária, cartões grandes:
+       imagem centralizada, fundo na cor da raridade (`contentTierUuid` da skin +
+       `highlightColor` de `/v1/contenttiers`), ícone da raridade, nome, preço e coração. O botão
+       da loja de ontem continua embaixo, fechado no início.
+     - **Coleção (só para ver):** dois resumos (valor em VP das skins; lista de desejos, que abre a
+       tela com busca), Loadout em fila horizontal, Equipado (cartão e título) e grade com Skins,
+       Buddies, Sprays, Cartões, Títulos, Flex e Agentes, cada um abrindo sua lista com "voltar".
+     - **Ajustes:** Conta, Avisos no celular e Acesso. Sem chave, nada da conta aparece.
+     - **`sw.js`:** a lista de skins tem 3,6 MB, então abrir a cópia guardada e atualizar por trás.
+       Nunca guardar respostas do GitHub.
+     - **Fora, combinado:** editar loadout pelo app (exigiria a sessão da Riot no celular), várias
+       contas e anúncios.
+  2. **Testar login e leitura da loja** no `vilela` (aviso do topo). É o maior risco: sem isso,
+     nada tem dados reais.
+  3. **Se funcionar, ligar os dados novos no robô**, gravando no formato do `app/exemplo.json`:
+     `kc` e `radianita` (carteira, ids `85ca954a-41f2-ce94-9b45-8ca3dd39a00d` e
+     `e59aa87c-4cbf-517a-5983-6e81511be9b7`), `AccessoryStore` e `FeaturedBundle` (mesma resposta
+     da loja), coleção e loadout (`valapidocs.techchrism.me`: `owned-items`, `player-loadout`).
+     Por último, Battle Pass (`contracts`) e perfil (`player-mmr`, `account-xp`).
+  - **`cadastro-pessoas`, para quando quiser voltar:** alterar pela página (id + idade nova) e
+    consertar a linha 9 do `index.php`, que lê `$_GET["uf"]` sem conferir com `isset`.
+
 - **No computador `vilela`:** antes do primeiro exercício de banco, conferir se `php -m`
   mostra `pdo_sqlite` (ver `CLAUDE.md`). Se ele quiser a tela de consulta, instalar as
   extensões SQLite Viewer e SQLite (alexcvzz) no VS Code de lá. O `readline` do projeto
   precisa funcionar no PHP de lá (`php -r "var_dump(function_exists('readline'));"`).
+- **Pendências da loja:** mudar `loja-valorant` para privado; criar o público `minha-loja`;
+  confirmar se pode criar um tópico novo no ntfy; passar a lista real de skins.
 - **Dúvidas pendentes:** nenhuma.
 - **Perfil do GitHub:** em 22/10 ele escolheu "desenvolvedor" como objetivo (antes estava
   "Engenharia de Dados"). Perfil ajustado, agora igual ao portfólio.
@@ -126,9 +151,10 @@
   difíceis**, sem etapas, usando o banco. Mas a explicação de assunto novo continua **um pedaço
   por mensagem**, curta e concreta. Quando não entende, pede "como se fosse para uma criança"
   (analogias simples funcionaram: telefone para a conexão, planilha para tabela e coluna,
-  cofrinho para soma, campeonato para maior/menor). Desde 23/10, treinar também a
-  **explicação**: nos exercícios, uma Parte 2 em que ele explica linhas em comentário (o que
-  faz + pra quê). Ele gostou de **caça ao bug** (código quebrado para consertar). Quando ele
+  cofrinho para soma, campeonato para maior/menor). **Desde 06/11: não pedir para explicar
+  linhas de código** ("chega disso, quero praticar"), a não ser que seja pedido. Prática em
+  projeto de uso real anima mais que exercício solto. **No projeto da loja, o Claude escreve o
+  código** e a direção vem dos pedidos. Ele gostou de **caça ao bug** (código quebrado para consertar). Quando ele
   pede "passo a passo", dar uma ação por mensagem e conferir o arquivo depois de cada uma:
   funcionou muito bem em 23/10. Quando o exercício pedir um array, os itens já vêm no
   enunciado (regra no `CLAUDE.md`). Erros que se repetem: a ordem do `+=` (o cofrinho fica à
@@ -156,6 +182,7 @@
 
 ## Histórico
 
+- 30/10/2026 (`computador 2`): projeto `cadastro-pessoas`, parte 5: lista lembra o estado (`selected`), `isset`, cadastro pela página com POST.
 - 29/10/2026 (`computador 2`): projeto `cadastro-pessoas`: `UPDATE` no `alterar.php`; começo da parte 5, busca por estado no navegador (`$_GET`, `<form>`, `<select>`).
 - 28/10/2026 (`computador 2`): projeto `cadastro-pessoas`, parte 4: `require` com `conexao.php` nos três arquivos.
 - 26/10/2026 (`computador 2`): projeto `cadastro-pessoas`: `if` / `else` no `buscar.php`, `INSERT` no `cadastrar.php` (Carla Mendes, id 501) e `DELETE` no `apagar.php`.

@@ -1,6 +1,13 @@
 {
     "riot_id": "SeuNome#BR1",
     "vp": 2350,
+    "kc": 45,
+    "radianita": 20,
+    "desejos": [
+        "Reaver Vandal",
+        "Glitchpop Dagger",
+        "Elderflame Vandal"
+    ],
     "hoje": {
         "data": "2026-11-06",
         "expira": null,
@@ -53,9 +60,288 @@
             }
         ]
     },
-    "desejos": [
-        "Reaver Vandal",
-        "Glitchpop Dagger",
-        "Elderflame Vandal"
-    ]
+    "acessorios": {
+        "expira": null,
+        "itens": [
+            {
+                "tipo": "Buddy",
+                "nome": "BlastX Buddy",
+                "icone": "https://media.valorant-api.com/buddies/853da947-486d-feb3-ec2d-8ba25a6b545b/displayicon.png",
+                "preco": 10
+            },
+            {
+                "tipo": "Spray",
+                "nome": "Good Boy Spray",
+                "icone": "https://media.valorant-api.com/sprays/d39fbf07-4088-062a-1bbd-8bb229fd77b2/fulltransparenticon.png",
+                "preco": 5
+            },
+            {
+                "tipo": "Cartão",
+                "nome": "Fade Mastery Card",
+                "icone": "https://media.valorant-api.com/playercards/e0d4094a-4ae9-ba8c-5a65-dc8cafbc7b96/largeart.png",
+                "preco": 5
+            },
+            {
+                "tipo": "Título",
+                "nome": "Gênio",
+                "icone": null,
+                "preco": 2
+            }
+        ]
+    },
+    "pacotes": [
+        {
+            "id": "fde33d91-4bbd-ee1d-3c2b-40af0fe0e510",
+            "nome": "Reaver",
+            "icone": "https://media.valorant-api.com/bundles/fde33d91-4bbd-ee1d-3c2b-40af0fe0e510/displayicon.png",
+            "preco": 7100,
+            "itens": 7,
+            "expira": null
+        },
+        {
+            "id": "de041dd5-4e17-2924-6d09-b4a3ccd82e6f",
+            "nome": "Prime//2.0",
+            "icone": "https://media.valorant-api.com/bundles/de041dd5-4e17-2924-6d09-b4a3ccd82e6f/displayicon.png",
+            "preco": 7100,
+            "itens": 7,
+            "expira": null
+        }
+    ],
+    "colecao": {
+        "valor_vp": 8275,
+        "equipado": {
+            "cartao": "Breach Mastery Card",
+            "titulo": "Braba"
+        },
+        "loadout": [
+            {
+                "arma": "Vandal",
+                "skin": "Reaver Vandal",
+                "icone": "https://media.valorant-api.com/weaponskinlevels/ba42fe63-457a-78ce-4499-47950a698129/displayicon.png"
+            },
+            {
+                "arma": "Phantom",
+                "skin": "Oni Phantom",
+                "icone": "https://media.valorant-api.com/weaponskinlevels/c00e786e-4e6f-0ef7-0ce3-32ba9918ba41/displayicon.png"
+            },
+            {
+                "arma": "Classic",
+                "skin": "Standard Classic",
+                "icone": "https://media.valorant-api.com/weaponskinlevels/51cbccad-487c-50ed-2ffd-c88b4240fab3/displayicon.png"
+            },
+            {
+                "arma": "Sheriff",
+                "skin": "Ion Sheriff",
+                "icone": "https://media.valorant-api.com/weaponskinlevels/2b555f97-46bb-5949-3531-979f5bc817f0/displayicon.png"
+            },
+            {
+                "arma": "Operator",
+                "skin": "Standard Operator",
+                "icone": "https://media.valorant-api.com/weaponskinlevels/88cba358-4f4d-4d0e-69fc-b48f4c65cb2d/displayicon.png"
+            },
+            {
+                "arma": "Spectre",
+                "skin": "Standard Spectre",
+                "icone": "https://media.valorant-api.com/weaponskinlevels/1dc45e18-4a07-c85f-0020-6da4db1486ce/displayicon.png"
+            }
+        ],
+        "skins": [
+            {
+                "id": "ba42fe63-457a-78ce-4499-47950a698129",
+                "nome": "Reaver Vandal"
+            },
+            {
+                "id": "c00e786e-4e6f-0ef7-0ce3-32ba9918ba41",
+                "nome": "Oni Phantom"
+            },
+            {
+                "id": "c9678d8c-4327-f397-b0ec-dca3c3d6fb15",
+                "nome": "Prime Vandal"
+            },
+            {
+                "id": "2b555f97-46bb-5949-3531-979f5bc817f0",
+                "nome": "Ion Sheriff"
+            },
+            {
+                "id": "851b390a-4852-66bd-8b72-4f96f0919710",
+                "nome": "Forsaken Vandal"
+            }
+        ],
+        "buddies": [
+            {
+                "id": "dadb46d4-4760-141f-aa50-948f3054006e",
+                "nome": "BlastX Buddy",
+                "icone": "https://media.valorant-api.com/buddies/853da947-486d-feb3-ec2d-8ba25a6b545b/displayicon.png"
+            },
+            {
+                "id": "198e77a1-4708-1f80-7c5a-ca9d1da93808",
+                "nome": "Happy Petal Buddy",
+                "icone": "https://media.valorant-api.com/buddies/3bff23db-431e-8ef3-476f-39b5d90c89b2/displayicon.png"
+            },
+            {
+                "id": "772210d9-472d-424f-0f62-c881ed22b9c4",
+                "nome": "Blueberry Buddy",
+                "icone": "https://media.valorant-api.com/buddies/5d3744e9-4c9d-1a45-e79b-6b8004041a30/displayicon.png"
+            },
+            {
+                "id": "3a1671fb-4f0e-15b4-dd30-5eb5e13e13a5",
+                "nome": "Boba Truck Buddy",
+                "icone": "https://media.valorant-api.com/buddies/96680619-4a7f-7ea2-d935-47a71758f844/displayicon.png"
+            },
+            {
+                "id": "58584a97-4839-3cb0-6f21-02809648df92",
+                "nome": "Boba Buddy",
+                "icone": "https://media.valorant-api.com/buddies/d400dd1a-4a81-1b26-b8f1-a994e13739b2/displayicon.png"
+            },
+            {
+                "id": "f5d81ea8-4b98-fe1a-03db-ba8172ef087b",
+                "nome": "Bolt Buddy",
+                "icone": "https://media.valorant-api.com/buddies/a0045987-4f04-584a-6b61-53a5566c5eb4/displayicon.png"
+            }
+        ],
+        "sprays": [
+            {
+                "id": "d39fbf07-4088-062a-1bbd-8bb229fd77b2",
+                "nome": "Good Boy Spray",
+                "icone": "https://media.valorant-api.com/sprays/d39fbf07-4088-062a-1bbd-8bb229fd77b2/fulltransparenticon.png"
+            },
+            {
+                "id": "70f415cf-4a89-3ce1-c01f-94a2c7495515",
+                "nome": "Bolt Spray",
+                "icone": "https://media.valorant-api.com/sprays/70f415cf-4a89-3ce1-c01f-94a2c7495515/fulltransparenticon.png"
+            },
+            {
+                "id": "35d8fb90-49a9-641e-ff08-b4bc20421908",
+                "nome": "Boom! Spray",
+                "icone": "https://media.valorant-api.com/sprays/35d8fb90-49a9-641e-ff08-b4bc20421908/fulltransparenticon.png"
+            },
+            {
+                "id": "e42f668f-4829-10af-02ca-4abf7fa74fb5",
+                "nome": "Fade Spray",
+                "icone": "https://media.valorant-api.com/sprays/e42f668f-4829-10af-02ca-4abf7fa74fb5/fulltransparenticon.png"
+            },
+            {
+                "id": "da32f415-4593-dba5-e09c-9fb6af3325e0",
+                "nome": "On the Prowl Spray",
+                "icone": "https://media.valorant-api.com/sprays/da32f415-4593-dba5-e09c-9fb6af3325e0/fulltransparenticon.png"
+            },
+            {
+                "id": "7a46d7de-409e-a15a-a052-89a6808eb549",
+                "nome": "Eye Opener Spray",
+                "icone": "https://media.valorant-api.com/sprays/7a46d7de-409e-a15a-a052-89a6808eb549/fulltransparenticon.png"
+            }
+        ],
+        "cartoes": [
+            {
+                "id": "e0d4094a-4ae9-ba8c-5a65-dc8cafbc7b96",
+                "nome": "Fade Mastery Card",
+                "icone": "https://media.valorant-api.com/playercards/e0d4094a-4ae9-ba8c-5a65-dc8cafbc7b96/largeart.png"
+            },
+            {
+                "id": "ffbfcb92-462e-58bd-3aea-4c9849a7bb76",
+                "nome": "Breach Mastery Card",
+                "icone": "https://media.valorant-api.com/playercards/ffbfcb92-462e-58bd-3aea-4c9849a7bb76/largeart.png"
+            },
+            {
+                "id": "7a7d21c3-4886-f5c8-606e-858ff452e2d8",
+                "nome": "Deadlock Mastery Card",
+                "icone": "https://media.valorant-api.com/playercards/7a7d21c3-4886-f5c8-606e-858ff452e2d8/largeart.png"
+            },
+            {
+                "id": "6b4bcdf9-43e6-bd1e-7ab9-72807b01fa41",
+                "nome": "Tejo Mastery Card",
+                "icone": "https://media.valorant-api.com/playercards/6b4bcdf9-43e6-bd1e-7ab9-72807b01fa41/largeart.png"
+            },
+            {
+                "id": "5e9e64d1-4fed-2225-7b9d-5a960470f644",
+                "nome": "Raze Mastery Card",
+                "icone": "https://media.valorant-api.com/playercards/5e9e64d1-4fed-2225-7b9d-5a960470f644/largeart.png"
+            },
+            {
+                "id": "532ea15e-4851-1a56-9226-638282f76472",
+                "nome": "Chamber Mastery Card",
+                "icone": "https://media.valorant-api.com/playercards/532ea15e-4851-1a56-9226-638282f76472/largeart.png"
+            }
+        ],
+        "titulos": [
+            {
+                "id": "9859edc2-4e1d-1719-4403-838a97a918ac",
+                "nome": "Gênio"
+            },
+            {
+                "id": "c8fb6c43-4cce-e518-6a06-0892de1d9f72",
+                "nome": "Braba"
+            },
+            {
+                "id": "ec59e486-47a0-2cf2-4cfd-588bf95f2ef1",
+                "nome": "GOOOOALLLL!!!"
+            },
+            {
+                "id": "a65074fd-4937-734e-20fe-3cafa842c631",
+                "nome": "Catalyst"
+            },
+            {
+                "id": "2d284b12-4536-1d0e-b08c-e58850b2a76e",
+                "nome": "Chicken"
+            },
+            {
+                "id": "326c3796-43c0-4aca-cd5e-53b3ccf8c507",
+                "nome": "Foxy"
+            }
+        ],
+        "flex": [
+            {
+                "id": "fc33f376-4a58-687c-6961-bd8a7e529346",
+                "nome": "ORA by OneTap Flex",
+                "icone": "https://media.valorant-api.com/flex/fc33f376-4a58-687c-6961-bd8a7e529346/displayicon.png"
+            },
+            {
+                "id": "80a11c6a-4d28-bfad-5594-2e9369b7787a",
+                "nome": "Bolt Prism Flex",
+                "icone": "https://media.valorant-api.com/flex/80a11c6a-4d28-bfad-5594-2e9369b7787a/displayicon.png"
+            },
+            {
+                "id": "2c270c5a-4da2-b120-df90-ee89f6bfc55f",
+                "nome": "Mr. Sprinklebottom Flex",
+                "icone": "https://media.valorant-api.com/flex/2c270c5a-4da2-b120-df90-ee89f6bfc55f/displayicon.png"
+            }
+        ],
+        "agentes": [
+            {
+                "id": "e370fa57-4757-3604-3648-499e1f642d3f",
+                "nome": "Gekko",
+                "icone": "https://media.valorant-api.com/agents/e370fa57-4757-3604-3648-499e1f642d3f/displayicon.png"
+            },
+            {
+                "id": "dade69b4-4f5a-8528-247b-219e5a1facd6",
+                "nome": "Fade",
+                "icone": "https://media.valorant-api.com/agents/dade69b4-4f5a-8528-247b-219e5a1facd6/displayicon.png"
+            },
+            {
+                "id": "5f8d3a7f-467b-97f3-062c-13acf203c006",
+                "nome": "Breach",
+                "icone": "https://media.valorant-api.com/agents/5f8d3a7f-467b-97f3-062c-13acf203c006/displayicon.png"
+            },
+            {
+                "id": "cc8b64c8-4b25-4ff9-6e7f-37b4da43d235",
+                "nome": "Deadlock",
+                "icone": "https://media.valorant-api.com/agents/cc8b64c8-4b25-4ff9-6e7f-37b4da43d235/displayicon.png"
+            },
+            {
+                "id": "b444168c-4e35-8076-db47-ef9bf368f384",
+                "nome": "Tejo",
+                "icone": "https://media.valorant-api.com/agents/b444168c-4e35-8076-db47-ef9bf368f384/displayicon.png"
+            },
+            {
+                "id": "f94c3b30-42be-e959-889c-5aa313dba261",
+                "nome": "Raze",
+                "icone": "https://media.valorant-api.com/agents/f94c3b30-42be-e959-889c-5aa313dba261/displayicon.png"
+            },
+            {
+                "id": "22697a3d-45bf-8dd7-4fec-84a9e28c69d7",
+                "nome": "Chamber",
+                "icone": "https://media.valorant-api.com/agents/22697a3d-45bf-8dd7-4fec-84a9e28c69d7/displayicon.png"
+            }
+        ]
+    }
 }
