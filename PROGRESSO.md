@@ -14,12 +14,13 @@
 >    No `computador 2`, esse link terminou em erro 404 e não chegamos a saber em qual domínio.
 >    Se o endereço começar com `playvalorant.com`, o login funcionou mesmo com o 404. Se
 >    começar com `auth.riotgames.com`, procure o link atual.
-> 3. Pesquise a rota atual antes de codar: a busca de 06/11 não confirmou os endereços nem o
->    captcha. Em PHP, com o `ssid` vindo de variável de ambiente, teste se dá para renovar a
->    sessão sem abrir o navegador e mostre as 4 skins do dia no terminal. Veja também por
->    quanto tempo a sessão dura.
-> 4. Depois: juntar com o `comparar.php`, avisar pelo ntfy, rodar no GitHub Actions (sessão só
->    em secret; confira antes se o repositório e os logs são públicos) e, por último, a tela no celular.
+> 3. **Neste projeto, ele comanda e o Claude escreve todo o código** (a regra de não entregar a
+>    solução não vale aqui). O `robo.php` já está pronto e passou no `php robo.php --teste`,
+>    mas a parte que usa a conta **nunca rodou**: a rota veio de documentação da comunidade e
+>    pode estar velha. Teste no `vilela` com `RIOT_SSID` em variável de ambiente, sem mostrar o
+>    valor, e corrija o que falhar. Veja também por quanto tempo a sessão dura.
+> 4. Depois: testar o aviso pelo ntfy, rodar no GitHub Actions (sessão só em secret; confira
+>    antes se o repositório e os logs são públicos) e, por último, a tela no celular.
 > 5. Uma ação por mensagem. Quando o login e a leitura da loja funcionarem, apague este aviso,
 >    faça commit e push.
 
