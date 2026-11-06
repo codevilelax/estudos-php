@@ -13,6 +13,11 @@
 //   RIOT_SHARD   servidor da conta (opcional). Brasil usa "na".
 
 const LOJA_DE_TESTE = ["Reaver Vandal", "Ion Sheriff", "Spectrum Phantom", "Glitchpop Dagger"];
+const PRECOS_DE_TESTE = [1775, 1275, 2675, 3550];
+const VP_DE_TESTE = 2350;
+
+const ID_DO_VP = "85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741";
+const AJUSTES_PADRAO = ["avisar_desejos" => true, "resumo_diario" => false];
 
 const ENDERECO_LOGIN = "https://auth.riotgames.com/authorize?redirect_uri=https%3A%2F%2Fplayvalorant.com%2Fopt_in"
     . "&client_id=play-valorant-web-prod&response_type=token%20id_token&nonce=1&scope=account%20openid";
@@ -64,7 +69,7 @@ function buscarNomes()
 }
 
 // Usa o cookie da sessão para pegar os tokens e ler a loja.
-// Devolve os ids das 4 skins e quantos segundos faltam para a loja trocar.
+// Devolve os ids das 4 skins, os preços, quantos segundos faltam para a loja trocar e o saldo de VP.
 function lerLojaDaConta($ssid, $shard)
 {
     $login = pedir(ENDERECO_LOGIN, [CURLOPT_HTTPHEADER => ["Cookie: ssid=" . $ssid, "User-Agent: Mozilla/5.0"]]);
@@ -105,14 +110,41 @@ function lerLojaDaConta($ssid, $shard)
     }
 
     $painel = json_decode($loja["corpo"], true)["SkinsPanelLayout"];
+
+    $precos = [];
+    foreach ($painel["SingleItemStoreOffers"] ?? [] as $oferta) {
+        $precos[$oferta["OfferID"]] = $oferta["Cost"][ID_DO_VP] ?? null;
+    }
+
+    // Sem o saldo, a loja ainda serve: só o VP não aparece.
+    $vp = null;
+    $carteira = pedir($base . "/v1/wallet/" . $usuario["sub"], [CURLOPT_HTTPHEADER => $cabecalhos]);
+    if ($carteira["status"] == 200) {
+        $vp = json_decode($carteira["corpo"], true)["Balances"][ID_DO_VP] ?? null;
+    }
+
     return [
         "ids" => $painel["SingleItemOffers"],
+        "precos" => $precos,
         "segundos" => $painel["SingleItemOffersRemainingDurationInSeconds"],
+        "vp" => $vp,
     ];
 }
 
+// Sem o arquivo, ou com ele quebrado, valem os ajustes padrão.
+function lerAjustes($arquivo)
+{
+    $lidos = is_file($arquivo) ? json_decode(file_get_contents($arquivo), true) : null;
+    return (is_array($lidos) ? $lidos : []) + AJUSTES_PADRAO;
+}
+
+function descreverSkin($skin)
+{
+    return $skin["preco"] === null ? $skin["nome"] : $skin["nome"] . " (" . $skin["preco"] . " VP)";
+}
+
 // A loja que estava como "hoje" vira "ontem" quando chega uma loja de outro dia.
-function guardarLoja($arquivo, $skins, $segundos)
+function guardarLoja($arquivo, $skins, $segundos, $vp)
 {
     $dados = is_file($arquivo) ? json_decode(file_get_contents($arquivo), true) : [];
     $exemplo = !empty($dados["exemplo"]);
@@ -128,7 +160,7 @@ function guardarLoja($arquivo, $skins, $segundos)
         $ontem = $anterior;
     }
 
-    $json = json_encode(["hoje" => $hoje, "ontem" => $ontem], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $json = json_encode(["vp" => $vp, "hoje" => $hoje, "ontem" => $ontem], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     if (file_put_contents($arquivo, $json . "\n") === false) {
         throw new Exception("Não consegui guardar a loja.");
     }
@@ -162,10 +194,15 @@ try {
 
     if ($teste) {
         echo "(teste: loja de mentira)\n";
-        $ids = array_map(function ($nome) use ($nomes) {
-            return array_search($nome, $nomes);
-        }, LOJA_DE_TESTE);
+        $ids = [];
+        $precos = [];
+        foreach (LOJA_DE_TESTE as $posicao => $nome) {
+            $id = array_search($nome, $nomes);
+            $ids[] = $id;
+            $precos[$id] = PRECOS_DE_TESTE[$posicao];
+        }
         $segundos = 3600;
+        $vp = VP_DE_TESTE;
         $arquivoDaLoja = sys_get_temp_dir() . "/loja-teste.json";
     } else {
         $ssid = getenv("RIOT_SSID");
@@ -175,35 +212,51 @@ try {
         $shard = getenv("RIOT_SHARD") ?: "na";
         $lida = lerLojaDaConta($ssid, $shard);
         $ids = $lida["ids"];
+        $precos = $lida["precos"];
         $segundos = $lida["segundos"];
+        $vp = $lida["vp"];
         $arquivoDaLoja = __DIR__ . "/dados/loja.json";
     }
 
     $loja = [];
-    $skinsParaGuardar = [];
     foreach ($ids as $id) {
-        $nome = $nomes[$id] ?? "Skin desconhecida (" . $id . ")";
-        $loja[] = $nome;
-        $skinsParaGuardar[] = ["id" => $id, "nome" => $nome];
+        $loja[] = [
+            "id" => $id,
+            "nome" => $nomes[$id] ?? "Skin desconhecida (" . $id . ")",
+            "preco" => $precos[$id] ?? null,
+        ];
     }
-    guardarLoja($arquivoDaLoja, $skinsParaGuardar, $segundos);
+    guardarLoja($arquivoDaLoja, $loja, $segundos, $vp);
+
+    if ($vp !== null) {
+        echo "Saldo: " . $vp . " VP\n";
+    }
 
     $achadas = [];
     foreach ($loja as $skin) {
-        if (in_array(mb_strtolower($skin), $desejosEmMinusculo)) {
-            $achadas[] = $skin;
-            echo $skin . " - QUERO!\n";
+        if (in_array(mb_strtolower($skin["nome"]), $desejosEmMinusculo)) {
+            $achadas[] = descreverSkin($skin);
+            echo descreverSkin($skin) . " - QUERO!\n";
         } else {
-            echo $skin . "\n";
+            echo descreverSkin($skin) . "\n";
         }
     }
     echo "Skins da lista hoje: " . count($achadas) . "\n";
 
-    if (count($achadas) > 0) {
+    $ajustes = lerAjustes(__DIR__ . "/config.json");
+    $avisos = [];
+    if (count($achadas) > 0 && $ajustes["avisar_desejos"]) {
+        $avisos[] = ["Skin na sua loja!", implode(", ", $achadas)];
+    }
+    if ($ajustes["resumo_diario"]) {
+        $avisos[] = ["Sua loja de hoje", implode(", ", array_map("descreverSkin", $loja))];
+    }
+
+    foreach ($avisos as $aviso) {
         if ($teste) {
-            echo "(teste: aviso não enviado)\n";
+            echo "(teste: aviso não enviado) " . $aviso[0] . ": " . $aviso[1] . "\n";
         } elseif ($topico) {
-            avisar($topico, "Skin na sua loja!", implode(", ", $achadas));
+            avisar($topico, $aviso[0], $aviso[1]);
         }
     }
 } catch (Exception $erro) {

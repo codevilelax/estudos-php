@@ -57,7 +57,21 @@
     h2 { font-size: 1.375rem; text-transform: uppercase; }
 
     .topo { margin-bottom: 20px; }
+    .topo-loja { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
     .subtitulo { margin: 2px 0 0; color: var(--texto-2); }
+    .vp {
+      margin: 0;
+      padding: 6px 12px;
+      font-family: var(--titulo);
+      font-size: 1.375rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      background: var(--cartao);
+      border: 1px solid var(--borda);
+      border-radius: 6px;
+    }
+    .preco { display: block; color: var(--texto-2); font-size: .9375rem; font-variant-numeric: tabular-nums; }
 
     .secao { margin-top: 28px; }
     .secao-topo { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
@@ -127,7 +141,20 @@
     .botao.principal { background: var(--vermelho); border-color: var(--vermelho); color: #14060a; }
     .botoes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 
-    details { margin-top: 28px; padding: 12px; background: var(--cartao); border-radius: 6px; }
+    .opcao {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      min-height: 64px;
+      margin: 0 0 8px;
+      padding: 10px 12px;
+      background: var(--cartao);
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .opcao small { display: block; color: var(--texto-2); font-size: .875rem; font-weight: 500; }
+    .opcao input { flex: none; width: 24px; height: 24px; accent-color: var(--vermelho); }
+    .opcao input:disabled { opacity: .5; }
+
+    details { margin-top: 10px; padding: 12px; background: var(--cartao); border-radius: 6px; }
     summary { min-height: 28px; font-weight: 600; cursor: pointer; }
     details ol { margin: 10px 0 14px; padding-left: 20px; color: var(--texto-2); font-size: .9375rem; }
 
@@ -149,10 +176,14 @@
 <body>
   <main>
     <section id="painel-loja">
-      <header class="topo">
-        <h1>Minha loja</h1>
-        <p class="subtitulo" id="tempo-loja">Carregando…</p>
+      <header class="topo topo-loja">
+        <div>
+          <h1>Minha loja</h1>
+          <p class="subtitulo" id="tempo-loja">Carregando…</p>
+        </div>
+        <p class="vp" id="vp" hidden></p>
       </header>
+      <p class="status" data-status role="status" aria-live="polite"></p>
       <div id="conteudo-loja"></div>
     </section>
 
@@ -164,14 +195,35 @@
 
       <label for="busca">Adicionar skin</label>
       <input id="busca" type="search" placeholder="Busque pelo nome em inglês" autocomplete="off" autocapitalize="off" spellcheck="false">
-      <p class="status" id="status" role="status" aria-live="polite"></p>
+      <p class="status" data-status role="status" aria-live="polite"></p>
       <div class="skins resultados" id="resultados"></div>
 
       <div class="secao">
         <div class="secao-topo"><h2>Na lista</h2></div>
         <div class="skins" id="lista-desejos"></div>
       </div>
+    </section>
 
+    <section id="painel-ajustes" hidden>
+      <header class="topo">
+        <h1>Ajustes</h1>
+      </header>
+      <p class="status" data-status role="status" aria-live="polite"></p>
+
+      <div class="secao">
+        <div class="secao-topo"><h2>Avisos no celular</h2></div>
+        <label class="opcao">
+          <span>Skin da lista na loja<small>Avisa quando vier uma skin que você quer.</small></span>
+          <input type="checkbox" id="avisar-desejos">
+        </label>
+        <label class="opcao">
+          <span>Resumo diário<small>Avisa todo dia quais skins vieram na loja.</small></span>
+          <input type="checkbox" id="resumo-diario">
+        </label>
+      </div>
+
+      <div class="secao">
+        <div class="secao-topo"><h2>Edição pelo app</h2></div>
       <details id="caixa-chave">
         <summary id="titulo-chave">Conectar para editar a lista</summary>
         <ol>
@@ -186,17 +238,20 @@
           <button class="botao" id="remover-chave" type="button" hidden>Remover chave</button>
         </div>
       </details>
+      </div>
     </section>
   </main>
 
   <nav aria-label="Telas">
     <button id="aba-loja" type="button" aria-current="page">Loja</button>
     <button id="aba-desejos" type="button">Desejos</button>
+    <button id="aba-ajustes" type="button">Ajustes</button>
   </nav>
 
   <script>
     const REPOSITORIO = 'codevilelax/loja-valorant';
-    const API_DESEJOS = `https://api.github.com/repos/${REPOSITORIO}/contents/desejos.txt`;
+    const API_ARQUIVOS = `https://api.github.com/repos/${REPOSITORIO}/contents/`;
+    const AJUSTES_PADRAO = { avisar_desejos: true, resumo_diario: false };
     const API_SKINS = 'https://valorant-api.com/v1/weapons/skins';
     const CHAVE_GUARDADA = 'chave-github';
     const LIMITE_RESULTADOS = 30;
@@ -210,6 +265,9 @@
     let desejos = [];
     let situacaoDesejos = 'carregando';
     let shaDesejos = null;
+    let ajustes = { ...AJUSTES_PADRAO };
+    let situacaoAjustes = 'carregando';
+    let shaAjustes = null;
     let salvando = false;
     let chave = lerChave();
 
@@ -241,6 +299,8 @@
       return elemento;
     }
 
+    const formatarVp = valor => `${valor.toLocaleString('pt-BR')} VP`;
+
     function formatarData(texto) {
       const [, mes, dia] = texto.split('-');
       return `${dia}/${mes}`;
@@ -262,6 +322,7 @@
       if (icone) imagem.src = icone;
 
       const nome = criar('div', {}, criar('span', { class: 'skin-nome', text: skin.nome }));
+      if (Number.isFinite(skin.preco)) nome.append(criar('span', { class: 'preco', text: formatarVp(skin.preco) }));
       if (quero) nome.append(criar('span', { class: 'etiqueta', text: 'Na sua lista' }));
 
       const coracao = criar('button', {
@@ -304,6 +365,10 @@
 
     function desenharLoja() {
       desenharTempo();
+      const temVp = Boolean(loja) && Number.isFinite(loja.vp);
+      $('vp').hidden = !temVp;
+      if (temVp) $('vp').textContent = formatarVp(loja.vp);
+
       const conteudo = $('conteudo-loja');
       conteudo.replaceChildren();
 
@@ -380,27 +445,37 @@
       $('remover-chave').hidden = !chave;
     }
 
+    function desenharAjustes() {
+      const podeEditar = Boolean(chave) && !salvando && situacaoAjustes === 'ok';
+      for (const [id, campo] of [['avisar-desejos', 'avisar_desejos'], ['resumo-diario', 'resumo_diario']]) {
+        $(id).checked = Boolean(ajustes[campo]);
+        $(id).disabled = !podeEditar;
+      }
+    }
+
     function desenharTudo() {
       desenharLoja();
       desenharDesejos();
+      desenharAjustes();
     }
 
     function mostrarStatus(texto, erro = false) {
-      $('status').textContent = texto;
-      $('status').classList.toggle('erro', erro);
+      for (const campo of document.querySelectorAll('[data-status]')) {
+        campo.textContent = texto;
+        campo.classList.toggle('erro', erro);
+      }
     }
 
     function trocarAba(aba) {
-      const naLoja = aba === 'loja';
-      $('painel-loja').hidden = !naLoja;
-      $('painel-desejos').hidden = naLoja;
-      $('aba-loja').removeAttribute('aria-current');
-      $('aba-desejos').removeAttribute('aria-current');
-      $(naLoja ? 'aba-loja' : 'aba-desejos').setAttribute('aria-current', 'page');
+      for (const nome of ['loja', 'desejos', 'ajustes']) {
+        $(`painel-${nome}`).hidden = nome !== aba;
+        if (nome === aba) $(`aba-${nome}`).setAttribute('aria-current', 'page');
+        else $(`aba-${nome}`).removeAttribute('aria-current');
+      }
       window.scrollTo(0, 0);
     }
 
-    // ---------- GitHub: ler e salvar o desejos.txt ----------
+    // ---------- GitHub: ler e salvar o desejos.txt e o config.json ----------
 
     function cabecalhosGitHub(chaveUsada = chave) {
       return {
@@ -423,16 +498,73 @@
 
     function mensagemDoGitHub(status) {
       if (status === 401) return 'A chave não vale mais. Crie outra e salve de novo.';
-      if (status === 403) return 'A chave não tem permissão para salvar a lista.';
-      if (status === 404) return 'Não achei o repositório ou o arquivo da lista.';
+      if (status === 403) return 'A chave não tem permissão para salvar.';
+      if (status === 404) return 'Não achei o repositório ou o arquivo.';
       return `O GitHub respondeu com erro ${status}.`;
     }
 
-    async function lerDesejosDoGitHub(chaveUsada = chave) {
-      const resposta = await fetch(API_DESEJOS, { headers: cabecalhosGitHub(chaveUsada), cache: 'no-store' });
+    // Devolve null se o arquivo ainda não existe no repositório
+    async function lerArquivoDoGitHub(caminho, chaveUsada = chave) {
+      const resposta = await fetch(API_ARQUIVOS + caminho, { headers: cabecalhosGitHub(chaveUsada), cache: 'no-store' });
+      if (resposta.status === 404) return null;
       if (!resposta.ok) throw new Error(mensagemDoGitHub(resposta.status));
       const arquivo = await resposta.json();
-      return { lista: textoParaLista(decodificar(arquivo.content)), sha: arquivo.sha };
+      return { texto: decodificar(arquivo.content), sha: arquivo.sha };
+    }
+
+    async function lerDesejosDoGitHub(chaveUsada = chave) {
+      const arquivo = await lerArquivoDoGitHub('desejos.txt', chaveUsada);
+      if (!arquivo) throw new Error(mensagemDoGitHub(404));
+      return { lista: textoParaLista(arquivo.texto), sha: arquivo.sha };
+    }
+
+    function lerJsonDeAjustes(texto) {
+      try {
+        const lidos = JSON.parse(texto);
+        return lidos && typeof lidos === 'object' ? { ...AJUSTES_PADRAO, ...lidos } : { ...AJUSTES_PADRAO };
+      } catch {
+        return { ...AJUSTES_PADRAO };
+      }
+    }
+
+    async function lerAjustes() {
+      if (chave) {
+        const arquivo = await lerArquivoDoGitHub('config.json');
+        ajustes = arquivo ? lerJsonDeAjustes(arquivo.texto) : { ...AJUSTES_PADRAO };
+        shaAjustes = arquivo ? arquivo.sha : null;
+        return;
+      }
+      const resposta = await fetch('config.json', { cache: 'no-cache' });
+      ajustes = resposta.ok ? lerJsonDeAjustes(await resposta.text()) : { ...AJUSTES_PADRAO };
+    }
+
+    async function salvarAjuste(campo, valor) {
+      if (salvando || !chave) return;
+      const anterior = ajustes;
+      ajustes = { ...ajustes, [campo]: valor };
+      salvando = true;
+      mostrarStatus('Salvando…');
+      desenharTudo();
+
+      const enviar = (dados, sha) => enviarArquivo('config.json', JSON.stringify(dados, null, 4) + '\n', sha, 'Atualiza os ajustes pelo app');
+      try {
+        let resposta = await enviar(ajustes, shaAjustes);
+        // O arquivo mudou em outro lugar: refaz só este ajuste em cima da versão nova
+        if (resposta.status === 409 || resposta.status === 422) {
+          const arquivo = await lerArquivoDoGitHub('config.json');
+          ajustes = { ...(arquivo ? lerJsonDeAjustes(arquivo.texto) : AJUSTES_PADRAO), [campo]: valor };
+          resposta = await enviar(ajustes, arquivo ? arquivo.sha : undefined);
+        }
+        if (!resposta.ok) throw new Error(mensagemDoGitHub(resposta.status));
+        shaAjustes = (await resposta.json()).content.sha;
+        mostrarStatus('Ajuste salvo. Vale a partir da próxima leitura do robô.');
+      } catch (erro) {
+        ajustes = anterior;
+        mostrarStatus(erro instanceof TypeError ? 'Sem internet. O ajuste não mudou.' : erro.message, true);
+      } finally {
+        salvando = false;
+        desenharTudo();
+      }
     }
 
     async function lerDesejos() {
@@ -451,25 +583,24 @@
       desejos = textoParaLista(await resposta.text());
     }
 
-    async function enviarDesejos(novaLista, sha) {
-      return fetch(API_DESEJOS, {
+    function enviarArquivo(caminho, texto, sha, mensagem) {
+      return fetch(API_ARQUIVOS + caminho, {
         method: 'PUT',
         headers: { ...cabecalhosGitHub(), 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: 'Atualiza a lista de desejos pelo app',
-          content: codificar(listaParaTexto(novaLista)),
-          sha,
-        }),
+        body: JSON.stringify({ message: mensagem, content: codificar(texto), sha: sha || undefined }),
       });
+    }
+
+    function enviarDesejos(novaLista, sha) {
+      return enviarArquivo('desejos.txt', listaParaTexto(novaLista), sha, 'Atualiza a lista de desejos pelo app');
     }
 
     async function alternarDesejo(nome) {
       if (salvando) return;
       if (!chave) {
-        trocarAba('desejos');
+        trocarAba('ajustes');
         $('caixa-chave').open = true;
         mostrarStatus('Conecte a chave do GitHub para editar a lista.', true);
-        $('caixa-chave').scrollIntoView({ block: 'center' });
         return;
       }
 
@@ -514,6 +645,8 @@
         desejos = lido.lista;
         situacaoDesejos = 'ok';
         shaDesejos = lido.sha;
+        await lerAjustes();
+        situacaoAjustes = 'ok';
         $('chave').value = '';
         $('caixa-chave').open = false;
         mostrarStatus('Chave conectada. Já pode editar a lista.');
@@ -526,6 +659,7 @@
     function removerChave() {
       chave = '';
       shaDesejos = null;
+      shaAjustes = null;
       guardarChave('');
       mostrarStatus('Chave removida deste aparelho.');
       desenharTudo();
@@ -562,6 +696,7 @@
       erroLoja = false;
       situacaoCatalogo = 'carregando';
       situacaoDesejos = 'carregando';
+      situacaoAjustes = 'carregando';
       desenharTudo();
       // Cada parte aparece quando chega e falha sozinha: sem imagens, a loja continua com os nomes
       await Promise.all([
@@ -572,17 +707,24 @@
         lerDesejos()
           .then(() => { situacaoDesejos = 'ok'; }, () => { situacaoDesejos = 'erro'; })
           .then(desenharTudo),
+        lerAjustes()
+          .then(() => { situacaoAjustes = 'ok'; }, () => { situacaoAjustes = 'erro'; })
+          .then(desenharTudo),
       ]);
     }
 
     $('aba-loja').addEventListener('click', () => trocarAba('loja'));
     $('aba-desejos').addEventListener('click', () => trocarAba('desejos'));
+    $('aba-ajustes').addEventListener('click', () => trocarAba('ajustes'));
+    $('avisar-desejos').addEventListener('change', e => salvarAjuste('avisar_desejos', e.target.checked));
+    $('resumo-diario').addEventListener('change', e => salvarAjuste('resumo_diario', e.target.checked));
     $('busca').addEventListener('input', desenharResultados);
     $('salvar-chave').addEventListener('click', salvarChave);
     $('remover-chave').addEventListener('click', removerChave);
     setInterval(desenharTempo, 60000);
 
     if (location.hash === '#desejos') trocarAba('desejos');
+    if (location.hash === '#ajustes') trocarAba('ajustes');
     carregar();
 
     if ('serviceWorker' in navigator) {

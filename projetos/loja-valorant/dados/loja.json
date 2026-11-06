@@ -1,23 +1,56 @@
 {
     "exemplo": true,
+    "vp": 2350,
     "hoje": {
         "data": "2026-11-06",
         "expira": null,
         "skins": [
-            { "id": "ba42fe63-457a-78ce-4499-47950a698129", "nome": "Reaver Vandal" },
-            { "id": "2b555f97-46bb-5949-3531-979f5bc817f0", "nome": "Ion Sheriff" },
-            { "id": "48ce4a70-4207-623b-4739-bfb937812432", "nome": "Glitchpop Dagger" },
-            { "id": "82db01d1-4192-167b-9f53-78ba374c39ac", "nome": "Spectrum Phantom" }
+            {
+                "id": "ba42fe63-457a-78ce-4499-47950a698129",
+                "nome": "Reaver Vandal",
+                "preco": 1775
+            },
+            {
+                "id": "2b555f97-46bb-5949-3531-979f5bc817f0",
+                "nome": "Ion Sheriff",
+                "preco": 1275
+            },
+            {
+                "id": "48ce4a70-4207-623b-4739-bfb937812432",
+                "nome": "Glitchpop Dagger",
+                "preco": 3550
+            },
+            {
+                "id": "82db01d1-4192-167b-9f53-78ba374c39ac",
+                "nome": "Spectrum Phantom",
+                "preco": 2675
+            }
         ]
     },
     "ontem": {
         "data": "2026-11-05",
         "expira": null,
         "skins": [
-            { "id": "c9678d8c-4327-f397-b0ec-dca3c3d6fb15", "nome": "Prime Vandal" },
-            { "id": "c00e786e-4e6f-0ef7-0ce3-32ba9918ba41", "nome": "Oni Phantom" },
-            { "id": "851b390a-4852-66bd-8b72-4f96f0919710", "nome": "Forsaken Vandal" },
-            { "id": "b3d3ff38-4202-20d8-2f41-c783477e5636", "nome": "Elderflame Vandal" }
+            {
+                "id": "c9678d8c-4327-f397-b0ec-dca3c3d6fb15",
+                "nome": "Prime Vandal",
+                "preco": 1775
+            },
+            {
+                "id": "c00e786e-4e6f-0ef7-0ce3-32ba9918ba41",
+                "nome": "Oni Phantom",
+                "preco": 1775
+            },
+            {
+                "id": "851b390a-4852-66bd-8b72-4f96f0919710",
+                "nome": "Forsaken Vandal",
+                "preco": 1775
+            },
+            {
+                "id": "b3d3ff38-4202-20d8-2f41-c783477e5636",
+                "nome": "Elderflame Vandal",
+                "preco": 2475
+            }
         ]
     }
 }
