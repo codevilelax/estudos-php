@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <!-- A chave do GitHub fica neste app: só deixa conversar com estes endereços -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://media.valorant-api.com; connect-src 'self' https://valorant-api.com https://api.github.com; base-uri 'none'; form-action 'none'">
+  <title>Minha Loja</title>
+  <meta name="theme-color" content="#0e0f12">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Minha Loja">
+  <link rel="icon" type="image/png" href="icone-192.png">
+  <link rel="apple-touch-icon" href="icone-180.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&amp;family=Barlow:wght@400;500;600&amp;display=swap">
+  <style>
+    :root {
+      --fundo: #0e0f12;
+      --cartao: #181a1f;
+      --cartao-2: #22252b;
+      --borda: #2e3138;
+      --vermelho: #ff4655;
+      --vermelho-fundo: #2a1418;
+      --texto: #f4f4f5;
+      --texto-2: #a6a9b1;
+      --titulo: 'Barlow Condensed', 'Arial Narrow', Impact, sans-serif;
+      --corpo: 'Barlow', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { background: var(--fundo); }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--texto);
+      font: 500 1rem/1.4 var(--corpo);
+      -webkit-tap-highlight-color: transparent;
+    }
+    button, input { font: inherit; color: inherit; }
+    button { cursor: pointer; }
+    a { color: var(--vermelho); }
+    :focus-visible { outline: 2px solid var(--texto); outline-offset: 2px; }
+    [hidden] { display: none !important; }
+
+    main {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: calc(env(safe-area-inset-top, 0px) + 20px) 16px calc(env(safe-area-inset-bottom, 0px) + 96px);
+    }
+    h1, h2 { font-family: var(--titulo); font-weight: 700; margin: 0; letter-spacing: .01em; }
+    h1 { font-size: 2.25rem; line-height: 1.05; text-transform: uppercase; }
+    h2 { font-size: 1.375rem; text-transform: uppercase; }
+
+    .topo { margin-bottom: 20px; }
+    .subtitulo { margin: 2px 0 0; color: var(--texto-2); }
+
+    .secao { margin-top: 28px; }
+    .secao-topo { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .data { color: var(--texto-2); font-size: .9375rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+    .aviso {
+      margin: 0 0 12px;
+      padding: 10px 12px;
+      border-left: 3px solid var(--vermelho);
+      background: var(--cartao);
+      font-size: .9375rem;
+    }
+
+    .skins { display: grid; gap: 8px; }
+    .skin {
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1fr) 44px;
+      align-items: center;
+      gap: 12px;
+      min-height: 76px;
+      padding: 8px 8px 8px 12px;
+      background: var(--cartao);
+      border: 1px solid var(--borda);
+      border-radius: 6px;
+    }
+    .skin.quero { border-color: var(--vermelho); background: var(--vermelho-fundo); }
+    .skin img { display: block; width: 96px; height: 56px; object-fit: contain; }
+    .skin img:not([src]) { visibility: hidden; }
+    .skin-nome { font-weight: 600; overflow-wrap: anywhere; }
+    .etiqueta { display: block; color: var(--vermelho); font-size: .8125rem; font-weight: 600; }
+
+    .coracao {
+      width: 44px; height: 44px;
+      display: grid; place-items: center;
+      background: none; border: 0; border-radius: 6px;
+      color: var(--texto-2);
+    }
+    .coracao svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; }
+    .coracao[aria-pressed="true"] { color: var(--vermelho); }
+    .coracao[aria-pressed="true"] svg { fill: currentColor; }
+    .coracao:disabled { opacity: .5; cursor: progress; }
+
+    .vazio { margin: 0; padding: 16px 12px; color: var(--texto-2); background: var(--cartao); border-radius: 6px; }
+
+    label { display: block; margin-bottom: 6px; font-weight: 600; }
+    input[type="search"], input[type="password"] {
+      width: 100%;
+      min-height: 46px;
+      padding: 10px 12px;
+      font-size: 1rem;
+      background: var(--cartao);
+      border: 1px solid var(--borda);
+      border-radius: 6px;
+    }
+    .resultados { margin-top: 8px; }
+    .status { min-height: 1.4em; margin: 8px 0 0; color: var(--texto-2); font-size: .9375rem; }
+    .status.erro { color: var(--vermelho); }
+
+    .botao {
+      min-height: 44px;
+      padding: 8px 16px;
+      font-weight: 600;
+      background: var(--cartao-2);
+      border: 1px solid var(--borda);
+      border-radius: 6px;
+    }
+    .botao.principal { background: var(--vermelho); border-color: var(--vermelho); color: #14060a; }
+    .botoes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+
+    details { margin-top: 28px; padding: 12px; background: var(--cartao); border-radius: 6px; }
+    summary { min-height: 28px; font-weight: 600; cursor: pointer; }
+    details ol { margin: 10px 0 14px; padding-left: 20px; color: var(--texto-2); font-size: .9375rem; }
+
+    nav {
+      position: fixed; left: 0; right: 0; bottom: 0;
+      display: flex; justify-content: center; gap: 8px;
+      padding: 8px 16px calc(env(safe-area-inset-bottom, 0px) + 8px);
+      background: var(--fundo);
+      border-top: 1px solid var(--borda);
+    }
+    nav button {
+      flex: 1; max-width: 264px; min-height: 48px;
+      font-family: var(--titulo); font-size: 1.1875rem; font-weight: 700; text-transform: uppercase;
+      background: none; border: 0; border-radius: 6px; color: var(--texto-2);
+    }
+    nav button[aria-current="page"] { background: var(--cartao-2); color: var(--texto); }
+  </style>
+</head>
+<body>
+  <main>
+    <section id="painel-loja">
+      <header class="topo">
+        <h1>Minha loja</h1>
+        <p class="subtitulo" id="tempo-loja">Carregando…</p>
+      </header>
+      <div id="conteudo-loja"></div>
+    </section>
+
+    <section id="painel-desejos" hidden>
+      <header class="topo">
+        <h1>Lista de desejos</h1>
+        <p class="subtitulo" id="contagem-desejos"></p>
+      </header>
+
+      <label for="busca">Adicionar skin</label>
+      <input id="busca" type="search" placeholder="Busque pelo nome em inglês" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+      <div class="skins resultados" id="resultados"></div>
+
+      <div class="secao">
+        <div class="secao-topo"><h2>Na lista</h2></div>
+        <div class="skins" id="lista-desejos"></div>
+      </div>
+
+      <details id="caixa-chave">
+        <summary id="titulo-chave">Conectar para editar a lista</summary>
+        <ol>
+          <li><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Crie uma chave no GitHub</a>, só para o repositório <code>loja-valorant</code>.</li>
+          <li>Em permissões, dê <strong>Contents: Read and write</strong> e mais nada.</li>
+          <li>Cole a chave aqui. Ela fica guardada só neste aparelho.</li>
+        </ol>
+        <label for="chave">Chave do GitHub</label>
+        <input id="chave" type="password" autocomplete="off" spellcheck="false">
+        <div class="botoes">
+          <button class="botao principal" id="salvar-chave" type="button">Salvar chave</button>
+          <button class="botao" id="remover-chave" type="button" hidden>Remover chave</button>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <nav aria-label="Telas">
+    <button id="aba-loja" type="button" aria-current="page">Loja</button>
+    <button id="aba-desejos" type="button">Desejos</button>
+  </nav>
+
+  <script>
+    const REPOSITORIO = 'codevilelax/loja-valorant';
+    const API_DESEJOS = `https://api.github.com/repos/${REPOSITORIO}/contents/desejos.txt`;
+    const API_SKINS = 'https://valorant-api.com/v1/weapons/skins';
+    const CHAVE_GUARDADA = 'chave-github';
+    const LIMITE_RESULTADOS = 30;
+
+    let loja = null;
+    let erroLoja = false;
+    let catalogo = [];
+    let situacaoCatalogo = 'carregando';
+    let iconePorId = new Map();
+    let iconePorNome = new Map();
+    let desejos = [];
+    let situacaoDesejos = 'carregando';
+    let shaDesejos = null;
+    let salvando = false;
+    let chave = lerChave();
+
+    const $ = id => document.getElementById(id);
+
+    // O navegador pode bloquear o armazenamento (ex: janela anônima)
+    function lerChave() {
+      try { return localStorage.getItem(CHAVE_GUARDADA) || ''; } catch { return ''; }
+    }
+    function guardarChave(valor) {
+      try {
+        if (valor) localStorage.setItem(CHAVE_GUARDADA, valor);
+        else localStorage.removeItem(CHAVE_GUARDADA);
+      } catch { /* a chave continua valendo até fechar o app */ }
+    }
+
+    const normalizar = nome => nome.trim().toLowerCase();
+    const estaNaLista = nome => desejos.some(d => normalizar(d) === normalizar(nome));
+
+    function criar(tag, propriedades = {}, ...filhos) {
+      const elemento = document.createElement(tag);
+      for (const [nome, valor] of Object.entries(propriedades)) {
+        if (nome === 'class') elemento.className = valor;
+        else if (nome.startsWith('on')) elemento.addEventListener(nome.slice(2), valor);
+        else if (nome === 'text') elemento.textContent = valor;
+        else elemento.setAttribute(nome, valor);
+      }
+      elemento.append(...filhos);
+      return elemento;
+    }
+
+    function formatarData(texto) {
+      const [, mes, dia] = texto.split('-');
+      return `${dia}/${mes}`;
+    }
+
+    function ehDiaAnterior(ontem, hoje) {
+      const umDia = 24 * 60 * 60 * 1000;
+      return Date.parse(hoje + 'T00:00:00Z') - Date.parse(ontem + 'T00:00:00Z') === umDia;
+    }
+
+    function iconeDaSkin(skin) {
+      return iconePorId.get(skin.id) || iconePorNome.get(normalizar(skin.nome)) || '';
+    }
+
+    function desenharCartao(skin) {
+      const quero = estaNaLista(skin.nome);
+      const icone = iconeDaSkin(skin);
+      const imagem = criar('img', { alt: '', loading: 'lazy', onerror: e => { e.target.style.visibility = 'hidden'; } });
+      if (icone) imagem.src = icone;
+
+      const nome = criar('div', {}, criar('span', { class: 'skin-nome', text: skin.nome }));
+      if (quero) nome.append(criar('span', { class: 'etiqueta', text: 'Na sua lista' }));
+
+      const coracao = criar('button', {
+        class: 'coracao',
+        type: 'button',
+        'aria-pressed': String(quero),
+        'aria-label': `${quero ? 'Tirar' : 'Colocar'} ${skin.nome} ${quero ? 'da' : 'na'} lista de desejos`,
+        onclick: () => alternarDesejo(skin.nome),
+      });
+      coracao.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5 4.4 13a4.9 4.9 0 0 1 0-7 5 5 0 0 1 7 0l.6.6.6-.6a5 5 0 0 1 7 0 4.9 4.9 0 0 1 0 7Z"/></svg>';
+      // Só deixa editar com a lista carregada, para não salvar por cima do que não foi lido
+      coracao.disabled = salvando || situacaoDesejos !== 'ok';
+
+      return criar('article', { class: quero ? 'skin quero' : 'skin' }, imagem, nome, coracao);
+    }
+
+    function desenharSecaoLoja(titulo, data, skins) {
+      return criar('section', { class: 'secao' },
+        criar('div', { class: 'secao-topo' },
+          criar('h2', { text: titulo }),
+          criar('span', { class: 'data', text: data ? formatarData(data) : '' })),
+        criar('div', { class: 'skins' }, ...skins.map(desenharCartao)));
+    }
+
+    function lojaExpirou() {
+      return Boolean(loja && loja.hoje && loja.hoje.expira && Date.parse(loja.hoje.expira) <= Date.now());
+    }
+
+    function desenharTempo() {
+      const campo = $('tempo-loja');
+      if (erroLoja) { campo.textContent = 'Não consegui carregar a loja.'; return; }
+      if (!loja) { campo.textContent = 'Carregando…'; return; }
+      if (!loja.hoje) { campo.textContent = 'O robô ainda não leu sua loja.'; return; }
+      if (loja.exemplo) { campo.textContent = 'Skins de exemplo'; return; }
+      if (lojaExpirou()) { campo.textContent = 'A loja já trocou'; return; }
+      if (!loja.hoje.expira) { campo.textContent = ''; return; }
+      const minutos = Math.max(0, Math.ceil((Date.parse(loja.hoje.expira) - Date.now()) / 60000));
+      campo.textContent = `Troca em ${Math.floor(minutos / 60)}h ${minutos % 60}min`;
+    }
+
+    function desenharLoja() {
+      desenharTempo();
+      const conteudo = $('conteudo-loja');
+      conteudo.replaceChildren();
+
+      if (erroLoja) {
+        conteudo.append(
+          criar('p', { class: 'aviso', text: 'Confira a internet e tente de novo.' }),
+          criar('button', { class: 'botao', type: 'button', text: 'Tentar de novo', onclick: carregar }));
+        return;
+      }
+      if (!loja) return;
+      if (loja.exemplo) {
+        conteudo.append(criar('p', { class: 'aviso', text: 'Esta não é a sua loja. Ela aparece aqui depois que o robô for ligado na sua conta.' }));
+      }
+      if (lojaExpirou()) {
+        conteudo.append(criar('p', { class: 'aviso', text: 'O robô ainda não leu a loja nova. Esta é a última que ele viu.' }));
+      }
+      if (!loja.hoje) {
+        conteudo.append(criar('p', { class: 'vazio', text: 'Nenhuma loja lida ainda.' }));
+        return;
+      }
+
+      conteudo.append(desenharSecaoLoja(lojaExpirou() ? 'Última loja' : 'Loja de hoje', loja.hoje.data, loja.hoje.skins));
+
+      if (loja.ontem) {
+        const titulo = ehDiaAnterior(loja.ontem.data, loja.hoje.data) ? 'Loja de ontem' : 'Loja anterior';
+        conteudo.append(desenharSecaoLoja(titulo, loja.ontem.data, loja.ontem.skins));
+      } else {
+        conteudo.append(criar('section', { class: 'secao' },
+          criar('div', { class: 'secao-topo' }, criar('h2', { text: 'Loja de ontem' })),
+          criar('p', { class: 'vazio', text: 'Aparece depois do segundo dia do robô ligado.' })));
+      }
+    }
+
+    function desenharResultados() {
+      const termo = normalizar($('busca').value);
+      const resultados = $('resultados');
+      resultados.replaceChildren();
+      if (termo.length < 2) return;
+
+      const achadas = catalogo.filter(skin => normalizar(skin.nome).includes(termo));
+      if (situacaoCatalogo === 'carregando') {
+        resultados.append(criar('p', { class: 'vazio', text: 'Carregando as skins…' }));
+      } else if (situacaoCatalogo === 'erro') {
+        resultados.append(criar('p', { class: 'vazio', text: 'A lista de skins não carregou. Tente de novo com internet.' }));
+      } else if (!achadas.length) {
+        resultados.append(criar('p', { class: 'vazio', text: 'Nenhuma skin com esse nome.' }));
+      } else {
+        resultados.append(...achadas.slice(0, LIMITE_RESULTADOS).map(desenharCartao));
+        if (achadas.length > LIMITE_RESULTADOS) {
+          resultados.append(criar('p', { class: 'status', text: `Mostrando ${LIMITE_RESULTADOS} de ${achadas.length}. Digite mais do nome.` }));
+        }
+      }
+    }
+
+    function desenharDesejos() {
+      const total = desejos.length;
+      const carregada = situacaoDesejos === 'ok';
+      $('contagem-desejos').textContent = !carregada ? '' : total === 1 ? '1 skin' : `${total} skins`;
+
+      const lista = $('lista-desejos');
+      lista.replaceChildren();
+      if (situacaoDesejos === 'carregando') {
+        lista.append(criar('p', { class: 'vazio', text: 'Carregando sua lista…' }));
+      } else if (situacaoDesejos === 'erro') {
+        lista.append(criar('p', { class: 'vazio', text: 'Não consegui carregar sua lista. Tente de novo com internet.' }));
+      } else if (!total) {
+        lista.append(criar('p', { class: 'vazio', text: 'Sua lista está vazia. Busque uma skin acima.' }));
+      } else {
+        lista.append(...[...desejos].sort((a, b) => a.localeCompare(b)).map(nome => desenharCartao({ id: '', nome })));
+      }
+      desenharResultados();
+
+      $('titulo-chave').textContent = chave ? 'Chave conectada' : 'Conectar para editar a lista';
+      $('remover-chave').hidden = !chave;
+    }
+
+    function desenharTudo() {
+      desenharLoja();
+      desenharDesejos();
+    }
+
+    function mostrarStatus(texto, erro = false) {
+      $('status').textContent = texto;
+      $('status').classList.toggle('erro', erro);
+    }
+
+    function trocarAba(aba) {
+      const naLoja = aba === 'loja';
+      $('painel-loja').hidden = !naLoja;
+      $('painel-desejos').hidden = naLoja;
+      $('aba-loja').removeAttribute('aria-current');
+      $('aba-desejos').removeAttribute('aria-current');
+      $(naLoja ? 'aba-loja' : 'aba-desejos').setAttribute('aria-current', 'page');
+      window.scrollTo(0, 0);
+    }
+
+    // ---------- GitHub: ler e salvar o desejos.txt ----------
+
+    function cabecalhosGitHub(chaveUsada = chave) {
+      return {
+        Accept: 'application/vnd.github+json',
+        Authorization: `Bearer ${chaveUsada}`,
+        'X-GitHub-Api-Version': '2022-11-28',
+      };
+    }
+
+    const textoParaLista = texto => texto.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    const listaParaTexto = lista => lista.join('\n') + '\n';
+
+    function decodificar(base64) {
+      const bytes = Uint8Array.from(atob(base64.replace(/\s/g, '')), c => c.charCodeAt(0));
+      return new TextDecoder().decode(bytes);
+    }
+    function codificar(texto) {
+      return btoa(String.fromCharCode(...new TextEncoder().encode(texto)));
+    }
+
+    function mensagemDoGitHub(status) {
+      if (status === 401) return 'A chave não vale mais. Crie outra e salve de novo.';
+      if (status === 403) return 'A chave não tem permissão para salvar a lista.';
+      if (status === 404) return 'Não achei o repositório ou o arquivo da lista.';
+      return `O GitHub respondeu com erro ${status}.`;
+    }
+
+    async function lerDesejosDoGitHub(chaveUsada = chave) {
+      const resposta = await fetch(API_DESEJOS, { headers: cabecalhosGitHub(chaveUsada), cache: 'no-store' });
+      if (!resposta.ok) throw new Error(mensagemDoGitHub(resposta.status));
+      const arquivo = await resposta.json();
+      return { lista: textoParaLista(decodificar(arquivo.content)), sha: arquivo.sha };
+    }
+
+    async function lerDesejos() {
+      if (chave) {
+        try {
+          const lido = await lerDesejosDoGitHub();
+          desejos = lido.lista;
+          shaDesejos = lido.sha;
+          return;
+        } catch (erro) {
+          mostrarStatus(erro.message, true);
+        }
+      }
+      const resposta = await fetch('desejos.txt', { cache: 'no-cache' });
+      if (!resposta.ok) throw new Error('Lista não encontrada');
+      desejos = textoParaLista(await resposta.text());
+    }
+
+    async function enviarDesejos(novaLista, sha) {
+      return fetch(API_DESEJOS, {
+        method: 'PUT',
+        headers: { ...cabecalhosGitHub(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'Atualiza a lista de desejos pelo app',
+          content: codificar(listaParaTexto(novaLista)),
+          sha,
+        }),
+      });
+    }
+
+    async function alternarDesejo(nome) {
+      if (salvando) return;
+      if (!chave) {
+        trocarAba('desejos');
+        $('caixa-chave').open = true;
+        mostrarStatus('Conecte a chave do GitHub para editar a lista.', true);
+        $('caixa-chave').scrollIntoView({ block: 'center' });
+        return;
+      }
+
+      const anterior = desejos;
+      const tirando = estaNaLista(nome);
+      desejos = tirando ? desejos.filter(d => normalizar(d) !== normalizar(nome)) : [...desejos, nome];
+      salvando = true;
+      mostrarStatus('Salvando…');
+      desenharTudo();
+
+      try {
+        let resposta = await enviarDesejos(desejos, shaDesejos);
+        // O arquivo mudou em outro lugar: lê de novo e refaz a mudança em cima da versão nova
+        if (resposta.status === 409 || resposta.status === 422) {
+          const lido = await lerDesejosDoGitHub();
+          desejos = tirando
+            ? lido.lista.filter(d => normalizar(d) !== normalizar(nome))
+            : lido.lista.some(d => normalizar(d) === normalizar(nome)) ? lido.lista : [...lido.lista, nome];
+          resposta = await enviarDesejos(desejos, lido.sha);
+        }
+        if (!resposta.ok) throw new Error(mensagemDoGitHub(resposta.status));
+        shaDesejos = (await resposta.json()).content.sha;
+        mostrarStatus(tirando ? `${nome} saiu da lista.` : `${nome} entrou na lista.`);
+      } catch (erro) {
+        desejos = anterior;
+        const semInternet = erro instanceof TypeError;
+        mostrarStatus(semInternet ? 'Sem internet. A lista não mudou.' : erro.message, true);
+      } finally {
+        salvando = false;
+        desenharTudo();
+      }
+    }
+
+    async function salvarChave() {
+      const nova = $('chave').value.trim();
+      if (!nova) { mostrarStatus('Cole a chave antes de salvar.', true); return; }
+      mostrarStatus('Conferindo a chave…');
+      try {
+        const lido = await lerDesejosDoGitHub(nova);
+        chave = nova;
+        guardarChave(nova);
+        desejos = lido.lista;
+        situacaoDesejos = 'ok';
+        shaDesejos = lido.sha;
+        $('chave').value = '';
+        $('caixa-chave').open = false;
+        mostrarStatus('Chave conectada. Já pode editar a lista.');
+        desenharTudo();
+      } catch (erro) {
+        mostrarStatus(erro instanceof TypeError ? 'Sem internet para conferir a chave.' : erro.message, true);
+      }
+    }
+
+    function removerChave() {
+      chave = '';
+      shaDesejos = null;
+      guardarChave('');
+      mostrarStatus('Chave removida deste aparelho.');
+      desenharTudo();
+    }
+
+    // ---------- Início ----------
+
+    async function carregarCatalogo() {
+      const resposta = await fetch(API_SKINS);
+      if (!resposta.ok) throw new Error('Lista de skins indisponível');
+      const { data } = await resposta.json();
+      iconePorId = new Map();
+      iconePorNome = new Map();
+      catalogo = [];
+      for (const skin of data) {
+        const icone = skin.levels[0]?.displayIcon || skin.displayIcon || '';
+        for (const nivel of skin.levels) iconePorId.set(nivel.uuid, icone);
+        iconePorNome.set(normalizar(skin.displayName), icone);
+        // Fora as skins padrão, que não aparecem na loja
+        if (!/^(Standard |Random Favorite Skin$|Melee$)/.test(skin.displayName)) {
+          catalogo.push({ id: skin.levels[0]?.uuid || '', nome: skin.displayName });
+        }
+      }
+      catalogo.sort((a, b) => a.nome.localeCompare(b.nome));
+    }
+
+    async function carregarLoja() {
+      const resposta = await fetch('dados/loja.json', { cache: 'no-cache' });
+      if (!resposta.ok) throw new Error('Loja indisponível');
+      loja = await resposta.json();
+    }
+
+    async function carregar() {
+      erroLoja = false;
+      situacaoCatalogo = 'carregando';
+      situacaoDesejos = 'carregando';
+      desenharTudo();
+      // Cada parte aparece quando chega e falha sozinha: sem imagens, a loja continua com os nomes
+      await Promise.all([
+        carregarLoja().catch(() => { erroLoja = true; }).then(desenharTudo),
+        carregarCatalogo()
+          .then(() => { situacaoCatalogo = 'ok'; }, () => { situacaoCatalogo = 'erro'; })
+          .then(desenharTudo),
+        lerDesejos()
+          .then(() => { situacaoDesejos = 'ok'; }, () => { situacaoDesejos = 'erro'; })
+          .then(desenharTudo),
+      ]);
+    }
+
+    $('aba-loja').addEventListener('click', () => trocarAba('loja'));
+    $('aba-desejos').addEventListener('click', () => trocarAba('desejos'));
+    $('busca').addEventListener('input', desenharResultados);
+    $('salvar-chave').addEventListener('click', salvarChave);
+    $('remover-chave').addEventListener('click', removerChave);
+    setInterval(desenharTempo, 60000);
+
+    if (location.hash === '#desejos') trocarAba('desejos');
+    carregar();
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>

@@ -2,8 +2,9 @@
 
 // Projeto: Loja do Valorant
 // Lê a loja do dia, compara com o desejos.txt e avisa no celular pelo ntfy.
+// Também guarda a loja de hoje e a de ontem em dados/loja.json, para o app mostrar.
 //
-// Teste sem usar a conta (loja de mentira, sem enviar aviso):
+// Teste sem usar a conta (loja de mentira, sem enviar aviso e sem mexer em dados/loja.json):
 //   php robo.php --teste
 //
 // De verdade (precisa destas variáveis de ambiente):
@@ -11,7 +12,7 @@
 //   NTFY_TOPICO  tópico do ntfy que recebe o aviso.
 //   RIOT_SHARD   servidor da conta (opcional). Brasil usa "na".
 
-const LOJA_DE_TESTE = ["Reaver Vandal", "Ion Sheriff", "Prime Phantom", "Glitchpop Dagger"];
+const LOJA_DE_TESTE = ["Reaver Vandal", "Ion Sheriff", "Spectrum Phantom", "Glitchpop Dagger"];
 
 const ENDERECO_LOGIN = "https://auth.riotgames.com/authorize?redirect_uri=https%3A%2F%2Fplayvalorant.com%2Fopt_in"
     . "&client_id=play-valorant-web-prod&response_type=token%20id_token&nonce=1&scope=account%20openid";
@@ -35,7 +36,6 @@ function pedir($url, $opcoes = [])
 
     $status = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
     $tamanhoCabecalho = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-    curl_close($curl);
 
     return [
         "status" => $status,
@@ -63,7 +63,8 @@ function buscarNomes()
     return $nomes;
 }
 
-// Usa o cookie da sessão para pegar os tokens e ler a loja. Devolve os ids das 4 skins.
+// Usa o cookie da sessão para pegar os tokens e ler a loja.
+// Devolve os ids das 4 skins e quantos segundos faltam para a loja trocar.
 function lerLojaDaConta($ssid, $shard)
 {
     $login = pedir(ENDERECO_LOGIN, [CURLOPT_HTTPHEADER => ["Cookie: ssid=" . $ssid, "User-Agent: Mozilla/5.0"]]);
@@ -103,7 +104,34 @@ function lerLojaDaConta($ssid, $shard)
         throw new Exception("A loja respondeu " . $loja["status"]);
     }
 
-    return json_decode($loja["corpo"], true)["SkinsPanelLayout"]["SingleItemOffers"];
+    $painel = json_decode($loja["corpo"], true)["SkinsPanelLayout"];
+    return [
+        "ids" => $painel["SingleItemOffers"],
+        "segundos" => $painel["SingleItemOffersRemainingDurationInSeconds"],
+    ];
+}
+
+// A loja que estava como "hoje" vira "ontem" quando chega uma loja de outro dia.
+function guardarLoja($arquivo, $skins, $segundos)
+{
+    $dados = is_file($arquivo) ? json_decode(file_get_contents($arquivo), true) : [];
+    $exemplo = !empty($dados["exemplo"]);
+    $anterior = $exemplo ? null : ($dados["hoje"] ?? null);
+    $ontem = $exemplo ? null : ($dados["ontem"] ?? null);
+
+    $hoje = [
+        "data" => gmdate("Y-m-d"),
+        "expira" => gmdate("c", time() + $segundos),
+        "skins" => $skins,
+    ];
+    if ($anterior && $anterior["data"] != $hoje["data"]) {
+        $ontem = $anterior;
+    }
+
+    $json = json_encode(["hoje" => $hoje, "ontem" => $ontem], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    if (file_put_contents($arquivo, $json . "\n") === false) {
+        throw new Exception("Não consegui guardar a loja.");
+    }
 }
 
 function avisar($topico, $titulo, $mensagem)
@@ -134,18 +162,31 @@ try {
 
     if ($teste) {
         echo "(teste: loja de mentira)\n";
-        $loja = LOJA_DE_TESTE;
+        $ids = array_map(function ($nome) use ($nomes) {
+            return array_search($nome, $nomes);
+        }, LOJA_DE_TESTE);
+        $segundos = 3600;
+        $arquivoDaLoja = sys_get_temp_dir() . "/loja-teste.json";
     } else {
         $ssid = getenv("RIOT_SSID");
         if (!$ssid) {
             throw new Exception("Falta a variável de ambiente RIOT_SSID.");
         }
         $shard = getenv("RIOT_SHARD") ?: "na";
-        $loja = [];
-        foreach (lerLojaDaConta($ssid, $shard) as $id) {
-            $loja[] = $nomes[$id] ?? "Skin desconhecida (" . $id . ")";
-        }
+        $lida = lerLojaDaConta($ssid, $shard);
+        $ids = $lida["ids"];
+        $segundos = $lida["segundos"];
+        $arquivoDaLoja = __DIR__ . "/dados/loja.json";
     }
+
+    $loja = [];
+    $skinsParaGuardar = [];
+    foreach ($ids as $id) {
+        $nome = $nomes[$id] ?? "Skin desconhecida (" . $id . ")";
+        $loja[] = $nome;
+        $skinsParaGuardar[] = ["id" => $id, "nome" => $nome];
+    }
+    guardarLoja($arquivoDaLoja, $skinsParaGuardar, $segundos);
 
     $achadas = [];
     foreach ($loja as $skin) {

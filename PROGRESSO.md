@@ -19,8 +19,15 @@
 >    mas a parte que usa a conta **nunca rodou**: a rota veio de documentação da comunidade e
 >    pode estar velha. Teste no `vilela` com `RIOT_SSID` em variável de ambiente, sem mostrar o
 >    valor, e corrija o que falhar. Veja também por quanto tempo a sessão dura.
-> 4. Depois: testar o aviso pelo ntfy, rodar no GitHub Actions (sessão só em secret; confira
->    antes se o repositório e os logs são públicos) e, por último, a tela no celular.
+> 4. O front também está pronto (`index.html`, `sw.js`, `manifest.json`), com dados de exemplo
+>    em `dados/loja.json`: loja de hoje, loja de ontem e lista de desejos editada pelo app.
+>    Foi testado com um GitHub de mentira, nunca com o de verdade. Falta: testar o aviso pelo
+>    ntfy; mover o projeto para a raiz de um repositório próprio, `codevilelax/loja-valorant`
+>    (é o nome que está no `index.html`; ele cria o repositório e liga o Pages pela web); rodar
+>    no GitHub Actions, que precisa fazer commit do `dados/loja.json` (sessão só em secret, e
+>    confira se os logs são públicos); e criar a chave do GitHub só para esse repositório, com
+>    Contents read/write, colando já no app instalado no celular (no iPhone, o app instalado
+>    guarda dados separados do Safari).
 > 5. Uma ação por mensagem. Quando o login e a leitura da loja funcionarem, apague este aviso,
 >    faça commit e push.
 
