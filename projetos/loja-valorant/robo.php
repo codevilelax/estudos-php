@@ -15,6 +15,7 @@
 const LOJA_DE_TESTE = ["Reaver Vandal", "Ion Sheriff", "Spectrum Phantom", "Glitchpop Dagger"];
 const PRECOS_DE_TESTE = [1775, 1275, 2675, 3550];
 const VP_DE_TESTE = 2350;
+const RIOT_ID_DE_TESTE = "Teste#0000";
 
 const ID_DO_VP = "85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741";
 const AJUSTES_PADRAO = ["avisar_desejos" => true, "resumo_diario" => false];
@@ -69,7 +70,7 @@ function buscarNomes()
 }
 
 // Usa o cookie da sessão para pegar os tokens e ler a loja.
-// Devolve os ids das 4 skins, os preços, quantos segundos faltam para a loja trocar e o saldo de VP.
+// Devolve os ids das 4 skins, os preços, quantos segundos faltam para a loja trocar, o saldo de VP e o Riot ID.
 function lerLojaDaConta($ssid, $shard)
 {
     $login = pedir(ENDERECO_LOGIN, [CURLOPT_HTTPHEADER => ["Cookie: ssid=" . $ssid, "User-Agent: Mozilla/5.0"]]);
@@ -123,12 +124,32 @@ function lerLojaDaConta($ssid, $shard)
         $vp = json_decode($carteira["corpo"], true)["Balances"][ID_DO_VP] ?? null;
     }
 
+    // A documentação da comunidade mostra dois lugares com o Riot ID. Sem ele, a loja ainda serve.
+    $riotId = montarRiotId($usuario["acct"]["game_name"] ?? "", $usuario["acct"]["tag_line"] ?? "");
+    if ($riotId === null) {
+        $jogadores = pedir("https://pd." . $shard . ".a.pvp.net/name-service/v2/players", [
+            CURLOPT_CUSTOMREQUEST => "PUT",
+            CURLOPT_POSTFIELDS => json_encode([$usuario["sub"]]),
+            CURLOPT_HTTPHEADER => $cabecalhos,
+        ]);
+        if ($jogadores["status"] == 200) {
+            $jogador = json_decode($jogadores["corpo"], true)[0] ?? [];
+            $riotId = montarRiotId($jogador["GameName"] ?? "", $jogador["TagLine"] ?? "");
+        }
+    }
+
     return [
         "ids" => $painel["SingleItemOffers"],
         "precos" => $precos,
         "segundos" => $painel["SingleItemOffersRemainingDurationInSeconds"],
         "vp" => $vp,
+        "riot_id" => $riotId,
     ];
+}
+
+function montarRiotId($nome, $tag)
+{
+    return $nome !== "" && $tag !== "" ? $nome . "#" . $tag : null;
 }
 
 // Sem o arquivo, ou com ele quebrado, valem os ajustes padrão.
@@ -144,7 +165,7 @@ function descreverSkin($skin)
 }
 
 // A loja que estava como "hoje" vira "ontem" quando chega uma loja de outro dia.
-function guardarLoja($arquivo, $skins, $segundos, $vp)
+function guardarLoja($arquivo, $skins, $segundos, $vp, $riotId)
 {
     $dados = is_file($arquivo) ? json_decode(file_get_contents($arquivo), true) : [];
     $exemplo = !empty($dados["exemplo"]);
@@ -160,7 +181,12 @@ function guardarLoja($arquivo, $skins, $segundos, $vp)
         $ontem = $anterior;
     }
 
-    $json = json_encode(["vp" => $vp, "hoje" => $hoje, "ontem" => $ontem], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    // O Riot ID quase nunca muda: se a leitura falhar, continua valendo o último.
+    if ($riotId === null && !$exemplo) {
+        $riotId = $dados["riot_id"] ?? null;
+    }
+
+    $json = json_encode(["riot_id" => $riotId, "vp" => $vp, "hoje" => $hoje, "ontem" => $ontem], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     if (file_put_contents($arquivo, $json . "\n") === false) {
         throw new Exception("Não consegui guardar a loja.");
     }
@@ -203,6 +229,7 @@ try {
         }
         $segundos = 3600;
         $vp = VP_DE_TESTE;
+        $riotId = RIOT_ID_DE_TESTE;
         $arquivoDaLoja = sys_get_temp_dir() . "/loja-teste.json";
     } else {
         $ssid = getenv("RIOT_SSID");
@@ -215,6 +242,7 @@ try {
         $precos = $lida["precos"];
         $segundos = $lida["segundos"];
         $vp = $lida["vp"];
+        $riotId = $lida["riot_id"];
         $arquivoDaLoja = __DIR__ . "/dados/loja.json";
     }
 
@@ -226,8 +254,11 @@ try {
             "preco" => $precos[$id] ?? null,
         ];
     }
-    guardarLoja($arquivoDaLoja, $loja, $segundos, $vp);
+    guardarLoja($arquivoDaLoja, $loja, $segundos, $vp, $riotId);
 
+    if ($riotId !== null) {
+        echo "Conta: " . $riotId . "\n";
+    }
     if ($vp !== null) {
         echo "Saldo: " . $vp . " VP\n";
     }

@@ -71,6 +71,10 @@
       border: 1px solid var(--borda);
       border-radius: 6px;
     }
+    .riot-id { margin: 2px 0 0; font-weight: 600; overflow-wrap: anywhere; }
+    .riot-tag { color: var(--texto-2); font-weight: 500; }
+    .conta { margin: 0; padding: 14px 12px; background: var(--cartao); border-radius: 6px; }
+    .conta.vazia { color: var(--texto-2); }
     .preco { display: block; color: var(--texto-2); font-size: .9375rem; font-variant-numeric: tabular-nums; }
 
     .secao { margin-top: 28px; }
@@ -179,6 +183,7 @@
       <header class="topo topo-loja">
         <div>
           <h1>Minha loja</h1>
+          <p class="riot-id" id="riot-id-loja" hidden></p>
           <p class="subtitulo" id="tempo-loja">Carregando…</p>
         </div>
         <p class="vp" id="vp" hidden></p>
@@ -209,6 +214,11 @@
         <h1>Ajustes</h1>
       </header>
       <p class="status" data-status role="status" aria-live="polite"></p>
+
+      <div class="secao">
+        <div class="secao-topo"><h2>Conta</h2></div>
+        <p class="conta" id="riot-id-ajustes"></p>
+      </div>
 
       <div class="secao">
         <div class="secao-topo"><h2>Avisos no celular</h2></div>
@@ -363,8 +373,27 @@
       campo.textContent = `Troca em ${Math.floor(minutos / 60)}h ${minutos % 60}min`;
     }
 
+    function escreverRiotId(campo, riotId) {
+      const divisao = riotId.lastIndexOf('#');
+      if (divisao === -1) { campo.textContent = riotId; return; }
+      campo.replaceChildren(riotId.slice(0, divisao), criar('span', { class: 'riot-tag', text: riotId.slice(divisao) }));
+    }
+
+    function desenharRiotId() {
+      const riotId = loja && typeof loja.riot_id === 'string' ? loja.riot_id : '';
+      $('riot-id-loja').hidden = !riotId;
+      $('riot-id-ajustes').classList.toggle('vazia', !riotId);
+      if (riotId) {
+        escreverRiotId($('riot-id-loja'), riotId);
+        escreverRiotId($('riot-id-ajustes'), riotId);
+      } else {
+        $('riot-id-ajustes').textContent = 'Aparece depois que o robô ler sua conta.';
+      }
+    }
+
     function desenharLoja() {
       desenharTempo();
+      desenharRiotId();
       const temVp = Boolean(loja) && Number.isFinite(loja.vp);
       $('vp').hidden = !temVp;
       if (temVp) $('vp').textContent = formatarVp(loja.vp);

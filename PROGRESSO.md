@@ -21,8 +21,8 @@
 >    valor, e corrija o que falhar. Veja também por quanto tempo a sessão dura.
 > 4. O front também está pronto (`index.html`, `sw.js`, `manifest.json`), com dados de exemplo
 >    em `dados/loja.json`: saldo de VP, preços, loja de hoje, loja de ontem, lista de desejos e
->    ajustes de aviso (`config.json`), editados pelo app. O saldo e os preços também nunca
->    rodaram com dados reais; o saldo fica público no repositório, e ele já foi avisado.
+>    ajustes de aviso (`config.json`), editados pelo app, e Riot ID com a tag. Saldo, preços e Riot ID também nunca
+>    rodaram com dados reais; saldo e Riot ID ficam públicos no repositório, e ele já foi avisado.
 >    Foi testado com um GitHub de mentira, nunca com o de verdade. Falta: testar o aviso pelo
 >    ntfy; mover o projeto para a raiz de um repositório próprio, `codevilelax/loja-valorant`
 >    (é o nome que está no `index.html`; ele cria o repositório e liga o Pages pela web); rodar
