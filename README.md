@@ -29,4 +29,12 @@ Os resumos do que já pratiquei ficam junto dos exercícios do assunto:
 php 01-fundamentos/ex02-compras.php
 ```
 
+O projeto de cadastro de pessoas roda no navegador, com o servidor que já vem no PHP:
+
+```bash
+php -S localhost:8000 -t projetos/cadastro-pessoas
+```
+
+Depois é só abrir `http://localhost:8000/?uf=MS` (troque `MS` pelo estado que quiser buscar).
+
 O andamento dos estudos fica em [PROGRESSO.md](PROGRESSO.md).
