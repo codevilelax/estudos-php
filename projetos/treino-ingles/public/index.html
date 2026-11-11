@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#000000">
+    <title>Treino de inglês</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body data-estado="parado">
+
+<!-- O desenho da Emma. O app.js copia este molde para os lugares onde ela aparece.
+     As partes com "class" são as que se mexem (ver "Emma" no estilo.css). -->
+<template id="molde-emma">
+    <svg class="emma" viewBox="0 0 240 240" data-boca="0" role="img" aria-label="Emma, a professora">
+        <!-- cabelo de trás -->
+        <path fill="#2a1b17" d="M62 118C56 60 92 34 120 34s64 26 58 84l4 58c0 10-10 14-18 10l-6-36H82l-6 36c-8 4-18 0-18-10z"/>
+        <!-- pescoço e blusa -->
+        <rect x="104" y="150" width="32" height="46" rx="14" fill="#e3a98c"/>
+        <path fill="#ff4655" d="M34 240c0-44 36-60 86-60s86 16 86 60z"/>
+        <path fill="none" stroke="#d6323f" stroke-width="6" stroke-linecap="round" d="M97 184q23 22 46 0"/>
+
+        <g class="cabeca">
+            <!-- orelhas e rosto -->
+            <ellipse cx="74" cy="112" rx="7" ry="10" fill="#e9b596"/>
+            <ellipse cx="166" cy="112" rx="7" ry="10" fill="#e9b596"/>
+            <path fill="#f3c5a8" d="M76 100c0-38 88-38 88 0 0 40-20 64-44 64s-44-24-44-64z"/>
+            <!-- franja -->
+            <path fill="#2a1b17" d="M74 104c-4-46 36-60 58-54 26 4 40 28 34 56-6-22-20-34-38-36-16 12-38 16-54 34z"/>
+
+            <!-- bochechas e nariz -->
+            <ellipse cx="92" cy="130" rx="8" ry="5" fill="#ff7b86" opacity=".28"/>
+            <ellipse cx="148" cy="130" rx="8" ry="5" fill="#ff7b86" opacity=".28"/>
+            <path fill="none" stroke="#d9a084" stroke-width="2.5" stroke-linecap="round" d="M120 116q-4 12 1 14"/>
+
+            <!-- sobrancelhas -->
+            <g class="sobrancelhas" fill="none" stroke="#2a1b17" stroke-width="3" stroke-linecap="round">
+                <path d="M92 96q9-5 18-1"/>
+                <path d="M130 95q9-4 18 1"/>
+            </g>
+
+            <!-- olhos: "olhar" muda para onde ela olha, "olhos" pisca -->
+            <g class="olhar">
+                <g class="olhos">
+                    <ellipse cx="101" cy="110" rx="5.5" ry="7" fill="#2a1b17"/>
+                    <ellipse cx="139" cy="110" rx="5.5" ry="7" fill="#2a1b17"/>
+                    <circle cx="103" cy="107" r="1.8" fill="#fff"/>
+                    <circle cx="141" cy="107" r="1.8" fill="#fff"/>
+                </g>
+            </g>
+
+            <!-- bocas: só uma aparece por vez, conforme o data-boca do desenho -->
+            <path class="boca boca-0" fill="none" stroke="#b4474f" stroke-width="3.5" stroke-linecap="round" d="M106 140q14 12 28 0"/>
+            <path class="boca boca-1" fill="#7b2630" d="M107 141q13 6 26 0-13 13-26 0z"/>
+            <g class="boca boca-2">
+                <ellipse cx="120" cy="145" rx="10" ry="8" fill="#7b2630"/>
+                <rect x="113" y="138.5" width="14" height="3.5" rx="1.5" fill="#fff"/>
+                <ellipse cx="120" cy="149.5" rx="6" ry="3" fill="#e0606c"/>
+            </g>
+            <ellipse class="boca boca-3" cx="120" cy="145" rx="6" ry="7" fill="#7b2630"/>
+
+            <!-- fone com microfone -->
+            <path fill="none" stroke="#48484a" stroke-width="6" stroke-linecap="round" d="M72 106C66 50 174 50 168 106"/>
+            <rect x="62" y="98" width="14" height="28" rx="7" fill="#5a5a5e"/>
+            <rect x="164" y="98" width="14" height="28" rx="7" fill="#5a5a5e"/>
+            <path fill="none" stroke="#5a5a5e" stroke-width="3.5" stroke-linecap="round" d="M69 126c-1 24 12 34 26 32"/>
+            <circle cx="97" cy="157.5" r="4.5" fill="#ff4655"/>
+        </g>
+    </svg>
+</template>
+
+<!-- TELA 1: a trilha de lições -->
+<div id="tela-trilha" class="tela">
+    <header class="topo">
+        <h1>Treino de inglês</h1>
+    </header>
+
+    <main class="rolagem">
+        <div class="trilha">
+            <section class="destaque">
+                <div id="emma-da-trilha" class="retrato"></div>
+                <div class="destaque-texto">
+                    <p class="sobre">Emma · sua professora</p>
+                    <h2 id="destaque-titulo">Carregando as lições…</h2>
+                    <p id="destaque-resumo"></p>
+                    <button id="continuar" class="botao-principal" type="button" hidden>Começar</button>
+                </div>
+            </section>
+
+            <div id="niveis"></div>
+        </div>
+    </main>
+</div>
+
+<!-- TELA 2: a aula -->
+<div id="tela-aula" class="tela" hidden>
+    <header class="topo">
+        <button id="voltar" class="botao-pequeno" type="button">‹ Lições</button>
+        <h1 id="aula-titulo"></h1>
+        <div class="topo-botoes">
+            <button id="pular" class="botao-pequeno" type="button">Pular</button>
+            <button id="recomecar" class="botao-pequeno" type="button">Recomeçar</button>
+        </div>
+    </header>
+
+    <div id="progresso" class="progresso" role="progressbar" aria-label="Progresso da lição" aria-valuemin="0" aria-valuemax="100">
+        <div id="progresso-barra"></div>
+    </div>
+
+    <main class="aula">
+        <aside id="palco" class="palco" data-modo="parada">
+            <div id="emma-da-aula" class="retrato"></div>
+            <div class="palco-texto">
+                <p class="palco-nome">Emma</p>
+                <p id="palco-status" class="palco-status"></p>
+            </div>
+        </aside>
+
+        <section id="conversa" class="conversa"></section>
+    </main>
+
+    <footer id="barra" class="barra">
+        <p id="aviso" class="aviso" role="status"></p>
+
+        <div class="controles">
+            <button id="cancelar" class="botao-redondo" type="button" aria-label="Cancelar gravação" title="Cancelar gravação">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
+
+            <button id="microfone" class="microfone" type="button" aria-label="Falar">
+                <svg class="icone-microfone" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="9" y="3" width="6" height="11" rx="3"/>
+                    <path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>
+                </svg>
+                <svg class="icone-enviar" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5"/></svg>
+                <span class="girando" aria-hidden="true"></span>
+            </button>
+
+            <button id="teclado" class="botao-redondo" type="button" aria-label="Escrever em vez de falar" title="Escrever em vez de falar">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="2.5" y="6" width="19" height="12" rx="2.5"/>
+                    <path d="M6.5 10h.01M10 10h.01M13.5 10h.01M17 10h.01M8 14h8"/>
+                </svg>
+            </button>
+        </div>
+
+        <form id="digitar" class="digitar" hidden>
+            <input id="texto" type="text" placeholder="Escreva aqui" autocomplete="off" maxlength="500" aria-label="Sua fala, por escrito">
+            <button class="botao-pequeno" type="submit">Enviar</button>
+        </form>
+    </footer>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

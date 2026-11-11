@@ -1,0 +1,469 @@
+:root {
+    --fundo: #000;
+    --cartao: #1c1c1e;
+    --cartao-claro: #2c2c2e;
+    --texto: #f2f2f7;
+    --apagado: #98989f;
+    --vermelho: #ff4655;
+    --verde: #32d74b;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--fundo);
+    color: var(--texto);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 17px;
+    line-height: 1.45;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+button,
+input {
+    font: inherit;
+    color: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible {
+    outline: 2px solid var(--vermelho);
+    outline-offset: 2px;
+}
+
+/* Topo */
+
+.topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 18px 20px 10px;
+}
+
+.topo h1 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+/* Meio */
+
+.conteudo {
+    flex: 1;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.inicio {
+    min-height: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 24px 24px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.inicio h2 {
+    margin: 0 0 12px;
+    font-size: 40px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+}
+
+.inicio p {
+    margin: 0 0 32px;
+    color: var(--apagado);
+    text-wrap: pretty;
+}
+
+.conversa {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 12px 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Falas */
+
+.bloco {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 86%;
+}
+
+.bloco.ia {
+    align-self: flex-start;
+    align-items: flex-start;
+}
+
+.bloco.voce {
+    align-self: flex-end;
+    align-items: flex-end;
+}
+
+.fala {
+    padding: 13px 18px;
+    border-radius: 20px;
+    overflow-wrap: anywhere;
+}
+
+.fala p {
+    margin: 0;
+}
+
+.bloco.ia .fala {
+    background: var(--cartao);
+    border-bottom-left-radius: 6px;
+}
+
+.bloco.voce .fala {
+    background: rgba(255, 70, 85, 0.18);
+    border: 1px solid rgba(255, 70, 85, 0.45);
+    border-bottom-right-radius: 6px;
+}
+
+.traducao {
+    margin-top: 8px !important;
+    padding-top: 8px;
+    border-top: 1px solid var(--cartao-claro);
+    color: var(--apagado);
+    font-size: 15px;
+}
+
+.acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.correcao {
+    width: 100%;
+    padding: 13px 18px;
+    border-radius: 20px;
+    background: var(--cartao);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow-wrap: anywhere;
+}
+
+.correcao p {
+    margin: 0;
+}
+
+.etiqueta {
+    color: var(--verde);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.correcao mark {
+    background: none;
+    color: var(--verde);
+    font-weight: 700;
+}
+
+.explicacao {
+    color: var(--apagado);
+    font-size: 15px;
+}
+
+.correcao .acoes {
+    margin-top: 4px;
+}
+
+.sem-erros {
+    color: var(--verde);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Três pontinhos enquanto a IA pensa */
+
+.pontos {
+    display: inline-flex;
+    gap: 5px;
+    padding: 6px 2px;
+}
+
+.pontos span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--texto);
+    opacity: 0.35;
+    animation: piscar 1.1s infinite;
+}
+
+.pontos span:nth-child(2) {
+    animation-delay: 0.18s;
+}
+
+.pontos span:nth-child(3) {
+    animation-delay: 0.36s;
+}
+
+@keyframes piscar {
+    40% {
+        opacity: 1;
+    }
+}
+
+/* Botões */
+
+.botao-principal {
+    padding: 15px 44px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--vermelho);
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.botao-principal:hover {
+    filter: brightness(1.1);
+}
+
+.botao-pequeno {
+    padding: 6px 14px;
+    border: 1px solid var(--cartao-claro);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--apagado);
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.botao-pequeno:hover {
+    color: var(--texto);
+    border-color: var(--apagado);
+}
+
+.botao-redondo {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--cartao);
+    display: grid;
+    place-items: center;
+}
+
+.botao-redondo:hover {
+    background: var(--cartao-claro);
+}
+
+svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Barra de baixo */
+
+.barra {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 10px 20px calc(18px + env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.aviso {
+    margin: 0;
+    min-height: 1.45em;
+    color: var(--apagado);
+    font-size: 15px;
+    text-align: center;
+    text-wrap: balance;
+    font-variant-numeric: tabular-nums;
+}
+
+.aviso.erro {
+    color: var(--vermelho);
+}
+
+.controles {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.microfone {
+    position: relative;
+    width: 78px;
+    height: 78px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--vermelho);
+    color: #fff;
+    display: grid;
+    place-items: center;
+}
+
+.microfone svg {
+    width: 32px;
+    height: 32px;
+}
+
+.microfone:hover {
+    filter: brightness(1.1);
+}
+
+.microfone:disabled {
+    background: var(--cartao);
+    cursor: default;
+    filter: none;
+}
+
+/* O que aparece em cada estado: parado, gravando ou pensando */
+
+.icone-enviar,
+.girando,
+#cancelar {
+    display: none;
+}
+
+[data-estado="gravando"] .icone-microfone,
+[data-estado="pensando"] .icone-microfone {
+    display: none;
+}
+
+[data-estado="gravando"] .icone-enviar {
+    display: block;
+}
+
+[data-estado="gravando"] #cancelar {
+    display: grid;
+}
+
+[data-estado="gravando"] #teclado,
+[data-estado="pensando"] #teclado {
+    visibility: hidden;
+}
+
+[data-estado="gravando"] .digitar,
+[data-estado="pensando"] .digitar {
+    display: none;
+}
+
+/* Com o botão de cancelar escondido, este espaço mantém o microfone no meio */
+[data-estado="parado"] .controles::before,
+[data-estado="pensando"] .controles::before {
+    content: "";
+    width: 48px;
+}
+
+[data-estado="gravando"] .microfone::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid var(--vermelho);
+    animation: pulsar 1.4s ease-out infinite;
+}
+
+@keyframes pulsar {
+    to {
+        transform: scale(1.55);
+        opacity: 0;
+    }
+}
+
+[data-estado="pensando"] .girando {
+    display: block;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 3px solid var(--cartao-claro);
+    border-top-color: var(--texto);
+    animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.digitar {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+}
+
+.digitar input {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 18px;
+    border: 1px solid var(--cartao-claro);
+    border-radius: 999px;
+    background: var(--cartao);
+}
+
+.digitar input::placeholder {
+    color: var(--apagado);
+}
+
+.digitar .botao-pequeno {
+    padding: 0 20px;
+    color: var(--texto);
+}
+
+@media (max-width: 480px) {
+    .inicio h2 {
+        font-size: 32px;
+    }
+
+    .bloco {
+        max-width: 94%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pontos span,
+    .microfone::after {
+        animation: none;
+    }
+}

@@ -87,10 +87,37 @@
 
 ## Onde parei
 
-- **Data e computador:** 06/11/2026, `computador 2`
-- **Assunto:** projeto `projetos/loja-valorant` (loja do Valorant no celular). O aviso no topo
-  deste arquivo tem login, privacidade e o que falta no robô.
-- **O que foi feito:**
+- **Data e computador:** 11/11/2026, `computador 2`
+- **Assunto:** projeto novo `projetos/treino-ingles` (conversa em inglês por voz com IA). Em 11/11
+  ele pediu para trocar os exercícios por projetos: quer "fazer coisas que realmente funcionam".
+  **Não passar mais exercício numerado solto.** O `03-banco-de-dados/ex07-filtro-de-idade.php` foi
+  criado e não foi feito: perguntar se pode apagar.
+- **Treino de inglês (o Claude escreve o código e ele comanda; não pode ter custo nenhum):**
+  - Usa a IA da Groq no plano gratuito. A chave fica em `projetos/treino-ingles/chave.txt`, que está
+    no `.gitignore`. No `vilela` o arquivo não existe: criar outra chave em `console.groq.com`.
+    Nunca pedir a chave no chat nem mostrar o conteúdo do arquivo.
+  - **Versão 1, pronta e testada:** conversa livre por voz, correção com explicação em português,
+    botões Ouvir, Devagar e Traduzir. Abre com `iniciar.bat` (`localhost:8123`).
+  - **Versão 2, pela metade** (pedido dele: uma professora na tela e um curso do zero que avança):
+    - Pronto e testado no PHP: `src/curso.php` (24 lições em 4 níveis), `src/ia.php` (a professora
+      Emma dá aula em duas fases, `ensinar` e `praticar`; o servidor devolve `fase` e `passo` e a tela
+      manda de volta), `public/api/falar.php` e `public/api/curso.php`. Uma aula inteira simulada
+      (lição 1) passou.
+    - `public/index.html` já é o novo: tela da trilha, tela da aula e o desenho da Emma em SVG
+      (molde `#molde-emma`, bocas `boca-0` a `boca-3` trocadas pelo `data-boca`).
+    - **Falta:** reescrever `public/estilo.css` e `public/app.js` para o HTML novo. Enquanto isso
+      não for feito, **a tela não funciona** (os dois ainda são os da versão 1). Depois, testar no
+      Chrome de teste e atualizar o `README.md`.
+    - Combinado para o `app.js`: guardar no navegador as lições concluídas e a aula em andamento;
+      lição só abre quando a anterior foi concluída (com botão Pular); a Emma mexe a boca enquanto
+      `speechSynthesis.speaking` for verdadeiro; cada parte da fala usa a voz do seu idioma (`pt`
+      ou `en`); a transcrição descobre sozinha se ele falou português ou inglês.
+  - Limites da conta gratuita (medidos em 11/11): 8000 tokens por minuto por modelo, e cada fala da
+    aula gasta uns 1300; 20 transcrições por minuto. Por isso as instruções da IA são curtas e
+    existe um modelo de reserva.
+- **Loja do Valorant (parada desde 06/11):** o aviso no topo deste arquivo tem login, privacidade e
+  o que falta no robô.
+- **O que foi feito em 06/11:**
   - **Banco:** `03-banco-de-dados/ex05-tocantins.php` concluído. Além do pedido, incluiu a idade
     e o contador `$qnt` sem ninguém falar. Erros no caminho: `echo $pessoas` (não dá para
     mostrar o resultado inteiro, só com `foreach`) e um `and IDADE` sobrando no `WHERE`.
@@ -106,7 +133,8 @@
     service worker na cópia e rode `php -S` com `router.php` + Chrome `--headless=new --dump-dom`.
     O `roteiro.js` precisa de ajuste depois do novo visual.
   - **Banco agora:** 501 pessoas (as 500 + Carla, 29 anos). O próximo `id` vai ser **506**.
-- **Próximo passo (na ordem combinada):**
+- **Próximo passo:** terminar a versão 2 do treino de inglês (item "Falta", acima).
+- **Próximos passos da loja do Valorant (na ordem combinada):**
   1. **Refazer o visual do app, com `exemplo.json`.** Foi aprovado ("dê seu melhor"), mas **não
      foi salvo**: o `app/index.html` ainda é o visual antigo. A referência são 3 prints mandados no
      chat; não foram salvos porque mostram dados da conta, então peça de novo. Usar como
@@ -182,6 +210,8 @@
 
 ## Histórico
 
+- 09/11/2026 (`computador 2`): ex06 de banco concluído (caça ao bug no navegador, Raio-X do estado).
+- 06/11/2026 (`computador 2`): ex05 de banco concluído; começo do projeto `loja-valorant`.
 - 30/10/2026 (`computador 2`): projeto `cadastro-pessoas`, parte 5: lista lembra o estado (`selected`), `isset`, cadastro pela página com POST.
 - 29/10/2026 (`computador 2`): projeto `cadastro-pessoas`: `UPDATE` no `alterar.php`; começo da parte 5, busca por estado no navegador (`$_GET`, `<form>`, `<select>`).
 - 28/10/2026 (`computador 2`): projeto `cadastro-pessoas`, parte 4: `require` com `conexao.php` nos três arquivos.

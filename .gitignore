@@ -19,3 +19,6 @@ Thumbs.db
 
 # Dados da conta da loja do Valorant: só no repositório privado
 /projetos/loja-valorant/dados/
+
+# Chave da IA do treino de inglês: nunca vai para o git
+/projetos/treino-ingles/chave.txt
