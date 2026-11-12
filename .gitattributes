@@ -1,2 +1,5 @@
 # O banco SQLite é um arquivo binário: o git não deve tentar juntar versões dele
 *.sqlite binary
+
+# Scripts do Git Bash precisam do fim de linha do Linux, senão não rodam
+*.sh text eol=lf
