@@ -44,18 +44,18 @@ Items, in order:
 {itens}
 Language rule: {idioma}
 
-"fase" starts as "ensinar": teach ONE item per turn, in order. "passo" is the number of the item you are teaching in this turn.
+"fase" starts as "ensinar": teach ONE item per turn, in order, never skipping one. "passo" is the number of the item you are teaching in this turn.
 - Say the item ("en" part), its meaning in Portuguese, then what the student must do: repeat it or answer with it. If the item has "...", give one example and ask for the student's own version.
 - Right answer: short praise, then the next item in the same turn.
 - Wrong answer: show the right way and ask again with the same "passo". After two wrong tries, encourage and go on.
 
-After the student says the last item, "fase" becomes "praticar": say you will practise now. Then, one per turn, describe a small everyday situation or ask a question that makes the student use an item (for example: "É de manhã e você encontra um amigo. O que você fala?"). Never give the answer: in "praticar" your "falas" have no "en" part with the expected answer. Now "passo" counts how many the student has answered correctly, going up one at a time. When it reaches {praticas}, set "concluida" to true, congratulate warmly, say in one sentence what the student can do now, and ask nothing. Otherwise "concluida" is false.
+After the student says the last item, "fase" becomes "praticar": say you will practise now. Then, one per turn, describe a small everyday situation or ask a question whose answer is one of the items above, never something that is not in the list (for example: "É de manhã e você encontra um amigo. O que você fala?"). Never give the answer: in "praticar" your "falas" have no "en" part with the expected answer. Now "passo" is how many practice answers the student has got right so far: 0 when the practice starts, going up by one for each right answer. When it reaches {praticas}, set "concluida" to true, congratulate warmly, say in one sentence what the student can do now, and ask nothing. Otherwise "concluida" is false and you ask another one.
 
 Always: end by telling the student exactly what to do next. In the first turn, greet, say in one sentence what today's lesson is, and teach item 1. If the student asks something in Portuguese, answer briefly and return to the lesson. Sound like a friendly young Brazilian: informal Portuguese, varied praise ("Boa!", "Isso aí!", "Perfeito!", "Mandou bem!").
 
 Example of "falas" in a beginner teaching turn: [{"idioma":"pt","texto":"Boa! A próxima é:"},{"idioma":"en","texto":"Good morning."},{"idioma":"pt","texto":"Quer dizer bom dia. Agora repete pra mim."}]
 
-Now: "fase" is "{fase}", "passo" is {passo}.
+{agora}
 TEXTO;
 
 const INSTRUCOES_DA_CONVERSA_LIVRE = <<<'TEXTO'
@@ -342,6 +342,40 @@ function separarIngles($falas, $licao)
     return $novas;
 }
 
+// Diz para a IA, com todas as letras, em que ponto a lição está agora.
+// Sem isso ela às vezes pula um item ou encerra a lição antes da hora.
+function descreverPonto($licao, $ponto)
+{
+    $itens = $licao["itens"];
+    $total = count($itens);
+
+    if ($ponto["fase"] == "praticar") {
+        $certas = min($ponto["passo"], PRATICAS_POR_LICAO);
+        $texto = 'Now: "fase" is "praticar" and "passo" is ' . $certas . ": the student has "
+            . $certas . " of " . PRATICAS_POR_LICAO . " right practice answers.";
+
+        if ($certas >= PRATICAS_POR_LICAO) {
+            $texto .= ' The practice is complete: set "concluida" to true, congratulate and ask nothing.';
+        } elseif ($certas == PRATICAS_POR_LICAO - 1) {
+            $texto .= " If this answer is right, the lesson is complete. If not, ask again.";
+        } else {
+            $texto .= " The lesson is not complete yet: ask another one.";
+        }
+        return $texto;
+    }
+
+    $passo = max(1, min($ponto["passo"], $total));
+    $texto = 'Now: "fase" is "ensinar" and "passo" is ' . $passo . ". Item " . $passo . ' is "' . $itens[$passo - 1] . '".';
+
+    if ($passo < $total) {
+        $texto .= ' The item after it is "' . $itens[$passo] . '": teach it before any practice ('
+            . ($total - $passo) . " still to teach).";
+    } else {
+        $texto .= ' It is the last item: after the student says it, "fase" becomes "praticar" with "passo" 0.';
+    }
+    return $texto;
+}
+
 // Monta o roteiro completo: quem é a professora + a lição (ou a conversa livre).
 function montarInstrucoes($licao, $ponto)
 {
@@ -361,33 +395,15 @@ function montarInstrucoes($licao, $ponto)
         "{itens}" => trim($itens),
         "{idioma}" => NIVEIS[$licao["nivel"]]["idioma"],
         "{praticas}" => PRATICAS_POR_LICAO,
-        "{fase}" => $ponto["fase"],
-        "{passo}" => $ponto["passo"],
+        "{agora}" => descreverPonto($licao, $ponto),
     ]);
 
     return INSTRUCOES . "\n\n" . $daLicao;
 }
 
-// Manda a fala do aluno (com as falas anteriores) e devolve o que a professora responde.
-// $licao: a lição (do curso.php) ou null para conversa livre.
-// $historico: lista de ["papel" => "ia" ou "voce", "texto" => "..."]
-// $fala: o que o aluno disse, ou null para a professora abrir a lição.
-// $ponto: onde a lição está: ["fase" => "ensinar" ou "praticar", "passo" => número,
-//         "turno" => quantas vezes o aluno já falou, contando com esta]
-function conversar($licao, $historico, $fala, $ponto)
+// Manda as mensagens para a IA e devolve a resposta dela já separada em campos.
+function pedirFala($mensagens)
 {
-    $mensagens = [["role" => "system", "content" => montarInstrucoes($licao, $ponto)]];
-    foreach (array_slice($historico, -FALAS_LEMBRADAS) as $item) {
-        $mensagens[] = [
-            "role" => $item["papel"] == "ia" ? "assistant" : "user",
-            "content" => $item["texto"],
-        ];
-    }
-    $mensagens[] = [
-        "role" => "user",
-        "content" => $fala === null ? "(The lesson starts now. The student has not said anything yet.)" : $fala,
-    ];
-
     $pedido = [
         "messages" => $mensagens,
         "temperature" => 0.6,
@@ -411,6 +427,54 @@ function conversar($licao, $historico, $fala, $ponto)
     $partes = json_decode($texto, true);
     if (!is_array($partes)) {
         $partes = ["falas" => [["idioma" => "en", "texto" => $texto]]];
+    }
+
+    return $partes;
+}
+
+// Manda a fala do aluno (com as falas anteriores) e devolve o que a professora responde.
+// $licao: a lição (do curso.php) ou null para conversa livre.
+// $historico: lista de ["papel" => "ia" ou "voce", "texto" => "..."]
+// $fala: o que o aluno disse, ou null para a professora abrir a lição.
+// $ponto: onde a lição está: ["fase" => "ensinar" ou "praticar", "passo" => número,
+//         "turno" => quantas vezes o aluno já falou, contando com esta]
+function conversar($licao, $historico, $fala, $ponto)
+{
+    $mensagens = [["role" => "system", "content" => montarInstrucoes($licao, $ponto)]];
+    foreach (array_slice($historico, -FALAS_LEMBRADAS) as $item) {
+        $mensagens[] = [
+            "role" => $item["papel"] == "ia" ? "assistant" : "user",
+            "content" => $item["texto"],
+        ];
+    }
+    $mensagens[] = [
+        "role" => "user",
+        "content" => $fala === null ? "(The lesson starts now. The student has not said anything yet.)" : $fala,
+    ];
+
+    $partes = pedirFala($mensagens);
+
+    // Às vezes a IA pula um item ou quer praticar antes de ensinar tudo. Quando isso
+    // acontece, o servidor avisa e pede a fala de novo, uma vez só.
+    $proximo = $ponto["passo"] + 1;
+    $adiantou = $licao !== null
+        && $fala !== null
+        && $ponto["fase"] == "ensinar"
+        && $proximo <= count($licao["itens"])
+        && (($partes["fase"] ?? "") == "praticar" || (int) ($partes["passo"] ?? 0) > $proximo);
+
+    if ($adiantou) {
+        $mensagens[] = [
+            "role" => "system",
+            "content" => 'Careful: do not skip ahead and do not start the practice yet. Item ' . $proximo
+                . ' ("' . $licao["itens"][$proximo - 1] . '") has not been taught. If the student got the current item right, teach item '
+                . $proximo . ' now, with "fase" "ensinar" and "passo" ' . $proximo . ".",
+        ];
+        try {
+            $partes = pedirFala($mensagens);
+        } catch (ErroIA $erro) {
+            // Não deu para pedir de novo: fica com a primeira resposta.
+        }
     }
 
     // Confere cada pedaço da resposta, porque a tela depende deste formato.
@@ -452,17 +516,38 @@ function conversar($licao, $historico, $fala, $ponto)
         return $resultado + ["fase" => "praticar", "passo" => 0, "progresso" => 0, "concluida" => false];
     }
 
-    // A lição só anda para a frente: não volta de fase nem de passo.
-    $fase = ($partes["fase"] ?? "") == "praticar" || $ponto["fase"] == "praticar" ? "praticar" : "ensinar";
-    $passo = max(0, min(50, (int) ($partes["passo"] ?? 0)));
-    if ($fase == $ponto["fase"]) {
-        $passo = max($passo, $ponto["passo"]);
+    // Quem decide onde a lição está é o servidor. A IA só sugere: a lição anda para
+    // a frente, um passo por vez, sem pular item e sem voltar.
+    $total = count($licao["itens"]);
+    $passoDaIA = max(0, min(50, (int) ($partes["passo"] ?? 0)));
+    $querPraticar = ($partes["fase"] ?? "") == "praticar";
+
+    if ($ponto["fase"] == "praticar") {
+        // Na prática, o passo conta as respostas certas: sobe um quando o aluno acerta.
+        $acertouAPratica = $resultado["correcao"] === "" && ($resultado["acertou"] || $passoDaIA > $ponto["passo"]);
+        $fase = "praticar";
+        $passo = min(PRATICAS_POR_LICAO, $ponto["passo"] + ($acertouAPratica ? 1 : 0));
+    } elseif ($fala === null) {
+        // Abertura: a lição começa no primeiro item.
+        $fase = "ensinar";
+        $passo = 1;
+    } elseif ($querPraticar && $ponto["passo"] >= $total) {
+        // O aluno acabou de dizer o último item: começa a prática, com zero respostas certas.
+        $fase = "praticar";
+        $passo = 0;
+    } else {
+        // Ensinando: fica no item ou vai para o seguinte. Se a IA quis praticar antes
+        // de ensinar tudo, a lição segue para o próximo item.
+        $fase = "ensinar";
+        $pedido = $querPraticar ? $ponto["passo"] + 1 : $passoDaIA;
+        $passo = min($total, max($ponto["passo"], min($pedido, $ponto["passo"] + 1)));
     }
 
-    // A lição só acaba na fase de praticar e depois de o aluno ter falado o mínimo
-    // de vezes, mesmo que a IA queira encerrar antes.
+    // A lição só acaba na fase de praticar, com todas as respostas certas e depois de
+    // o aluno ter falado o mínimo de vezes, mesmo que a IA queira encerrar antes.
     $concluida = ($partes["concluida"] ?? false) === true
         && $fase == "praticar"
+        && $passo >= PRATICAS_POR_LICAO
         && $ponto["turno"] >= turnoMinimo($licao);
 
     $progresso = $concluida ? 100 : min(95, calcularProgresso($licao, $fase, $passo));

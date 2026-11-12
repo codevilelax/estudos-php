@@ -87,31 +87,42 @@
 
 ## Onde parei
 
-- **Data e computador:** 11/11/2026, `computador 2`
-- **Assunto:** projeto novo `projetos/treino-ingles` (conversa em inglês por voz com IA). Em 11/11
-  ele pediu para trocar os exercícios por projetos: quer "fazer coisas que realmente funcionam".
+- **Data e computador:** 12/11/2026, `computador 2`
+- **Assunto:** projeto `projetos/treino-ingles` (curso de inglês por voz com IA). Desde 11/11 ele
+  trocou os exercícios por projetos: quer "fazer coisas que realmente funcionam".
   **Não passar mais exercício numerado solto.** O `03-banco-de-dados/ex07-filtro-de-idade.php` foi
   criado e não foi feito: perguntar se pode apagar.
 - **Treino de inglês (o Claude escreve o código e ele comanda; não pode ter custo nenhum):**
   - Usa a IA da Groq no plano gratuito. A chave fica em `projetos/treino-ingles/chave.txt`, que está
     no `.gitignore`. No `vilela` o arquivo não existe: criar outra chave em `console.groq.com`.
     Nunca pedir a chave no chat nem mostrar o conteúdo do arquivo.
-  - **Versão 1, pronta e testada:** conversa livre por voz, correção com explicação em português,
-    botões Ouvir, Devagar e Traduzir. Abre com `iniciar.bat` (`localhost:8123`).
-  - **Versão 2, pela metade** (pedido dele: uma professora na tela e um curso do zero que avança):
-    - Pronto e testado no PHP: `src/curso.php` (24 lições em 4 níveis), `src/ia.php` (a professora
-      Emma dá aula em duas fases, `ensinar` e `praticar`; o servidor devolve `fase` e `passo` e a tela
-      manda de volta), `public/api/falar.php` e `public/api/curso.php`. Uma aula inteira simulada
-      (lição 1) passou.
-    - `public/index.html` já é o novo: tela da trilha, tela da aula e o desenho da Emma em SVG
-      (molde `#molde-emma`, bocas `boca-0` a `boca-3` trocadas pelo `data-boca`).
-    - **Falta:** reescrever `public/estilo.css` e `public/app.js` para o HTML novo. Enquanto isso
-      não for feito, **a tela não funciona** (os dois ainda são os da versão 1). Depois, testar no
-      Chrome de teste e atualizar o `README.md`.
-    - Combinado para o `app.js`: guardar no navegador as lições concluídas e a aula em andamento;
-      lição só abre quando a anterior foi concluída (com botão Pular); a Emma mexe a boca enquanto
-      `speechSynthesis.speaking` for verdadeiro; cada parte da fala usa a voz do seu idioma (`pt`
-      ou `en`); a transcrição descobre sozinha se ele falou português ou inglês.
+  - **Versão 2, pronta e testada em 12/11:** trilha de 24 lições em 4 níveis mais a conversa livre;
+    a professora Emma na tela (desenho em SVG que mexe a boca enquanto a voz toca); cada lição passa
+    por `ensinar` e `praticar` até ser concluída; o progresso fica guardado no navegador. Abre com
+    `iniciar.bat` (`localhost:8123`). O `README.md` do projeto explica como usar e onde mexer.
+  - **O que foi feito em 12/11:**
+    - Teste da tela nova (`public/app.js` e `public/estilo.css`, escritos em 11/11) e três correções:
+      1. `src/ia.php`: quem decide o ponto da lição agora é o servidor, e a IA só sugere. A IA às
+         vezes pulava um item, queria praticar antes de ensinar tudo e se despedia uma fala antes
+         de a lição fechar. `descreverPonto()` diz a ela o item atual e o seguinte; o passo anda no
+         máximo um por vez; se ela adiantar, o servidor pede a fala de novo, uma vez; na prática, o
+         passo conta as respostas certas (0 a 3) e a lição só conclui com 3.
+      2. `public/app.js`: "Refazer" numa lição já concluída começa do zero.
+      3. `public/estilo.css`: em tela estreita, o título da aula fica numa linha só dele.
+    - **Teste automático em `testes/`** (Git Bash, a partir da pasta do projeto):
+      `bash testes/rodar.sh mentira` (sem IA), `real` (lição 1 inteira com a IA) e `fotos`. Usa voz e
+      microfone de mentira, para o computador não falar alto. Em 12/11 passaram os 15 cenários.
+  - **Nunca testado:** a voz e o microfone de verdade. É o teste que ele vai fazer.
+  - **Os dois cliques no `iniciar.bat` não funcionaram para ele em 12/11** e a causa não foi
+    descoberta. O arquivo funciona (abri com `cmd /c start`). Perguntar o que aconteceu: se abriu
+    como texto, foi dentro do VS Code, e os dois cliques precisam ser no Explorador de Arquivos.
+  - **Melhorias que sugeri (ele ainda não escolheu):** 1. a voz: testar no Edge, que tem vozes mais
+    naturais que o Chrome, e se ficar melhor fazer o `iniciar.bat` abrir no Edge; 2. revisão das
+    lições anteriores no começo de cada lição; 3. a Emma reagir (sorrir no acerto, cara de "quase"
+    no erro). Ele perguntou se dá para falar em português: dá, a transcrição descobre o idioma e a
+    Emma responde curto e volta para o inglês. Ofereci um modo só de perguntas em português.
+  - **Pontos fracos conhecidos da IA gratuita:** na prática, às vezes repete a mesma situação, e de
+    vez em quando põe uma palavra em inglês dentro de uma fala em português.
   - Limites da conta gratuita (medidos em 11/11): 8000 tokens por minuto por modelo, e cada fala da
     aula gasta uns 1300; 20 transcrições por minuto. Por isso as instruções da IA são curtas e
     existe um modelo de reserva.
@@ -133,7 +144,8 @@
     service worker na cópia e rode `php -S` com `router.php` + Chrome `--headless=new --dump-dom`.
     O `roteiro.js` precisa de ajuste depois do novo visual.
   - **Banco agora:** 501 pessoas (as 500 + Carla, 29 anos). O próximo `id` vai ser **506**.
-- **Próximo passo:** terminar a versão 2 do treino de inglês (item "Falta", acima).
+- **Próximo passo:** ele testar o treino de inglês com a voz e o microfone de verdade e dizer o que
+  achou. Depois, escolher a próxima melhoria (lista acima).
 - **Próximos passos da loja do Valorant (na ordem combinada):**
   1. **Refazer o visual do app, com `exemplo.json`.** Foi aprovado ("dê seu melhor"), mas **não
      foi salvo**: o `app/index.html` ainda é o visual antigo. A referência são 3 prints mandados no
@@ -210,6 +222,8 @@
 
 ## Histórico
 
+- 12/11/2026 (`computador 2`): treino de inglês, versão 2 concluída e testada (trilha de lições, professora Emma na tela, teste automático).
+- 11/11/2026 (`computador 2`): começo do projeto `treino-ingles`: versão 1 pronta (conversa por voz com correção) e versão 2 começada.
 - 09/11/2026 (`computador 2`): ex06 de banco concluído (caça ao bug no navegador, Raio-X do estado).
 - 06/11/2026 (`computador 2`): ex05 de banco concluído; começo do projeto `loja-valorant`.
 - 30/10/2026 (`computador 2`): projeto `cadastro-pessoas`, parte 5: lista lembra o estado (`selected`), `isset`, cadastro pela página com POST.

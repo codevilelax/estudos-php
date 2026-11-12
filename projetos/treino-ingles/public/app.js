@@ -1,60 +1,92 @@
 "use strict";
 
-// A tela do treino: grava a fala, manda para o servidor (api/falar.php),
-// mostra a correção e a resposta da IA e lê a resposta em voz alta.
+// A tela do treino. Tem duas telas:
+// - a trilha: a lista de lições, com o que já foi feito;
+// - a aula: a Emma na tela, a conversa e o microfone.
+// A fala gravada vai para o servidor (api/falar.php), que devolve a correção e a
+// resposta da professora. A resposta é lida em voz alta, e a Emma mexe a boca.
 
-const GUARDADO = "treino-ingles-conversa";
+const GUARDADO = "treino-ingles-v2";
 const TEMPO_MINIMO = 600; // gravação mais curta que isso (em milissegundos) é descartada
 const TEMPO_MAXIMO = 60000; // depois disso a gravação é enviada sozinha
-const FALAS_ENVIADAS = 12; // quantas falas antigas vão junto em cada pedido
+const FALAS_ENVIADAS = 8; // quantas falas antigas vão junto em cada pedido
+const FALAS_GUARDADAS = 80; // quantas falas da aula ficam guardadas no navegador
 
-const SAUDACAO = {
+const SAUDACAO_LIVRE = {
     papel: "ia",
-    texto: "Hi! I'm your English practice partner. What would you like to talk about today?",
-    traducao: "Oi! Sou seu parceiro para treinar inglês. Sobre o que você quer conversar hoje?",
+    falas: [{ idioma: "en", texto: "Hi! I'm Emma. What would you like to talk about today?" }],
+    traducao: "Oi! Eu sou a Emma. Sobre o que você quer conversar hoje?",
 };
 
 const DICAS = {
-    parado: "Toque no microfone e fale em inglês",
+    parado: "Toque no microfone e fale",
     pensando: "Pensando…",
 };
 
-const telaInicio = document.getElementById("inicio");
-const lista = document.getElementById("conversa");
-const conteudo = document.getElementById("conteudo");
-const barra = document.getElementById("barra");
-const aviso = document.getElementById("aviso");
-const botaoComecar = document.getElementById("comecar");
-const botaoNova = document.getElementById("nova");
-const botaoMicrofone = document.getElementById("microfone");
-const botaoCancelar = document.getElementById("cancelar");
-const botaoTeclado = document.getElementById("teclado");
-const formulario = document.getElementById("digitar");
-const campoTexto = document.getElementById("texto");
+const STATUS_DA_EMMA = {
+    parada: "Sua vez de falar",
+    falando: "Falando…",
+    ouvindo: "Ouvindo você…",
+    pensando: "Pensando…",
+};
 
-let conversa = lerGuardado();
+const el = (id) => document.getElementById(id);
+
+const telaTrilha = el("tela-trilha");
+const telaAula = el("tela-aula");
+const listaDeNiveis = el("niveis");
+const destaqueTitulo = el("destaque-titulo");
+const destaqueResumo = el("destaque-resumo");
+const botaoContinuar = el("continuar");
+const tituloDaAula = el("aula-titulo");
+const barraDeProgresso = el("progresso");
+const enchimento = el("progresso-barra");
+const palco = el("palco");
+const statusDaEmma = el("palco-status");
+const lista = el("conversa");
+const aviso = el("aviso");
+const botaoVoltar = el("voltar");
+const botaoPular = el("pular");
+const botaoRecomecar = el("recomecar");
+const botaoMicrofone = el("microfone");
+const botaoCancelar = el("cancelar");
+const botaoTeclado = el("teclado");
+const formulario = el("digitar");
+const campoTexto = el("texto");
+
+let niveis = []; // o curso, como veio do servidor
+let licoes = []; // todas as lições em ordem, cada uma com o número do seu nível
+let dados = lerGuardado(); // o que fica guardado: lições concluídas e a aula em andamento
+let aula = null; // a aula aberta agora (é a mesma de dados.aula)
+
 let gravador = null;
 let pedacos = [];
 let inicioDaGravacao = 0;
 let relogio = null;
 let jogarFora = false;
 
-// ---------- Conversa guardada no navegador ----------
+// ---------- O que fica guardado no navegador ----------
 
 function lerGuardado() {
+    let lido = null;
     try {
-        const lido = JSON.parse(localStorage.getItem(GUARDADO));
-        return Array.isArray(lido) ? lido : [];
+        lido = JSON.parse(localStorage.getItem(GUARDADO));
     } catch (erro) {
-        return [];
+        // Guardado estragado ou navegador sem armazenamento: começa do zero.
     }
+
+    const valido = lido && Array.isArray(lido.concluidas);
+    return valido ? lido : { concluidas: [], aula: null };
 }
 
 function guardar() {
+    if (aula) {
+        aula.conversa = aula.conversa.slice(-FALAS_GUARDADAS);
+    }
     try {
-        localStorage.setItem(GUARDADO, JSON.stringify(conversa));
+        localStorage.setItem(GUARDADO, JSON.stringify(dados));
     } catch (erro) {
-        // Sem espaço ou em janela anônima: a conversa só não fica guardada.
+        // Sem espaço ou em janela anônima: o progresso só não fica guardado.
     }
 }
 
@@ -71,22 +103,24 @@ if (window.speechSynthesis) {
     speechSynthesis.addEventListener("voiceschanged", carregarVozes);
 }
 
-// Escolhe a voz em inglês mais natural que o navegador tiver.
-function melhorVoz() {
+// Escolhe a voz mais natural que o navegador tiver para o idioma ("en" ou "pt").
+// A Emma é mulher, então vozes de homem perdem pontos.
+function melhorVoz(idioma) {
     let melhor = null;
-    let melhorNota = -1;
+    let melhorNota = -99;
 
     for (const voz of vozes) {
-        const idioma = voz.lang.replace("_", "-").toLowerCase();
-        if (!idioma.startsWith("en")) {
+        const idiomaDaVoz = voz.lang.replace("_", "-").toLowerCase();
+        if (!idiomaDaVoz.startsWith(idioma)) {
             continue;
         }
 
         let nota = 0;
         if (/natural/i.test(voz.name)) nota += 4;
-        if (/google us english/i.test(voz.name)) nota += 3;
-        if (idioma === "en-us") nota += 2;
-        if (/aria|jenny|guy|ava|andrew|emma/i.test(voz.name)) nota += 1;
+        if (/google (us english|português do brasil)/i.test(voz.name)) nota += 3;
+        if (idiomaDaVoz === "en-us" || idiomaDaVoz === "pt-br") nota += 2;
+        if (/aria|jenny|ava|emma|zira|francisca|thalita|maria/i.test(voz.name)) nota += 1;
+        if (/david|mark|guy|andrew|brian|daniel|antonio|male/i.test(voz.name) && !/female/i.test(voz.name)) nota -= 3;
 
         if (nota > melhorNota) {
             melhorNota = nota;
@@ -97,21 +131,34 @@ function melhorVoz() {
     return melhor;
 }
 
-function falar(texto, devagar) {
+// Nos primeiros níveis, o inglês é falado um pouco mais devagar.
+function ritmoDoIngles() {
+    const licao = aula ? acharLicao(aula.licao) : null;
+    return licao && licao.nivel <= 2 ? 0.85 : 0.95;
+}
+
+// Lê em voz alta uma lista de partes, cada uma com a voz do seu idioma.
+function falar(partes, devagar) {
     if (!window.speechSynthesis) {
         return;
     }
 
     speechSynthesis.cancel();
 
-    const fala = new SpeechSynthesisUtterance(texto);
-    const voz = melhorVoz();
-    if (voz) {
-        fala.voice = voz;
+    for (const parte of partes) {
+        const fala = new SpeechSynthesisUtterance(parte.texto);
+        const voz = melhorVoz(parte.idioma);
+        if (voz) {
+            fala.voice = voz;
+        }
+        fala.lang = voz ? voz.lang : parte.idioma === "pt" ? "pt-BR" : "en-US";
+        if (parte.idioma === "pt") {
+            fala.rate = 1.05;
+        } else {
+            fala.rate = devagar ? 0.65 : ritmoDoIngles();
+        }
+        speechSynthesis.speak(fala);
     }
-    fala.lang = voz ? voz.lang : "en-US";
-    fala.rate = devagar ? 0.7 : 0.95;
-    speechSynthesis.speak(fala);
 }
 
 function calarVoz() {
@@ -120,7 +167,51 @@ function calarVoz() {
     }
 }
 
-// ---------- Montagem da tela ----------
+// ---------- Emma ----------
+
+// Copia o desenho da Emma (o molde do index.html) para dentro de um elemento.
+function desenharEmma(lugar) {
+    lugar.append(el("molde-emma").content.cloneNode(true));
+    return lugar.querySelector(".emma");
+}
+
+const emmaDaAula = desenharEmma(el("emma-da-aula"));
+desenharEmma(el("emma-da-trilha"));
+
+let bocaAtual = 0;
+
+// Várias vezes por segundo: decide o que a Emma está fazendo e mexe a boca
+// enquanto o navegador estiver lendo a fala dela.
+function atualizarEmma() {
+    if (telaAula.hidden) {
+        return;
+    }
+
+    let modo = "parada";
+    if (estado() === "gravando") {
+        modo = "ouvindo";
+    } else if (estado() === "pensando") {
+        modo = "pensando";
+    } else if (window.speechSynthesis && speechSynthesis.speaking) {
+        modo = "falando";
+    }
+
+    if (modo === "falando") {
+        // Sorteia uma boca diferente da atual, para parecer que ela articula.
+        const outras = [0, 1, 2, 3].filter((boca) => boca !== bocaAtual);
+        bocaAtual = outras[Math.floor(Math.random() * outras.length)];
+    } else {
+        bocaAtual = 0;
+    }
+
+    palco.dataset.modo = modo;
+    emmaDaAula.dataset.boca = bocaAtual;
+    statusDaEmma.textContent = estado() === "fim" ? "" : STATUS_DA_EMMA[modo];
+}
+
+setInterval(atualizarEmma, 130);
+
+// ---------- Ajudas para montar a tela ----------
 
 function criar(tag, classe, texto) {
     const elemento = document.createElement(tag);
@@ -133,25 +224,140 @@ function criar(tag, classe, texto) {
     return elemento;
 }
 
-function botaoPequeno(rotulo, aoClicar) {
-    const botao = criar("button", "botao-pequeno", rotulo);
-    botao.type = "button";
-    botao.addEventListener("click", aoClicar);
-    return botao;
-}
-
-function botoesDeOuvir(texto) {
-    const acoes = criar("div", "acoes");
-    acoes.append(
-        botaoPequeno("Ouvir", () => falar(texto, false)),
-        botaoPequeno("Devagar", () => falar(texto, true))
-    );
-    return acoes;
+function botao(classe, rotulo, aoClicar) {
+    const novo = criar("button", classe, rotulo);
+    novo.type = "button";
+    novo.addEventListener("click", aoClicar);
+    return novo;
 }
 
 function rolarParaOFim() {
-    conteudo.scrollTop = conteudo.scrollHeight;
+    lista.scrollTop = lista.scrollHeight;
 }
+
+function acharLicao(id) {
+    return licoes.find((licao) => licao.id === id) || null;
+}
+
+// ---------- Trilha ----------
+
+function foiConcluida(licao) {
+    return dados.concluidas.includes(licao.id);
+}
+
+// Uma lição abre quando a anterior foi concluída. A primeira está sempre aberta.
+function estaAberta(licao) {
+    const posicao = licoes.indexOf(licao);
+    return posicao === 0 || foiConcluida(licao) || foiConcluida(licoes[posicao - 1]);
+}
+
+function proximaLicao() {
+    return licoes.find((licao) => !foiConcluida(licao)) || null;
+}
+
+function aulaEmAndamento() {
+    const guardada = dados.aula;
+    return guardada && !guardada.concluida && guardada.conversa.length > 0 ? guardada : null;
+}
+
+function mostrarDestaque() {
+    const emAndamento = aulaEmAndamento();
+    const proxima = proximaLicao();
+    let alvo = "livre";
+
+    if (emAndamento && emAndamento.licao !== "livre" && acharLicao(emAndamento.licao)) {
+        const licao = acharLicao(emAndamento.licao);
+        alvo = licao.id;
+        destaqueTitulo.textContent = "Continuar: " + licao.titulo;
+        destaqueResumo.textContent = "Você parou no meio da lição " + licao.id + ". Vamos terminar?";
+        botaoContinuar.textContent = "Continuar lição " + licao.id;
+    } else if (proxima) {
+        alvo = proxima.id;
+        const primeira = dados.concluidas.length === 0;
+        destaqueTitulo.textContent = primeira ? "Vamos começar do zero?" : "Próxima: " + proxima.titulo;
+        destaqueResumo.textContent = primeira
+            ? "Eu te ensino uma coisa por vez, em português no começo. Você repete, eu corrijo, e a gente avança."
+            : proxima.resumo;
+        botaoContinuar.textContent = "Começar lição " + proxima.id;
+    } else {
+        destaqueTitulo.textContent = "Você terminou o curso!";
+        destaqueResumo.textContent = "Agora é praticar. Vamos conversar em inglês sobre o que você quiser.";
+        botaoContinuar.textContent = "Conversa livre";
+    }
+
+    botaoContinuar.hidden = false;
+    botaoContinuar.onclick = () => abrirAula(alvo);
+}
+
+function linhaDaLicao(numero, titulo, resumo, situacao, aoClicar) {
+    const linha = botao("licao", undefined, aoClicar);
+    linha.dataset.situacao = situacao;
+    linha.disabled = situacao === "fechada";
+
+    const texto = criar("span", "licao-texto");
+    texto.append(criar("strong", "", titulo), criar("span", "", resumo));
+
+    const setas = { feita: "Refazer", aberta: "Abrir ›", fechada: "" };
+    linha.append(criar("span", "licao-numero", numero), texto, criar("span", "licao-seta", setas[situacao]));
+    return linha;
+}
+
+function mostrarTrilha() {
+    mostrarDestaque();
+    listaDeNiveis.textContent = "";
+
+    for (const nivel of niveis) {
+        const secao = criar("section", "nivel");
+        const titulo = criar("h3");
+        titulo.append(criar("span", "", "Nível " + nivel.numero), nivel.nome);
+
+        const linhas = criar("div", "licoes");
+        for (const licao of nivel.licoes) {
+            let situacao = "fechada";
+            if (foiConcluida(licao)) {
+                situacao = "feita";
+            } else if (estaAberta(licao)) {
+                situacao = "aberta";
+            }
+            const numero = situacao === "feita" ? "✓" : String(licao.id);
+            linhas.append(linhaDaLicao(numero, licao.titulo, licao.resumo, situacao, () => abrirAula(licao.id)));
+        }
+
+        secao.append(titulo, linhas);
+        listaDeNiveis.append(secao);
+    }
+
+    const secao = criar("section", "nivel");
+    const titulo = criar("h3");
+    titulo.append(criar("span", "", "Sem roteiro"), "Conversa livre");
+    const linhas = criar("div", "licoes");
+    linhas.append(linhaDaLicao("∞", "Bate-papo com a Emma", "Converse em inglês sobre o que quiser.", "aberta", () => abrirAula("livre")));
+    secao.append(titulo, linhas);
+    listaDeNiveis.append(secao);
+}
+
+async function carregarCurso() {
+    try {
+        const retorno = await fetch("api/curso.php");
+        niveis = (await retorno.json()).niveis;
+    } catch (erro) {
+        destaqueTitulo.textContent = "Não consegui carregar as lições";
+        destaqueResumo.textContent = "Confira se o servidor está ligado (iniciar.bat) e atualize a página.";
+        return;
+    }
+
+    licoes = [];
+    for (const nivel of niveis) {
+        for (const licao of nivel.licoes) {
+            licao.nivel = nivel.numero;
+            licoes.push(licao);
+        }
+    }
+
+    mostrarTrilha();
+}
+
+// ---------- Falas na tela ----------
 
 function simplificar(palavra) {
     return palavra.toLowerCase().replace(/[^a-z0-9']/g, "");
@@ -198,22 +404,39 @@ function destacar(original, correcao) {
 function mostrarFalaIA(item) {
     const bloco = criar("div", "bloco ia");
     const fala = criar("div", "fala");
-    const ingles = criar("p", "", item.texto);
-    ingles.lang = "en";
-    fala.append(ingles);
+    const emIngles = item.falas.filter((parte) => parte.idioma === "en");
+    const misturada = emIngles.length > 0 && emIngles.length < item.falas.length;
 
-    const acoes = botoesDeOuvir(item.texto);
+    for (const parte of item.falas) {
+        if (parte.idioma === "en" && misturada) {
+            // No meio de uma fala em português, o inglês é a frase que ela está ensinando.
+            const frase = botao("frase", parte.texto, () => falar([parte], false));
+            frase.lang = "en";
+            frase.title = "Ouvir de novo";
+            fala.append(frase);
+        } else {
+            const texto = criar("p", "", parte.texto);
+            texto.lang = parte.idioma === "en" ? "en" : "pt-br";
+            fala.append(texto);
+        }
+    }
+
+    const acoes = criar("div", "acoes");
+    acoes.append(botao("botao-pequeno", "Ouvir", () => falar(item.falas, false)));
+    if (emIngles.length > 0) {
+        acoes.append(botao("botao-pequeno", "Devagar", () => falar(emIngles, true)));
+    }
 
     if (item.traducao) {
         const traducao = criar("p", "traducao", item.traducao);
         traducao.hidden = true;
         fala.append(traducao);
 
-        const botao = botaoPequeno("Traduzir", () => {
+        const alternar = botao("botao-pequeno", "Traduzir", () => {
             traducao.hidden = !traducao.hidden;
-            botao.textContent = traducao.hidden ? "Traduzir" : "Esconder tradução";
+            alternar.textContent = traducao.hidden ? "Traduzir" : "Esconder tradução";
         });
-        acoes.append(botao);
+        acoes.append(alternar);
     }
 
     bloco.append(fala, acoes);
@@ -223,11 +446,10 @@ function mostrarFalaIA(item) {
 
 function mostrarFalaVoce(item) {
     const bloco = criar("div", "bloco voce");
-    const fala = criar("div", "fala", item.texto);
-    fala.lang = "en";
-    bloco.append(fala);
+    bloco.append(criar("div", "fala", item.texto));
 
     if (item.correcao) {
+        const correcao = [{ idioma: "en", texto: item.correcao }];
         const cartao = criar("div", "correcao");
         const frase = criar("p");
         frase.lang = "en";
@@ -238,9 +460,14 @@ function mostrarFalaVoce(item) {
             cartao.append(criar("p", "explicacao", item.explicacao));
         }
 
-        cartao.append(botoesDeOuvir(item.correcao));
+        const acoes = criar("div", "acoes");
+        acoes.append(
+            botao("botao-pequeno", "Ouvir", () => falar(correcao, false)),
+            botao("botao-pequeno", "Devagar", () => falar(correcao, true))
+        );
+        cartao.append(acoes);
         bloco.append(cartao);
-    } else {
+    } else if (item.acertou) {
         bloco.append(criar("span", "sem-erros", "✓ Sem erros"));
     }
 
@@ -249,8 +476,8 @@ function mostrarFalaVoce(item) {
 }
 
 // Balão provisório enquanto a resposta não chega.
-function mostrarEspera(texto) {
-    const bloco = criar("div", "bloco voce");
+function mostrarEspera(texto, lado) {
+    const bloco = criar("div", "bloco " + lado);
     const fala = criar("div", "fala");
 
     if (texto) {
@@ -267,18 +494,49 @@ function mostrarEspera(texto) {
     return bloco;
 }
 
+// Cartão no meio da conversa, com título, texto e botões.
+function mostrarCartao(titulo, texto, botoes) {
+    const cartao = criar("div", "cartao-de-aviso");
+    const acoes = criar("div", "acoes");
+    acoes.append(...botoes);
+    cartao.append(criar("h3", "", titulo), criar("p", "", texto), acoes);
+    lista.append(cartao);
+    rolarParaOFim();
+    return cartao;
+}
+
+function mostrarFimDaLicao() {
+    const licao = acharLicao(aula.licao);
+    const posicao = licoes.indexOf(licao);
+    const seguinte = licoes[posicao + 1];
+    const botoes = [];
+
+    if (seguinte) {
+        botoes.push(botao("botao-principal", "Próxima lição", () => abrirAula(seguinte.id)));
+    }
+    botoes.push(botao("botao-pequeno", "Ver as lições", voltarParaATrilha));
+
+    const texto = seguinte
+        ? "Você terminou \"" + licao.titulo + "\". A próxima é \"" + seguinte.titulo + "\"."
+        : "Você terminou a última lição do curso. Agora é praticar na conversa livre.";
+    mostrarCartao("Lição concluída", texto, botoes);
+}
+
 function mostrarConversa() {
     lista.textContent = "";
-    for (const item of conversa) {
+    for (const item of aula.conversa) {
         if (item.papel === "ia") {
             mostrarFalaIA(item);
         } else {
             mostrarFalaVoce(item);
         }
     }
+    if (aula.concluida) {
+        mostrarFimDaLicao();
+    }
 }
 
-// ---------- Estado da tela ----------
+// ---------- Estado da aula ----------
 
 function estado() {
     return document.body.dataset.estado;
@@ -294,6 +552,74 @@ function mudarEstado(novo) {
     botaoMicrofone.disabled = novo === "pensando";
     botaoMicrofone.setAttribute("aria-label", novo === "gravando" ? "Enviar a gravação" : "Falar");
     avisar("");
+}
+
+function mostrarProgresso() {
+    const ehLicao = aula.licao !== "livre";
+    barraDeProgresso.hidden = !ehLicao;
+    botaoPular.hidden = !ehLicao || aula.concluida;
+    enchimento.style.width = aula.progresso + "%";
+    barraDeProgresso.setAttribute("aria-valuenow", aula.progresso);
+}
+
+// ---------- Abrir, recomeçar e sair da aula ----------
+
+function novaAula(licao) {
+    return { licao, fase: "ensinar", passo: 1, turno: 0, progresso: 0, concluida: false, conversa: [] };
+}
+
+function abrirAula(licao, doZero) {
+    // Só continua de onde parou se a aula guardada é desta lição e ficou no meio.
+    // Lição já concluída ("Refazer") começa do zero.
+    const guardada = dados.aula;
+    const continuar = !doZero && guardada && guardada.licao === licao && !guardada.concluida && guardada.conversa.length > 0;
+
+    calarVoz();
+    aula = continuar ? guardada : novaAula(licao);
+    dados.aula = aula;
+
+    const daLicao = acharLicao(licao);
+    tituloDaAula.textContent = daLicao ? "Lição " + daLicao.id + " · " + daLicao.titulo : "Conversa livre";
+
+    telaTrilha.hidden = true;
+    telaAula.hidden = false;
+    formulario.hidden = true;
+    mudarEstado(aula.concluida ? "fim" : "parado");
+    mostrarProgresso();
+    mostrarConversa();
+
+    if (aula.conversa.length > 0) {
+        return;
+    }
+
+    if (licao === "livre") {
+        aula.conversa.push(SAUDACAO_LIVRE);
+        guardar();
+        mostrarConversa();
+        falar(SAUDACAO_LIVRE.falas, false);
+    } else {
+        pedirAbertura();
+    }
+}
+
+function voltarParaATrilha() {
+    if (estado() === "gravando") {
+        pararGravacao(true);
+    }
+    calarVoz();
+    guardar();
+    telaAula.hidden = true;
+    telaTrilha.hidden = false;
+    mostrarTrilha();
+}
+
+function concluirLicao() {
+    aula.concluida = true;
+    aula.progresso = 100;
+    if (!dados.concluidas.includes(aula.licao)) {
+        dados.concluidas.push(aula.licao);
+    }
+    guardar();
 }
 
 // ---------- Gravação ----------
@@ -332,7 +658,7 @@ async function comecarGravacao() {
     }
 
     // Enquanto o navegador pedia a permissão, outra coisa pode ter começado.
-    if (estado() !== "parado") {
+    if (estado() !== "parado" || telaAula.hidden) {
         microfone.getTracks().forEach((faixa) => faixa.stop());
         return;
     }
@@ -356,14 +682,16 @@ async function comecarGravacao() {
         gravador = null;
 
         if (jogarFora) {
-            mudarEstado("parado");
+            if (estado() === "gravando") {
+                mudarEstado("parado");
+            }
         } else if (duracao < TEMPO_MINIMO || audio.size === 0) {
             mudarEstado("parado");
             avisar("Ficou muito curto. Toque, fale e toque de novo.", true);
         } else {
-            const dados = new FormData();
-            dados.append("audio", audio, "fala");
-            enviar(dados, "");
+            const envio = new FormData();
+            envio.append("audio", audio, "fala");
+            enviar(envio, "");
         }
     });
 
@@ -392,19 +720,91 @@ function alternarMicrofone() {
 
 // ---------- Conversa com o servidor ----------
 
-async function enviar(dados, textoDigitado) {
-    const anteriores = conversa.slice(-FALAS_ENVIADAS).map((item) => ({ papel: item.papel, texto: item.texto }));
-    dados.append("historico", JSON.stringify(anteriores));
+// Manda o pedido para o servidor e devolve a resposta. Nunca dá erro:
+// quando algo falha, devolve { ok: false, erro: "..." }.
+async function pedir(envio) {
+    try {
+        const retorno = await fetch("api/falar.php", { method: "POST", body: envio });
+        return await retorno.json();
+    } catch (erro) {
+        return { ok: false, erro: "Não consegui falar com o servidor. Confira se ele está ligado." };
+    }
+}
+
+// Guarda e mostra o que a professora respondeu, e lê em voz alta.
+function receberFalaDaEmma(resposta) {
+    const fala = { papel: "ia", falas: resposta.falas, traducao: resposta.traducao };
+    aula.conversa.push(fala);
+    aula.fase = resposta.fase;
+    aula.passo = resposta.passo;
+    aula.progresso = resposta.progresso;
+
+    if (resposta.concluida) {
+        concluirLicao();
+    }
+    guardar();
+
+    mostrarFalaIA(fala);
+    mostrarProgresso();
+    falar(fala.falas, false);
+
+    if (aula.concluida) {
+        mudarEstado("fim");
+        mostrarFimDaLicao();
+    }
+}
+
+// Pede para a Emma abrir a lição (a primeira fala é dela).
+async function pedirAbertura() {
+    const aulaDoPedido = aula;
+    mudarEstado("pensando");
+    const espera = mostrarEspera("", "ia");
+
+    const envio = new FormData();
+    envio.append("licao", aula.licao);
+    envio.append("comecar", "1");
+    const resposta = await pedir(envio);
+
+    // Se ele saiu desta aula enquanto a resposta vinha, ela não serve mais.
+    if (aula !== aulaDoPedido || telaAula.hidden) {
+        return;
+    }
+
+    espera.remove();
+    mudarEstado("parado");
+
+    if (!resposta.ok) {
+        const cartao = mostrarCartao("Não consegui começar a lição", resposta.erro || "Tente de novo.", [
+            botao("botao-principal", "Tentar de novo", () => {
+                cartao.remove();
+                pedirAbertura();
+            }),
+        ]);
+        return;
+    }
+
+    receberFalaDaEmma(resposta);
+}
+
+async function enviar(envio, textoDigitado) {
+    const aulaDoPedido = aula;
+    const anteriores = aula.conversa.slice(-FALAS_ENVIADAS).map((item) => ({
+        papel: item.papel,
+        texto: item.papel === "ia" ? item.falas.map((parte) => parte.texto).join(" ") : item.texto,
+    }));
+
+    envio.append("licao", aula.licao);
+    envio.append("fase", aula.fase);
+    envio.append("passo", aula.passo);
+    envio.append("turno", aula.turno + 1);
+    envio.append("historico", JSON.stringify(anteriores));
 
     mudarEstado("pensando");
-    const espera = mostrarEspera(textoDigitado);
+    const espera = mostrarEspera(textoDigitado, "voce");
+    const resposta = await pedir(envio);
 
-    let resposta;
-    try {
-        const retorno = await fetch("api/falar.php", { method: "POST", body: dados });
-        resposta = await retorno.json();
-    } catch (erro) {
-        resposta = { ok: false, erro: "Não consegui falar com o servidor. Confira se ele está ligado." };
+    if (aula !== aulaDoPedido || telaAula.hidden) {
+        return;
     }
 
     espera.remove();
@@ -423,53 +823,33 @@ async function enviar(dados, textoDigitado) {
         texto: resposta.voce,
         correcao: resposta.correcao,
         explicacao: resposta.explicacao,
+        acertou: resposta.acertou,
     };
-    const ia = { papel: "ia", texto: resposta.resposta, traducao: resposta.traducao };
-
-    conversa.push(voce, ia);
-    guardar();
+    aula.conversa.push(voce);
+    aula.turno++;
     mostrarFalaVoce(voce);
-    mostrarFalaIA(ia);
-    falar(ia.texto, false);
+    receberFalaDaEmma(resposta);
 }
 
-// ---------- Começo e botões ----------
+// ---------- Botões ----------
 
-function comecarConversa() {
-    telaInicio.hidden = true;
-    lista.hidden = false;
-    barra.hidden = false;
-    botaoNova.hidden = false;
-    mudarEstado("parado");
-
-    if (conversa.length === 0) {
-        conversa.push(SAUDACAO);
-        guardar();
-        mostrarConversa();
-        falar(SAUDACAO.texto, false);
-    } else {
-        mostrarConversa();
-    }
-}
-
-if (conversa.length > 0) {
-    botaoComecar.textContent = "Continuar conversa";
-}
-
-botaoComecar.addEventListener("click", comecarConversa);
 botaoMicrofone.addEventListener("click", alternarMicrofone);
 botaoCancelar.addEventListener("click", () => pararGravacao(true));
+botaoVoltar.addEventListener("click", voltarParaATrilha);
 
-botaoNova.addEventListener("click", () => {
+botaoRecomecar.addEventListener("click", () => {
     if (estado() === "gravando") {
         pararGravacao(true);
     }
-    if (estado() === "pensando") {
-        return;
+    abrirAula(aula.licao, true);
+});
+
+botaoPular.addEventListener("click", () => {
+    if (estado() === "gravando") {
+        pararGravacao(true);
     }
-    calarVoz();
-    conversa = [];
-    comecarConversa();
+    concluirLicao();
+    voltarParaATrilha();
 });
 
 botaoTeclado.addEventListener("click", () => {
@@ -490,19 +870,25 @@ formulario.addEventListener("submit", (evento) => {
 
     calarVoz();
     campoTexto.value = "";
-    const dados = new FormData();
-    dados.append("texto", texto);
-    enviar(dados, texto);
+    const envio = new FormData();
+    envio.append("texto", texto);
+    enviar(envio, texto);
 });
 
 // Atalhos: barra de espaço liga e desliga o microfone, Esc cancela a gravação.
 document.addEventListener("keydown", (evento) => {
+    if (telaAula.hidden) {
+        return;
+    }
+
     const digitando = ["INPUT", "BUTTON", "TEXTAREA"].includes(document.activeElement.tagName);
 
-    if (evento.code === "Space" && !evento.repeat && !digitando && !barra.hidden) {
+    if (evento.code === "Space" && !evento.repeat && !digitando) {
         evento.preventDefault();
         alternarMicrofone();
     } else if (evento.code === "Escape" && estado() === "gravando") {
         pararGravacao(true);
     }
 });
+
+carregarCurso();

@@ -48,64 +48,375 @@ input:focus-visible {
     outline-offset: 2px;
 }
 
-/* Topo */
+h1,
+h2,
+h3,
+p {
+    margin: 0;
+}
+
+/* Cada tela ocupa a janela inteira: topo, meio que rola e (na aula) barra de baixo */
+
+.tela {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
 
 .topo {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 12px;
     width: 100%;
-    max-width: 760px;
+    max-width: 1040px;
     margin: 0 auto;
-    padding: 18px 20px 10px;
+    padding: 16px 20px 10px;
 }
 
 .topo h1 {
-    margin: 0;
+    flex: 1;
+    min-width: 0;
     font-size: 20px;
     font-weight: 700;
     letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* Meio */
+.topo-botoes {
+    display: flex;
+    gap: 8px;
+}
 
-.conteudo {
+.rolagem {
     flex: 1;
+    min-height: 0;
     overflow-y: auto;
-    width: 100%;
 }
 
-.inicio {
-    min-height: 100%;
-    max-width: 520px;
+/* ---------- Emma ---------- */
+
+.retrato {
+    aspect-ratio: 1;
+    border-radius: 28px;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 30%, #45161d 0%, #1c1c1e 72%);
+    transition: box-shadow 0.25s;
+}
+
+.emma {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.emma .cabeca,
+.emma .olhar,
+.emma .olhos,
+.emma .sobrancelhas {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 0.3s;
+}
+
+.emma .cabeca {
+    transform-origin: 50% 90%;
+    animation: respirar 4s ease-in-out infinite alternate;
+}
+
+.emma .olhos {
+    animation: piscar 4.6s infinite;
+}
+
+@keyframes respirar {
+    to {
+        transform: translateY(1.5px);
+    }
+}
+
+@keyframes piscar {
+    0%,
+    94%,
+    100% {
+        transform: scaleY(1);
+    }
+    96.5% {
+        transform: scaleY(0.1);
+    }
+}
+
+/* Só uma boca aparece por vez */
+
+.emma .boca {
+    display: none;
+}
+
+.emma[data-boca="0"] .boca-0,
+.emma[data-boca="1"] .boca-1,
+.emma[data-boca="2"] .boca-2,
+.emma[data-boca="3"] .boca-3 {
+    display: block;
+}
+
+/* O jeito dela em cada momento: falando, ouvindo ou pensando */
+
+[data-modo="falando"] .retrato {
+    box-shadow: 0 0 0 3px var(--vermelho), 0 0 36px rgba(255, 70, 85, 0.35);
+}
+
+[data-modo="falando"] .emma .cabeca {
+    animation: acenar 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes acenar {
+    from {
+        transform: rotate(-1.2deg);
+    }
+    to {
+        transform: rotate(1.2deg) translateY(1px);
+    }
+}
+
+[data-modo="ouvindo"] .retrato {
+    box-shadow: 0 0 0 3px var(--texto);
+}
+
+[data-modo="ouvindo"] .emma .cabeca {
+    animation: none;
+    transform: rotate(-4deg);
+}
+
+[data-modo="ouvindo"] .emma .sobrancelhas,
+[data-modo="pensando"] .emma .sobrancelhas {
+    transform: translateY(-3px);
+}
+
+[data-modo="pensando"] .emma .olhar {
+    transform: translate(4px, -4px);
+}
+
+/* ---------- Tela da trilha ---------- */
+
+.trilha {
+    max-width: 760px;
     margin: 0 auto;
-    padding: 24px 24px 60px;
+    padding: 8px 20px 48px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    gap: 28px;
 }
 
-.inicio h2 {
-    margin: 0 0 12px;
-    font-size: 40px;
-    line-height: 1.1;
+.destaque {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding: 22px;
+    border-radius: 24px;
+    background: var(--cartao);
+}
+
+.destaque .retrato {
+    flex: none;
+    width: 132px;
+    border-radius: 22px;
+}
+
+.destaque-texto {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.sobre {
+    color: var(--vermelho);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.destaque h2 {
+    font-size: 26px;
+    line-height: 1.15;
     letter-spacing: -0.02em;
     text-wrap: balance;
 }
 
-.inicio p {
-    margin: 0 0 32px;
+.destaque-texto > p:not(.sobre) {
     color: var(--apagado);
     text-wrap: pretty;
 }
 
-.conversa {
-    max-width: 760px;
+.destaque .botao-principal {
+    margin-top: 10px;
+}
+
+#niveis {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.nivel h3 {
+    margin-bottom: 10px;
+    font-size: 19px;
+    letter-spacing: -0.01em;
+}
+
+.nivel h3 span {
+    display: block;
+    color: var(--apagado);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.licoes {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.licao {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 14px 18px;
+    border: 0;
+    background: var(--cartao);
+    text-align: left;
+}
+
+.licao:hover:not(:disabled) {
+    background: var(--cartao-claro);
+}
+
+.licao:disabled {
+    cursor: default;
+}
+
+.licao:disabled .licao-texto {
+    opacity: 0.4;
+}
+
+.licao-numero {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--cartao-claro);
+    color: var(--apagado);
+    font-size: 15px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.licao[data-situacao="feita"] .licao-numero {
+    background: rgba(50, 215, 75, 0.16);
+    color: var(--verde);
+}
+
+.licao[data-situacao="aberta"] .licao-numero {
+    background: var(--vermelho);
+    color: #fff;
+}
+
+.licao-texto {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.licao-texto strong {
+    font-weight: 600;
+}
+
+.licao-texto span {
+    color: var(--apagado);
+    font-size: 15px;
+}
+
+.licao-seta {
+    flex: none;
+    color: var(--apagado);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.licao[data-situacao="aberta"] .licao-seta {
+    color: var(--vermelho);
+}
+
+/* ---------- Tela da aula ---------- */
+
+.progresso {
+    width: calc(100% - 40px);
+    max-width: 1000px;
+    height: 6px;
+    margin: 0 auto 10px;
+    border-radius: 999px;
+    background: var(--cartao);
+    overflow: hidden;
+}
+
+#progresso-barra {
+    width: 0;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--verde);
+    transition: width 0.5s ease;
+}
+
+.aula {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    max-width: 1040px;
     margin: 0 auto;
-    padding: 12px 20px 24px;
+    padding: 6px 20px 0;
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 28px;
+}
+
+.palco {
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 4px;
+}
+
+.palco-nome {
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.palco-status {
+    min-height: 1.45em;
+    color: var(--apagado);
+    font-size: 15px;
+}
+
+[data-modo="falando"] .palco-status {
+    color: var(--vermelho);
+}
+
+.conversa {
+    min-height: 0;
+    overflow-y: auto;
+    padding: 4px 4px 20px;
     display: flex;
     flex-direction: column;
     gap: 18px;
@@ -117,7 +428,7 @@ input:focus-visible {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    max-width: 86%;
+    max-width: 88%;
 }
 
 .bloco.ia {
@@ -133,11 +444,11 @@ input:focus-visible {
 .fala {
     padding: 13px 18px;
     border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
     overflow-wrap: anywhere;
-}
-
-.fala p {
-    margin: 0;
 }
 
 .bloco.ia .fala {
@@ -151,8 +462,23 @@ input:focus-visible {
     border-bottom-right-radius: 6px;
 }
 
+/* A frase em inglês que ela está ensinando: aparece em destaque e toca ao clicar */
+.frase {
+    padding: 6px 14px;
+    border: 1px solid rgba(255, 70, 85, 0.5);
+    border-radius: 12px;
+    background: rgba(255, 70, 85, 0.12);
+    font-size: 19px;
+    font-weight: 700;
+    text-align: left;
+}
+
+.frase:hover {
+    background: rgba(255, 70, 85, 0.22);
+}
+
 .traducao {
-    margin-top: 8px !important;
+    align-self: stretch;
     padding-top: 8px;
     border-top: 1px solid var(--cartao-claro);
     color: var(--apagado);
@@ -162,22 +488,43 @@ input:focus-visible {
 .acoes {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 8px;
 }
 
-.correcao {
-    width: 100%;
+.correcao,
+.cartao-de-aviso {
     padding: 13px 18px;
     border-radius: 20px;
     background: var(--cartao);
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     gap: 6px;
     overflow-wrap: anywhere;
 }
 
-.correcao p {
-    margin: 0;
+.cartao-de-aviso {
+    align-self: center;
+    align-items: center;
+    max-width: 440px;
+    padding: 22px;
+    text-align: center;
+}
+
+.cartao-de-aviso h3 {
+    font-size: 22px;
+    letter-spacing: -0.01em;
+}
+
+.cartao-de-aviso p {
+    color: var(--apagado);
+    text-wrap: pretty;
+}
+
+.cartao-de-aviso .acoes {
+    justify-content: center;
+    margin-top: 10px;
 }
 
 .etiqueta {
@@ -209,12 +556,12 @@ input:focus-visible {
     font-weight: 600;
 }
 
-/* Três pontinhos enquanto a IA pensa */
+/* Três pontinhos enquanto a resposta não chega */
 
 .pontos {
     display: inline-flex;
     gap: 5px;
-    padding: 6px 2px;
+    padding: 8px 2px;
 }
 
 .pontos span {
@@ -223,7 +570,7 @@ input:focus-visible {
     border-radius: 50%;
     background: var(--texto);
     opacity: 0.35;
-    animation: piscar 1.1s infinite;
+    animation: acender 1.1s infinite;
 }
 
 .pontos span:nth-child(2) {
@@ -234,21 +581,21 @@ input:focus-visible {
     animation-delay: 0.36s;
 }
 
-@keyframes piscar {
+@keyframes acender {
     40% {
         opacity: 1;
     }
 }
 
-/* Botões */
+/* ---------- Botões ---------- */
 
 .botao-principal {
-    padding: 15px 44px;
+    padding: 13px 32px;
     border: 0;
     border-radius: 999px;
     background: var(--vermelho);
     color: #fff;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 700;
 }
 
@@ -286,7 +633,7 @@ input:focus-visible {
     background: var(--cartao-claro);
 }
 
-svg {
+.barra svg {
     width: 24px;
     height: 24px;
     fill: none;
@@ -296,21 +643,20 @@ svg {
     stroke-linejoin: round;
 }
 
-/* Barra de baixo */
+/* ---------- Barra de baixo ---------- */
 
 .barra {
     width: 100%;
     max-width: 760px;
     margin: 0 auto;
-    padding: 10px 20px calc(18px + env(safe-area-inset-bottom));
+    padding: 10px 20px calc(16px + env(safe-area-inset-bottom));
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .aviso {
-    margin: 0;
     min-height: 1.45em;
     color: var(--apagado);
     font-size: 15px;
@@ -331,8 +677,8 @@ svg {
 
 .microfone {
     position: relative;
-    width: 78px;
-    height: 78px;
+    width: 74px;
+    height: 74px;
     padding: 0;
     border: 0;
     border-radius: 50%;
@@ -342,9 +688,9 @@ svg {
     place-items: center;
 }
 
-.microfone svg {
-    width: 32px;
-    height: 32px;
+.barra .microfone svg {
+    width: 30px;
+    height: 30px;
 }
 
 .microfone:hover {
@@ -357,7 +703,7 @@ svg {
     filter: none;
 }
 
-/* O que aparece em cada estado: parado, gravando ou pensando */
+/* O que aparece em cada estado: parado, gravando, pensando ou fim */
 
 .icone-enviar,
 .girando,
@@ -384,7 +730,8 @@ svg {
 }
 
 [data-estado="gravando"] .digitar,
-[data-estado="pensando"] .digitar {
+[data-estado="pensando"] .digitar,
+[data-estado="fim"] .barra {
     display: none;
 }
 
@@ -451,9 +798,31 @@ svg {
     color: var(--texto);
 }
 
-@media (max-width: 480px) {
-    .inicio h2 {
-        font-size: 32px;
+/* ---------- Telas estreitas: a Emma vira uma faixa em cima da conversa ---------- */
+
+@media (max-width: 860px) {
+    .aula {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .palco {
+        align-self: stretch;
+        flex-direction: row;
+        align-items: center;
+        gap: 14px;
+        padding: 0;
+    }
+
+    .palco .retrato {
+        flex: none;
+        width: 92px;
+        border-radius: 22px;
+    }
+
+    .conversa {
+        flex: 1;
     }
 
     .bloco {
@@ -461,9 +830,41 @@ svg {
     }
 }
 
+@media (max-width: 520px) {
+    .destaque {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .destaque .retrato {
+        width: 112px;
+    }
+
+    .topo h1 {
+        font-size: 17px;
+    }
+
+    /* Na aula, o título desce para uma linha só dele: ao lado dos botões ele não cabe */
+    #tela-aula .topo {
+        flex-wrap: wrap;
+        row-gap: 8px;
+    }
+
+    #tela-aula .topo h1 {
+        order: 1;
+        flex: 1 0 100%;
+    }
+
+    #tela-aula .topo-botoes {
+        margin-left: auto;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
+    .emma .cabeca,
+    .emma .olhos,
     .pontos span,
     .microfone::after {
-        animation: none;
+        animation: none !important;
     }
 }
